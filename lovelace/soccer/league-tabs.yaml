@@ -1,0 +1,74 @@
+type: horizontal-stack
+cards:
+  - type: custom:button-card
+    entity: input_number.lovelace_soccer_tab
+    icon: mdi:podium-gold
+    show_name: false
+    styles:
+      card:
+        - height: 86px
+        - background: |
+            [[[
+              if ( entity.state == 1 ) return "var(--custom-card-active-background-color)";
+              else return "var( --ha-card-background, var(--card-background-color, white) )";
+            ]]]
+    tap_action:
+      action: call-service
+      service: input_number.set_value
+      service_data:
+        entity_id: input_number.lovelace_soccer_tab
+        value: 1
+  - type: custom:button-card
+    entity: input_number.lovelace_soccer_tab
+    icon: mdi:account-group
+    show_name: false
+    styles:
+      card:
+        - height: 86px
+        - background: |
+            [[[
+              if ( entity.state == 2 ) return "var(--custom-card-active-background-color)";
+              else return "var( --ha-card-background, var(--card-background-color, white) )";
+            ]]]
+    tap_action:
+      action: call-service
+      service: input_number.set_value
+      service_data:
+        entity_id: input_number.lovelace_soccer_tab
+        value: 2
+  - type: custom:button-card
+    entity: input_number.lovelace_soccer_tab
+    icon: mdi:alpha-c-circle
+    show_name: false
+    styles:
+      card:
+        - height: 86px
+        - background: |
+            [[[
+              if ( entity.state == 3 ) return "var(--custom-card-active-background-color)";
+              else return "var( --ha-card-background, var(--card-background-color, white) )";
+            ]]]
+    tap_action:
+      action: call-service
+      service: input_number.set_value
+      service_data:
+        entity_id: input_number.lovelace_soccer_tab
+        value: 3
+  - type: custom:button-card
+    entity: input_number.lovelace_soccer_tab
+    icon: mdi:account-multiple
+    show_name: false
+    styles:
+      card:
+        - height: 86px
+        - background: |
+            [[[
+              if ( entity.state == 4 ) return "var(--custom-card-active-background-color)";
+              else return "var( --ha-card-background, var(--card-background-color, white) )";
+            ]]]
+    tap_action:
+      action: call-service
+      service: input_number.set_value
+      service_data:
+        entity_id: input_number.lovelace_soccer_tab
+        value: 4

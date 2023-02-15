@@ -1,0 +1,21 @@
+type: custom:atomic-calendar-revive
+name: Fixture Calendar
+entities:
+  - calendar.premier_league_fixtures
+  - calendar.chelsea_fixtures
+maxDaysToShow: 60
+maxEventCount: 9
+showWeekDay: true
+firstDayOfWeek: 1
+refreshInterval: 60
+sortByStartTime: true
+showRelativeTime: false
+showLocation: false
+showLoader: false
+showProgressBar: false
+hideDuplicates: true
+style: |
+  ha-card {
+    height: 552px !important;
+    overflow: hidden !important;
+  }

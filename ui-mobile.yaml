@@ -1,0 +1,76 @@
+views:
+  - theme: Backend-selected
+    title: Overview
+    type: panel
+    icon: mdi:view-dashboard
+    path: overview
+    badges: []
+    cards:
+      - type: custom:mod-card
+        style: !include lovelace/style-mobile-view.yaml
+        card:
+            type: vertical-stack
+            cards:
+              - !include lovelace/overview/people-simple.yaml
+              - !include lovelace/overview/garage-buttons.yaml
+              - !include lovelace/overview/media.yaml
+              - !include lovelace/overview/entity-row-1.yaml
+              - !include lovelace/overview/entity-row-2.yaml
+  - theme: Backend-selected
+    title: Family
+    type: panel
+    icon: mdi:human-male-female-child
+    path: family
+    badges: []
+    cards:
+      - type: custom:mod-card
+        style: !include lovelace/style-mobile-view.yaml
+        card:
+            type: vertical-stack
+            cards:
+              - !include lovelace/family/people-detailed.yaml
+              - !include lovelace/family/map.yaml
+  - theme: Backend-selected
+    title: Home
+    type: panel
+    icon: mdi:home
+    path: home
+    badges: []
+    cards:
+      - type: custom:mod-card
+        style: !include lovelace/style-mobile-view.yaml
+        card:
+            type: vertical-stack
+            cards:
+              - !include lovelace/home/devices.yaml
+              - !include lovelace/home/thermostat.yaml
+  - theme: Backend-selected
+    title: Soccer
+    type: panel
+    icon: mdi:soccer
+    path: soccer
+    badges: []
+    cards:
+      - type: custom:mod-card
+        style: !include lovelace/style-mobile-view.yaml
+        card:
+            type: vertical-stack
+            cards:
+              - !include lovelace/soccer/league-tabs.yaml
+              - !include lovelace/soccer/league-data.yaml
+  - theme: Backend-selected
+    title: System
+    type: panel
+    icon: mdi:tools
+    path: system 
+    badges: []
+    cards:
+      - type: custom:mod-card
+        style: !include lovelace/style-mobile-view.yaml
+        card:
+            type: vertical-stack
+            cards:
+              - !include lovelace/system/admin-entities.yaml
+              - !include lovelace/system/updates.yaml
+              - type: button
+                entity: sun.sun

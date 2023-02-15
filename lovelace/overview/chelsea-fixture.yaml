@@ -1,0 +1,41 @@
+type: custom:button-card
+entity: sensor.chelsea_next_fixture
+show_icon: false
+show_name: false
+styles:
+  card:
+    - background: |
+        [[[
+            if (entity.attributes.date == "Today") return "var(--custom-card-active-background-color)";
+            else return "var( --ha-card-background, var(--card-background-color, white) )";
+        ]]]
+  grid:
+    - grid-template-areas: '"h_crest competition a_crest" "h_crest date a_crest" "h_crest time a_crest"'
+    - grid-template-columns: 1fr 1fr 1fr
+    - grid-template-rows: 1fr 1fr 1fr
+  custom_fields:
+    h_crest:
+      - display: inline-grid
+      - place-self: center
+      - align-self: flex-start
+    competition:
+      - display: inline-grid
+      - align-self: center
+      - overflow: visible
+    date:
+      - display: inline-grid
+      - align-self: center
+      - overflow: visible
+    time:
+      - display: inline-grid
+      - align-self: center
+    a_crest:
+      - display: inline-grid
+      - place-self: center
+      - align-self: flex-start
+custom_fields:
+  h_crest: '[[[ return `<img id="icon" src="${entity.attributes.home_path}" style="position: relative;">` ]]]'
+  competition: '[[[ return `<span>${entity.attributes.competition}</span>`]]]'
+  date: '[[[ return `<span>${entity.attributes.date}</span>` ]]]'
+  time: '[[[ return `<span>${entity.attributes.time}</span>` ]]]'
+  a_crest: '[[[ return `<img id="icon"src="${entity.attributes.away_path}" style="position: relative;">` ]]]'

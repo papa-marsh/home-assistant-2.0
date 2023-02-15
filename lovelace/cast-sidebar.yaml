@@ -1,0 +1,26 @@
+digitalClock: true
+twelveHourVersion: true
+date: true
+width: 25
+template: "{{ state_attr('sensor.sidebar_text', 'bottom_text') }}"
+sidebarMenu:
+  - action: navigate
+    navigation_path: "/lovelace-cast/overview"
+    name: "Overview"
+    icon: mdi:view-dashboard
+  - action: navigate
+    navigation_path: "/lovelace-cast/family"
+    name: "Family"
+    icon: mdi:human-male-female-child
+  - action: navigate
+    navigation_path: "/lovelace-cast/home"
+    name: "Home"
+    icon: mdi:home
+  - action: navigate
+    navigation_path: "/lovelace-cast/soccer"
+    name: "Soccer"
+    icon: mdi:soccer
+  - action: navigate
+    navigation_path: "/lovelace-cast/system"
+    name: "System"
+    icon: mdi:tools

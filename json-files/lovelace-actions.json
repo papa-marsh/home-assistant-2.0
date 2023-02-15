@@ -1,0 +1,23 @@
+[
+    "_Reset",
+    "_Reload",
+    "Reload Sonos Playlists",
+    "Restart SSH",
+    "Restart Home Assistant",
+    "East Stall",
+    "West Stall",
+    "Entity Card: HASS",
+    "Entity Card: Tess",
+    "Entity Card: Stocks",
+    "Entity Card: Crypto",
+    "Entity Card: Office",
+    "Update Home Assistant Core",
+    "Update Operating System",
+    "Update Supervisor",
+    "Update File Editor",
+    "Update Google Drive Backup",
+    "Update Node-RED",
+    "Update Samba Share",
+    "Update SSH & Web Terminal",
+    "Update Z-Wave JS"
+]

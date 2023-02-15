@@ -1,0 +1,12 @@
+type: weather-forecast
+entity: weather.weather
+show_current: true
+show_forecast: true
+name: East Grand Rapids
+style: |
+  .templow {
+    display: none !important;
+  }
+  .temp {
+    margin: 0px !important;
+  }

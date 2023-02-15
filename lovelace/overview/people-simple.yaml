@@ -1,0 +1,5 @@
+type: glance
+show_name: false
+entities:
+  - entity: person.marshall
+  - entity: person.emily

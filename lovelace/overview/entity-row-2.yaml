@@ -1,0 +1,8 @@
+type: horizontal-stack
+cards:
+  - type: custom:button-card
+    styles:
+      card:
+        - height: 100%
+  - !include ../entity-cards/office.yaml
+  - !include ../entity-cards/hass.yaml

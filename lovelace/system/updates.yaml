@@ -1,0 +1,317 @@
+type: entities
+entities:
+  - type: custom:fold-entity-row
+    padding: 0
+    head:
+      entity: update.home_assistant_core_update
+      name: Home Assistant Core
+      tap_action:
+        action: fire-dom-event
+        fold_row: true
+    entities:
+      - type: attribute
+        entity: update.home_assistant_core_update
+        attribute: installed_version
+        name: Installed Version
+        icon: none
+      - type: custom:paper-buttons-row
+        buttons:
+          - entity: update.home_assistant_core_update
+            icon: |
+              {% if state_attr("update.home_assistant_core_update", "installed_version") == state_attr("update.home_assistant_core_update", "latest_version") %}
+                mdi:check-circle
+              {% else %}
+                mdi:update
+              {% endif %}
+            name: |
+              {% if state_attr("update.home_assistant_core_update", "installed_version") == state_attr("update.home_assistant_core_update", "latest_version") %}
+                Up to Date
+              {% else %}
+                Update To Version {{ state_attr("update.home_assistant_core_update", "latest_version") }}
+              {% endif %}
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.lovelace_action
+                option: Update Home Assistant Core
+  - type: custom:fold-entity-row
+    padding: 0
+    head:
+      entity: update.home_assistant_operating_system_update
+      name: Operating System
+      tap_action:
+        action: fire-dom-event
+        fold_row: true
+    entities:
+      - type: attribute
+        entity: update.home_assistant_operating_system_update
+        attribute: installed_version
+        name: Installed Version
+        icon: none
+      - type: custom:paper-buttons-row
+        buttons:
+          - entity: update.home_assistant_operating_system_update
+            icon: |
+              {% if state_attr("update.home_assistant_operating_system_update", "installed_version") == state_attr("update.home_assistant_operating_system_update", "latest_version") %}
+                mdi:check-circle
+              {% else %}
+                mdi:update
+              {% endif %}
+            name: |
+              {% if state_attr("update.home_assistant_operating_system_update", "installed_version") == state_attr("update.home_assistant_operating_system_update", "latest_version") %}
+                Up to Date
+              {% else %}
+                Update To Version {{ state_attr("update.home_assistant_operating_system_update", "latest_version") }}
+              {% endif %}
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.lovelace_action
+                option: Update Operating System
+  - type: custom:fold-entity-row
+    padding: 0
+    head:
+      entity: update.home_assistant_supervisor_update
+      name: Supervisor
+      tap_action:
+        action: fire-dom-event
+        fold_row: true
+    entities:
+      - type: attribute
+        entity: update.home_assistant_supervisor_update
+        attribute: installed_version
+        name: Installed Version
+        icon: none
+      - type: custom:paper-buttons-row
+        buttons:
+          - entity: update.home_assistant_supervisor_update
+            icon: |
+              {% if state_attr("update.home_assistant_supervisor_update", "installed_version") == state_attr("update.home_assistant_supervisor_update", "latest_version") %}
+                mdi:check-circle
+              {% else %}
+                mdi:update
+              {% endif %}
+            name: |
+              {% if state_attr("update.home_assistant_supervisor_update", "installed_version") == state_attr("update.home_assistant_supervisor_update", "latest_version") %}
+                Up to Date
+              {% else %}
+                Update To Version {{ state_attr("update.home_assistant_supervisor_update", "latest_version") }}
+              {% endif %}
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.lovelace_action
+                option: Update Supervisor
+  - type: custom:fold-entity-row
+    padding: 0
+    head:
+      entity: update.file_editor_update
+      name: File Editor
+      tap_action:
+        action: fire-dom-event
+        fold_row: true
+    entities:
+      - type: attribute
+        entity: update.file_editor_update
+        attribute: installed_version
+        name: Installed Version
+        icon: none
+      - type: custom:paper-buttons-row
+        buttons:
+          - entity: update.file_editor_update
+            icon: |
+              {% if state_attr("update.file_editor_update", "installed_version") == state_attr("update.file_editor_update", "latest_version") %}
+                mdi:check-circle
+              {% else %}
+                mdi:update
+              {% endif %}
+            name: |
+              {% if state_attr("update.file_editor_update", "installed_version") == state_attr("update.file_editor_update", "latest_version") %}
+                Up to Date
+              {% else %}
+                Update To Version {{ state_attr("update.file_editor_update", "latest_version") }}
+              {% endif %}
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.lovelace_action
+                option: Update File Editor
+  - type: custom:fold-entity-row
+    padding: 0
+    head:
+      entity: update.home_assistant_google_drive_backup_update
+      name: Google Drive Backup
+      tap_action:
+        action: fire-dom-event
+        fold_row: true
+    entities:
+      - type: attribute
+        entity: update.home_assistant_google_drive_backup_update
+        attribute: installed_version
+        name: Installed Version
+        icon: none
+      - type: custom:paper-buttons-row
+        buttons:
+          - entity: update.home_assistant_google_drive_backup_update
+            icon: |
+              {% if state_attr("update.home_assistant_google_drive_backup_update", "installed_version") == state_attr("update.home_assistant_google_drive_backup_update", "latest_version") %}
+                mdi:check-circle
+              {% else %}
+                mdi:update
+              {% endif %}
+            name: |
+              {% if state_attr("update.home_assistant_google_drive_backup_update", "installed_version") == state_attr("update.home_assistant_google_drive_backup_update", "latest_version") %}
+                Up to Date
+              {% else %}
+                Update To Version {{ state_attr("update.home_assistant_google_drive_backup_update", "latest_version") }}
+              {% endif %}
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.lovelace_action
+                option: Update Google Drive Backup
+  - type: custom:fold-entity-row
+    padding: 0
+    head:
+      entity: update.node_red_update
+      name: Node-RED
+      tap_action:
+        action: fire-dom-event
+        fold_row: true
+    entities:
+      - type: attribute
+        entity: update.node_red_update
+        attribute: installed_version
+        name: Installed Version
+        icon: none
+      - type: custom:paper-buttons-row
+        buttons:
+          - entity: update.node_red_update
+            icon: |
+              {% if state_attr("update.node_red_update", "installed_version") == state_attr("update.node_red_update", "latest_version") %}
+                mdi:check-circle
+              {% else %}
+                mdi:update
+              {% endif %}
+            name: |
+              {% if state_attr("update.node_red_update", "installed_version") == state_attr("update.node_red_update", "latest_version") %}
+                Up to Date
+              {% else %}
+                Update To Version {{ state_attr("update.node_red_update", "latest_version") }}
+              {% endif %}
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.lovelace_action
+                option: Update Node-RED
+  - type: custom:fold-entity-row
+    padding: 0
+    head:
+      entity: update.samba_share_update
+      name: Samba Share
+      tap_action:
+        action: fire-dom-event
+        fold_row: true
+    entities:
+      - type: attribute
+        entity: update.samba_share_update
+        attribute: installed_version
+        name: Installed Version
+        icon: none
+      - type: custom:paper-buttons-row
+        buttons:
+          - entity: update.samba_share_update
+            icon: |
+              {% if state_attr("update.samba_share_update", "installed_version") == state_attr("update.samba_share_update", "latest_version") %}
+                mdi:check-circle
+              {% else %}
+                mdi:update
+              {% endif %}
+            name: |
+              {% if state_attr("update.samba_share_update", "installed_version") == state_attr("update.samba_share_update", "latest_version") %}
+                Up to Date
+              {% else %}
+                Update To Version {{ state_attr("update.samba_share_update", "latest_version") }}
+              {% endif %}
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.lovelace_action
+                option: Update Samba Share
+  - type: custom:fold-entity-row
+    padding: 0
+    head:
+      entity: update.ssh_web_terminal_update
+      name: SSH & Web Terminal
+      tap_action:
+        action: fire-dom-event
+        fold_row: true
+    entities:
+      - type: attribute
+        entity: update.ssh_web_terminal_update
+        attribute: installed_version
+        name: Installed Version
+        icon: none
+      - type: custom:paper-buttons-row
+        buttons:
+          - entity: update.ssh_web_terminal_update
+            icon: |
+              {% if state_attr("update.ssh_web_terminal_update", "installed_version") == state_attr("update.ssh_web_terminal_update", "latest_version") %}
+                mdi:check-circle
+              {% else %}
+                mdi:update
+              {% endif %}
+            name: |
+              {% if state_attr("update.ssh_web_terminal_update", "installed_version") == state_attr("update.ssh_web_terminal_update", "latest_version") %}
+                Up to Date
+              {% else %}
+                Update To Version {{ state_attr("update.ssh_web_terminal_update", "latest_version") }}
+              {% endif %}
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.lovelace_action
+                option: Update SSH & Web Terminal
+  - type: custom:fold-entity-row
+    padding: 0
+    head:
+      entity: update.z_wave_js_update
+      name: Z-Wave JS
+      tap_action:
+        action: fire-dom-event
+        fold_row: true
+    entities:
+      - type: attribute
+        entity: update.z_wave_js_update
+        attribute: installed_version
+        name: Installed Version
+        icon: none
+      - type: custom:paper-buttons-row
+        buttons:
+          - entity: update.z_wave_js_update
+            icon: |
+              {% if state_attr("update.z_wave_js_update", "installed_version") == state_attr("update.z_wave_js_update", "latest_version") %}
+                mdi:check-circle
+              {% else %}
+                mdi:update
+              {% endif %}
+            name: |
+              {% if state_attr("update.z_wave_js_update", "installed_version") == state_attr("update.z_wave_js_update", "latest_version") %}
+                Up to Date
+              {% else %}
+                Update To Version {{ state_attr("update.z_wave_js_update", "latest_version") }}
+              {% endif %}
+            tap_action:
+              action: call-service
+              service: input_select.select_option
+              service_data:
+                entity_id: input_select.lovelace_action
+                option: Update Z-Wave JS

@@ -1,0 +1,36 @@
+type: custom:state-switch
+transition: flip
+entity: input_number.lovelace_soccer_tab
+states:
+  "1.0":
+    type: iframe
+    url: "https://www.scoreaxis.com/widget/standings-widget/8?widgetHomeAwayTabs=0&header=0&widgetRows=1%2C1%2C1%2C1%2C1%2C1%2C0%2C1%2C1%2C1&borderColor=%23202020&links=0&bodyBackground=%23202020&textColor=%23ffffff&autoHeight=1&inst=2c328"
+    aspect_ratio: 132%
+    style: |
+      ha-card {
+        padding: 2px !important;
+      }
+  "2.0":
+    type: iframe
+    url: "https://www.scoreaxis.com/widget/league-top-players/8?autoHeight=1&playersNumber=20&links=0&bodyBackground=%23202020&textColor=%23ffffff&inst=3d945"
+    aspect_ratio: 132%
+    style: |
+      ha-card {
+        padding: 2px !important;
+      }
+  "3.0":
+    type: iframe
+    url: "https://www.scoreaxis.com/widget/team-info/18?autoHeight=1&teamLogo=1&playersTab=0&links=0&bodyBackground=%23202020&textColor=%23ffffff&inst=419dbz"
+    aspect_ratio: 132%
+    style: |
+      ha-card {
+        padding: 2px !important;
+      }
+  "4.0":
+    type: iframe
+    url: "https://www.scoreaxis.com/widget/top-players/18?autoHeight=1&playersNumber=20&links=0&bodyBackground=%23202020&textColor=%23ffffff&inst=a0413"
+    aspect_ratio: 132%
+    style: |
+      ha-card {
+        padding: 2px !important;
+      }

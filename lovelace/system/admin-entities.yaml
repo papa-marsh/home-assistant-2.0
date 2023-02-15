@@ -1,0 +1,6 @@
+type: entities
+entities:
+- entity: input_select.lovelace_action
+  name: Admin Actions
+- entity: pyscript.debug
+  name: PyScript Debug

@@ -1,0 +1,5 @@
+|
+  ha-card {
+      width: 752px !important;
+      margin: 8px !important;
+  }

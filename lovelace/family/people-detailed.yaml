@@ -1,0 +1,18 @@
+type: glance
+columns: 4
+show_name: false
+entities:
+  - entity: person.marshall
+  - entity: binary_sensor.marshall_s_iphone_focus
+  - entity: sensor.marshall_s_iphone_battery_level
+  - entity: sensor.marshall_s_iphone_connection_type
+  - entity: person.emily
+  - entity: binary_sensor.emily_s_iphone_focus
+  - entity: sensor.emily_s_iphone_battery_level
+  - entity: sensor.emily_s_iphone_connection_type
+style:
+  .entity:
+    $: |
+      div {
+        overflow: visible !important;
+      }

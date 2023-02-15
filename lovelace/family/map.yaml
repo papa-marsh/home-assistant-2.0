@@ -1,0 +1,7 @@
+type: map
+hours_to_show: 12
+aspect_ratio: '0.985'
+dark_mode: true
+entities:
+  - entity: person.marshall
+  - entity: person.emily

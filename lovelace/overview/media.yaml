@@ -1,0 +1,270 @@
+type: entities
+entities:
+  - entity: input_select.sonos_source_list
+    name: Select a Playlist...
+    tap_action: none
+style: |
+  ha-card {
+    height: 315px !important;
+  }
+#   - entity: media_player.living_room
+#     tap_action: none
+#     group: true
+#     hide:
+#       controls: true
+#       power: true
+#       progress: true
+#       source: true
+#       volume: true
+#     name: ' '
+#     speaker_group:
+#       show_group_count: false
+#     style: |
+#       .entity__info__media {
+#         opacity: 1 !important;
+#         color: var(--primary-text-color) !important;
+#         font-size: larger !important;
+#         white-space: initial !important;
+#         max-height: unset !important;
+#       }
+#     type: custom:mini-media-player
+#   - type: custom:paper-buttons-row
+#     buttons:
+#       - icon: mdi:skip-previous
+#         style:
+#           button:
+#             width: 12%
+#             justify-content: center
+#             padding: 8px 36px
+#             border-radius: var(--ha-card-border-radius)
+#             background-color: var(--paper-card-background-color)
+#         tap_action:
+#           action: call-service
+#           service: media_player.media_previous_track
+#           service_data:
+#             entity_id: media_player.living_room
+#       - icon: |-
+#           {% if is_state('media_player.living_room', 'playing') %}
+#             mdi:pause
+#           {% else %}
+#             mdi:play
+#           {% endif %}
+#         style:
+#           button:
+#             width: 12%
+#             justify-content: center
+#             padding: 8px 36px
+#             border-radius: var(--ha-card-border-radius)
+#             background-color: var(--paper-card-background-color)
+#         tap_action:
+#           action: call-service
+#           service: media_player.media_play_pause
+#           service_data:
+#             entity_id: media_player.living_room
+#       - icon: mdi:skip-next
+#         style:
+#           button:
+#             width: 12%
+#             justify-content: center
+#             padding: 8px 36px
+#             border-radius: var(--ha-card-border-radius)
+#             background-color: var(--paper-card-background-color)
+#         tap_action:
+#           action: call-service
+#           service: media_player.media_next_track
+#           service_data:
+#             entity_id: media_player.living_room
+#   - type: custom:fold-entity-row
+#     padding: 0
+#     head:
+#       artwork: none
+#       entity: media_player.living_room
+#       group: true
+#       hide:
+#         controls: false
+#         icon: true
+#         info: true
+#         mute: false
+#         next: true
+#         play_pause: true
+#         power: true
+#         prev: true
+#         progress: true
+#         source: true
+#       speaker_group:
+#         show_group_count: false
+#       style: |
+#         .mmp-player__adds {
+#           margin-top: -5px;
+#         }
+#         ha-card {
+#           margin-top: -5px;
+#         }
+#       type: custom:mini-media-player
+#     entities:
+#       - artwork: none
+#         entity: media_player.playroom
+#         group: true
+#         hide:
+#           controls: false
+#           icon: true
+#           info: true
+#           mute: false
+#           next: true
+#           play_pause: false
+#           power: true
+#           prev: true
+#           progress: true
+#           source: true
+#         speaker_group:
+#           show_group_count: false
+#         style:
+#           mmp-media-controls:
+#             $: |
+#               .mmp-media-controls__media {
+#                 padding-right: 3px !important;
+#               }
+#           .: |
+#             .mmp-player__adds {
+#               margin-top: -5px;
+#             }
+#             ha-card {
+#               margin-top: -5px;
+#             }
+#         type: custom:mini-media-player
+#       - artwork: none
+#         entity: media_player.ellies_room
+#         group: true
+#         hide:
+#           controls: false
+#           icon: true
+#           info: true
+#           mute: false
+#           next: true
+#           play_pause: false
+#           power: true
+#           prev: true
+#           progress: true
+#           source: true
+#         speaker_group:
+#           show_group_count: false
+#         style:
+#           mmp-media-controls:
+#             $: |
+#               .mmp-media-controls__media {
+#                 padding-right: 3px !important;
+#               }
+#           .: |
+#             .mmp-player__adds {
+#               margin-top: -5px;
+#             }
+#             ha-card {
+#               margin-top: -5px;
+#             }
+#         type: custom:mini-media-player
+#   - artwork: none
+#     entity: media_player.living_room
+#     type: custom:mini-media-player
+#     group: true
+#     hide:
+#       name: true
+#       volume: true
+#       controls: true
+#       icon: true
+#       info: true
+#       mute: true
+#       power: true
+#       progress: true
+#       source: true
+#     style: |
+#       ha-card {
+#         margin-top: -15px;
+#       }
+#   - type: custom:paper-buttons-row
+#     buttons:
+#       - icon: mdi:compass-rose
+#         style:
+#           button:
+#             width: 2%
+#             justify-content: center
+#             padding: 8px 36px
+#             border-radius: var(--ha-card-border-radius)
+#             background-color: >-
+#               {% if is_state('input_select.sonos_source_list',
+#               'Discover Weekly') %}
+#                 var(--custom-card-active-background-color)
+#               {% else %}
+#                 var(--paper-card-background-color)
+#               {% endif %}
+#         tap_action:
+#           action: call-service
+#           service: input_select.select_option
+#           service_data:
+#             entity_id: input_select.lovelace_button_list
+#             option: Media Preset 1
+#       - icon: mdi:calendar-today
+#         style:
+#           button:
+#             width: 2%
+#             justify-content: center
+#             padding: 8px 36px
+#             border-radius: var(--ha-card-border-radius)
+#             background-color: >-
+#               {% if is_state('input_select.sonos_source_list',
+#               'Daily Mix 1') %}
+#                 var(--custom-card-active-background-color)
+#               {% else %}
+#                 var(--paper-card-background-color)
+#               {% endif %}
+#         tap_action:
+#           action: call-service
+#           service: input_select.select_option
+#           service_data:
+#             entity_id: input_select.lovelace_button_list
+#             option: Media Preset 2
+#       - icon: mdi:face-shimmer
+#         style:
+#           button:
+#             width: 2%
+#             justify-content: center
+#             padding: 8px 36px
+#             border-radius: var(--ha-card-border-radius)
+#             background-color: >-
+#               {% if is_state('input_select.sonos_source_list',
+#               'Songs') %}
+#                 var(--custom-card-active-background-color)
+#               {% else %}
+#                 var(--paper-card-background-color)
+#               {% endif %}
+#         tap_action:
+#           action: call-service
+#           service: input_select.select_option
+#           service_data:
+#             entity_id: input_select.lovelace_button_list
+#             option: Media Preset 3
+#       - icon: mdi:face-woman-shimmer
+#         style:
+#           button:
+#             width: 2%
+#             justify-content: center
+#             padding: 8px 36px
+#             border-radius: var(--ha-card-border-radius)
+#             background-color: >-
+#               {% if is_state('input_select.sonos_source_list',
+#               'Emily') %}
+#                 var(--custom-card-active-background-color)
+#               {% else %}
+#                 var(--paper-card-background-color)
+#               {% endif %}
+#         tap_action:
+#           action: call-service
+#           service: input_select.select_option
+#           service_data:
+#             entity_id: input_select.lovelace_button_list
+#             option: Media Preset 4
+# style:
+#   .: |
+#     #states {
+#       padding-top: 4px;
+#       padding-bottom: 8px;
+#     }

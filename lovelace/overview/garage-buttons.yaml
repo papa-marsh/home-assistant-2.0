@@ -1,0 +1,36 @@
+type: horizontal-stack
+cards:
+  - type: custom:button-card
+    entity: cover.east_stall
+    name: Marshall's Stall
+    styles:
+      card:
+        - height: 116px
+        - background: |
+            [[[
+              if (entity.state == "open") return "var(--custom-card-active-background-color)";
+              else return "var( --ha-card-background, var(--card-background-color, white) )";
+            ]]]
+    tap_action:
+      action: call-service
+      service: input_select.select_option
+      service_data:
+        entity_id: input_select.lovelace_action
+        option: '[[[ return entity.attributes.friendly_name ]]]'
+  - type: custom:button-card
+    entity: cover.west_stall
+    name: Emily's Stall
+    styles:
+      card:
+        - height: 116px
+        - background: |
+            [[[
+              if (entity.state == "open") return "var(--custom-card-active-background-color)";
+              else return "var( --ha-card-background, var(--card-background-color, white) )";
+            ]]]
+    tap_action:
+      action: call-service
+      service: input_select.select_option
+      service_data:
+        entity_id: input_select.lovelace_action
+        option: '[[[ return entity.attributes.friendly_name ]]]'

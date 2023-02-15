@@ -1,0 +1,5 @@
+|
+  ha-card {
+      max-width: 412px !important;
+      margin: 8px !important;
+  }

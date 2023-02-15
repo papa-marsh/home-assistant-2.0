@@ -1,0 +1,8 @@
+type: entities
+entities:
+  - entity: switch.space_heater
+  - entity: switch.master_sound_machine
+  - entity: switch.ellies_sound_machine
+  - entity: media_player.living_room_tv
+title: Devices
+show_header_toggle: false

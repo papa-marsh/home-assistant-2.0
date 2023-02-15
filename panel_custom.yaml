@@ -1,0 +1,45 @@
+  - name: ha_integ
+    sidebar_title: Integrations
+    sidebar_icon: mdi:chip
+    js_url: /api/hassio/app/entrypoint.js
+    url_path: 'config/integrations'
+    embed_iframe: true
+    require_admin: true
+    config:
+      ingress: core_configurator
+  - name: ha_add_ons
+    sidebar_title: Add-ons
+    sidebar_icon: mdi:package-variant-closed-plus
+    js_url: /api/hassio/app/entrypoint.js
+    url_path: 'hassio/dashboard'
+    embed_iframe: true
+    require_admin: true
+    config:
+      ingress: core_configurator
+  - name: ha_entities
+    sidebar_title: Entities
+    sidebar_icon: mdi:format-list-text
+    js_url: /api/hassio/app/entrypoint.js
+    url_path: 'config/entities'
+    embed_iframe: true
+    require_admin: true
+    config:
+      ingress: core_configurator
+  - name: ha_supervisor
+    sidebar_title: Supervisor
+    sidebar_icon: mdi:shield-star
+    js_url: /api/hassio/app/entrypoint.js
+    url_path: 'hassio/system'
+    embed_iframe: true
+    require_admin: true
+    config:
+      ingress: core_configurator
+  - name: ha_lovelace_overview
+    sidebar_title: Sandbox
+    sidebar_icon: mdi:test-tube
+    js_url: /api/hassio/app/entrypoint.js
+    url_path: 'lovelace/'
+    embed_iframe: true
+    require_admin: true
+    config:
+      ingress: core_configurator

@@ -1,0 +1,19 @@
+type: custom:atomic-calendar-revive
+name: Warners Calendar
+entities:
+  - calendar.warnersfam_gmail_com
+maxDaysToShow: 30
+maxEventCount: 9
+showWeekDay: true
+firstDayOfWeek: 1
+refreshInterval: 60
+sortByStartTime: true
+showRelativeTime: false
+showLocation: false
+showLoader: false
+showProgressBar: false
+style: |
+  ha-card {
+    height: 552px !important;
+    overflow: hidden !important;
+  }

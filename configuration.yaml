@@ -1,0 +1,97 @@
+
+automation: !include automations.yaml
+
+default_config:
+
+frontend:
+    themes: !include_dir_merge_named themes
+    extra_module_url:
+      - /hacsfiles/lovelace-card-mod/card-mod.js
+
+homeassistant:
+  auth_providers:
+    - type: trusted_networks
+      trusted_networks:
+        - 192.168.0.0/24
+      allow_bypass_login: true
+    - type: homeassistant
+
+lovelace:
+  mode: storage
+  dashboards:
+    lovelace-cast:
+      mode: yaml
+      title: Cast
+      icon: mdi:cast
+      show_in_sidebar: true
+      filename: ui-cast.yaml
+    lovelace-mobile:
+      mode: yaml
+      title: Mobile
+      icon: mdi:cellphone
+      show_in_sidebar: true
+      filename: ui-mobile.yaml
+
+panel_custom: !include panel_custom.yaml
+
+scene: !include scenes.yaml
+
+script: !include scripts.yaml
+
+tts:
+  - platform: google_translate
+  
+########################################
+
+cover:
+  - platform: template
+    covers:
+      east_stall:
+        device_class: garage
+        friendly_name: "East Stall"
+        value_template: "{{ is_state('binary_sensor.east_stall_input', 'off') }}"
+        open_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.east_stall
+        close_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.east_stall
+  - platform: template
+    covers:
+      west_stall:
+        device_class: garage
+        friendly_name: "West Stall"
+        value_template: "{{ is_state('binary_sensor.west_stall_input', 'off') }}"
+        open_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.west_stall
+        close_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.west_stall
+
+sensor:
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+      - 'date_time_iso'
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /home
+      - type: disk_free
+        arg: /home
+      - type: memory_use_percent
+      - type: memory_free
+      - type: processor_use
+      - type: last_boot
+      - type: swap_use
+      - type: swap_free
+  - platform: command_line
+    name: CPU Temperature
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    value_template: '{{ value | multiply(0.0018) | round(0) + 32 }}'
