@@ -15,6 +15,7 @@ deps
 tts
 
 pyscript/jupyter
+__pycache__
 json-files/debug-log.json
 json-files/zones.json
 
