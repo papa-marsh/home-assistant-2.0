@@ -1,3 +1,30 @@
+state.persist(
+    "pyscript.entity_card_office",
+    default_value="Available",
+    default_attributes={
+        "name": "Office",
+        "state_icon": "mdi:rocket",
+        "active": False,
+        "blink": False,
+        "row_1": {
+            "icon": "mdi:home-assistant",
+            "value": "ph",
+            "color": "default",
+        },
+        "row_2": {
+            "icon": "mdi:home-assistant",
+            "value": "ph",
+            "color": "default",
+        },
+        "row_3": {
+            "icon": "mdi:home-assistant",
+            "value": "ph",
+            "color": "default",
+        },
+    },
+)
+
+
 @service("lovelace.office_tap")
 def office_tap():
     if pyscript.entity_office.active:
