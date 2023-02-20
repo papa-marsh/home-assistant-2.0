@@ -14,8 +14,16 @@ views:
               - !include lovelace/overview/people-simple.yaml
               - !include lovelace/overview/garage-buttons.yaml
               - !include lovelace/overview/media.yaml
-              - !include lovelace/overview/entity-row-1.yaml
-              - !include lovelace/overview/entity-row-2.yaml
+              - type: horizontal-stack
+                cards:
+                  - !include lovelace/entity-cards/card-1.yaml
+                  - !include lovelace/entity-cards/card-2.yaml
+                  - !include lovelace/entity-cards/card-3.yaml
+              - type: horizontal-stack
+                cards:
+                  - !include lovelace/entity-cards/card-4.yaml
+                  - !include lovelace/entity-cards/card-5.yaml
+                  - !include lovelace/entity-cards/card-6.yaml
   - theme: Backend-selected
     title: Family
     type: panel

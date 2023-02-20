@@ -18,10 +18,11 @@ tts
 
 pyscript/jupyter
 __pycache__
-secrets.py
+.ipynb_checkpoints
 
 json-files/debug-log.json
 json-files/zones.json
 
+secrets.py
 secrets.yaml
 lovelace/family/calendar-family.yaml

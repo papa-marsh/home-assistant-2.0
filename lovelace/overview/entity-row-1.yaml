@@ -1,8 +1,0 @@
-type: horizontal-stack
-cards:
-  - type: custom:button-card
-    styles:
-      card:
-        - height: 100%
-  - !include ../entity-cards/stocks.yaml
-  - !include ../entity-cards/crypto.yaml
