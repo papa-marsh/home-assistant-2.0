@@ -1,26 +1,21 @@
 state.persist(
     "pyscript.entity_card_yvette",
-    default_value="Unknown",
+    default_value="",
     default_attributes={
         "name": "Yvette",
         "state_icon": "mdi:car-electric",
         "active": False,
         "blink": False,
-        "row_1": {
-            "icon": "mdi:battery",
-            "value": "Unknown",
-            "color": "default",
-        },
-        "row_2": {
-            "icon": "mdi:lock",
-            "value": "Unknown",
-            "color": "default",
-        },
-        "row_3": {
-            "icon": "mdi:thermometer",
-            "value": "Unknown",
-            "color": "default",
-        },
+        "row_1_icon": "mdi:battery",
+        "row_1_value": "",
+        "row_1_color": "default",
+        "row_2_icon": "mdi:lock",
+        "row_2_value": "",
+        "row_2_color": "default",
+        "row_3_icon": "mdi:thermometer",
+        "row_3_value": "",
+        "row_3_color": "default",
+        "staging": {},
     },
 )
 

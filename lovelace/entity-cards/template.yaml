@@ -12,9 +12,9 @@ double_tap_action:
   action: call-service
   service: '[[[ return "lovelace." + entity.attributes.name + "_dtap"]]]'
 custom_fields:
-  custom1: '[[[ return `<ha-icon icon=${entity.attributes.row_1.icon} style="width: 20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_1.value}</span>` ]]]'
-  custom2: '[[[ return `<ha-icon icon=${entity.attributes.row_2.icon} style="width: 20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_2.value}</span>` ]]]'
-  custom3: '[[[ return `<ha-icon icon=${entity.attributes.row_3.icon} style="width: 20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_3.value}</span>` ]]]'
+  custom1: '[[[ return `<ha-icon icon=${entity.attributes.row_1_icon} style="width: 20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_1_value}</span>` ]]]'
+  custom2: '[[[ return `<ha-icon icon=${entity.attributes.row_2_icon} style="width: 20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_2_value}</span>` ]]]'
+  custom3: '[[[ return `<ha-icon icon=${entity.attributes.row_3_icon} style="width: 20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_3_value}</span>` ]]]'
   state: '[[[ return entity.state ]]]'
 extra_styles: '[[[ if ( entity.attributes.blink ) return `@keyframes fade { from { opacity: 1.0; } 50% { opacity: 0.2; } to { opacity: 1.0; } }` ]]]'
 styles:
@@ -29,16 +29,16 @@ styles:
       - padding-bottom: 4px
       - align-self: middle
       - justify-self: start
-      - color: '[[[ if ( entity.attributes.row_1.color == "red" ) return "var(--custom-warning-text-color)"; else if (entity.attributes.row_1.color == "green" ) return "var(--custom-favorable-text-color)"; else return "var(--primary-text-color)"; ]]]'
+      - color: '[[[ if ( entity.attributes.row_1_color == "red" ) return "var(--custom-warning-text-color)"; else if (entity.attributes.row_1_color == "green" ) return "var(--custom-favorable-text-color)"; else return "var(--primary-text-color)"; ]]]'
     custom2:
       - padding-bottom: 4px
       - align-self: middle
       - justify-self: start
-      - color: '[[[ if ( entity.attributes.row_2.color == "red" ) return "var(--custom-warning-text-color)"; else if (entity.attributes.row_2.color == "green" ) return "var(--custom-favorable-text-color)"; else return "var(--primary-text-color)"; ]]]'
+      - color: '[[[ if ( entity.attributes.row_2_color == "red" ) return "var(--custom-warning-text-color)"; else if (entity.attributes.row_2_color == "green" ) return "var(--custom-favorable-text-color)"; else return "var(--primary-text-color)"; ]]]'
     custom3:
       - align-self: middle
       - justify-self: start
-      - color: '[[[ if ( entity.attributes.row_3.color == "red" ) return "var(--custom-warning-text-color)"; else if (entity.attributes.row_3.color == "green" ) return "var(--custom-favorable-text-color)"; else return "var(--primary-text-color)"; ]]]'
+      - color: '[[[ if ( entity.attributes.row_3_color == "red" ) return "var(--custom-warning-text-color)"; else if (entity.attributes.row_3_color == "green" ) return "var(--custom-favorable-text-color)"; else return "var(--primary-text-color)"; ]]]'
     state:
       - margin-top: '-2px'
       - font-weight: bold

@@ -6,21 +6,16 @@ state.persist(
         "state_icon": "mdi:rocket",
         "active": False,
         "blink": False,
-        "row_1": {
-            "icon": "mdi:home-assistant",
-            "value": "ph",
-            "color": "default",
-        },
-        "row_2": {
-            "icon": "mdi:home-assistant",
-            "value": "ph",
-            "color": "default",
-        },
-        "row_3": {
-            "icon": "mdi:home-assistant",
-            "value": "ph",
-            "color": "default",
-        },
+        "row_1_icon": "mdi:home-assistant",
+        "row_1_value": "",
+        "row_1_color": "default",
+        "row_2_icon": "mdi:home-assistant",
+        "row_2_value": "",
+        "row_2_color": "default",
+        "row_3_icon": "mdi:home-assistant",
+        "row_3_value": "",
+        "row_3_color": "default",
+        "staging": {},
     },
 )
 

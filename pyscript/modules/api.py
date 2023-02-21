@@ -1,5 +1,10 @@
 import requests
 import secrets
+from datetime import date, datetime
+
+
+def get_stock_week_change(symbol="SPY"):
+    return get_stock_quote(symbol)["current"] / float(get_stock_week(symbol))
 
 
 def get_stock_quote(symbol="SPY"):
@@ -7,19 +12,22 @@ def get_stock_quote(symbol="SPY"):
 
     r = task.executor(requests.get, url).json()
 
-    output = {"current": r["c"], "change": r["dp"], "prev_close": r["pc"]}
-
-    return output
+    return {"current": r["c"], "change": r["dp"], "prev_close": r["pc"]}
 
 
-def get_stock_week_open(symbol="SPY"):
+def get_stock_week(symbol="SPY"):
     url = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={symbol.upper()}&apikey={secrets.ALPHAVANTAGE_KEY}"
 
     r = task.executor(requests.get, url).json()
 
     latest_week = list(r["Weekly Time Series"].keys())[0]
 
-    return r["Weekly Time Series"][latest_week]["1. open"]
+    latest_week_number = datetime.strptime(latest_week, "%Y-%m-%d").isocalendar().week
+    current_week_number = date.today().isocalendar().week
+
+    week_key = "1. open" if latest_week_number == current_week_number else "4. close"
+
+    return r["Weekly Time Series"][latest_week][week_key]
 
 
 def get_crypto_quotes(symbols=["BTC"], limit=500):

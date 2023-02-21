@@ -1,32 +1,27 @@
 import api
 import constants
-import misc
+import format
 import secrets
 
 
 state.persist(
     "pyscript.entity_card_stocks",
-    default_value="Unkown",
+    default_value="",
     default_attributes={
         "name": "Stocks",
         "state_icon": "mdi:finance",
         "active": False,
         "blink": False,
-        "row_1": {
-            "icon": constants.STOCK_DISPLAY_ICONS["row_1"],
-            "value": "Unknown",
-            "color": "default",
-        },
-        "row_2": {
-            "icon": constants.STOCK_DISPLAY_ICONS["row_2"],
-            "value": "Unknown",
-            "color": "default",
-        },
-        "row_3": {
-            "icon": constants.STOCK_DISPLAY_ICONS["row_3"],
-            "value": "Unknown",
-            "color": "default",
-        },
+        "private": False,
+        "row_1_icon": constants.STOCKS_CONFIG["row_1"]["icon"],
+        "row_1_value": "",
+        "row_1_color": "default",
+        "row_2_icon": constants.STOCKS_CONFIG["row_2"]["icon"],
+        "row_2_value": "",
+        "row_2_color": "default",
+        "row_3_icon": constants.STOCKS_CONFIG["row_3"]["icon"],
+        "row_3_value": "",
+        "row_3_color": "default",
         "staging": {},
     },
 )
@@ -34,7 +29,9 @@ state.persist(
 
 @service("lovelace.stocks_tap")
 def stocks_tap():
-    return
+    populate_card(not pyscript.entity_card_stocks.private)
+    task.sleep(10)
+    populate_card(private=False)
 
 
 @service("lovelace.stocks_hold")
@@ -47,89 +44,78 @@ def stocks_dtap():
     return
 
 
-# TODO parameterize row icons at the init level (also figure out way to update without init..?)
+@time_trigger("startup", "cron(*/5 9-17 * * 1-5)")
+def stage_and_populate():
+    stage_entity()
+    task.sleep(5)
+    populate_card(private=False)
 
 
-# @time(every X minutes)
 def stage_entity():
     staging = {
-        "balance": secrets.STOCK_BALANCE,
-        "spy_week": api.get_stock_week_open(symbol="SPY"),
+        "balance": secrets.STOCKS_BALANCE,
+        "spy_week": api.get_stock_week_change(symbol="SPY"),
+        "total": secrets.STOCKS_BALANCE,
     }
 
-    for symbol in secrets.STOCK_QTY:
+    for symbol in secrets.STOCKS_QTY:
         quote = api.get_stock_quote(symbol=symbol)
         staging[symbol.lower()] = {
             "price": quote["current"],
             "change": quote["change"],
-            "qty": secrets.STOCK_QTY[symbol],
+            "qty": secrets.STOCKS_QTY[symbol],
         }
+        staging["total"] += quote["current"] * secrets.STOCKS_QTY[symbol]
 
     pyscript.entity_card_stocks.staging = staging
-    populate_card_public()
 
 
-stage_entity()
+def populate_card(private=False):
+    visibility = "private" if private else "public"
+    active = False
 
+    if visibility == "public":
+        pyscript.entity_card_stocks = format.format_asset_change(
+            pyscript.entity_card_stocks.staging["spy_week"], percent_formatted=True
+        )
+    else:
+        pyscript.entity_card_stocks = format.format_asset_price(
+            pyscript.entity_card_stocks.staging["total"], precision=0
+        )
 
-# @(tap if private)
-# @(startup)
-def populate_card_public():
-    pyscript.entity_card_stocks.row_1["value"] = misc.format_asset_change(
-        pyscript.entity_card_stocks.staging[constants.STOCK_DISPLAY_SYMBOLS["row_1"]][
-            "change"
-        ]
-    )
-    pyscript.entity_card_stocks.row_2["value"] = misc.format_asset_change(
-        pyscript.entity_card_stocks.staging[constants.STOCK_DISPLAY_SYMBOLS["row_2"]][
-            "change"
-        ]
-    )
-    pyscript.entity_card_stocks.row_3["value"] = misc.format_asset_change(
-        pyscript.entity_card_stocks.staging[constants.STOCK_DISPLAY_SYMBOLS["row_3"]][
-            "change"
-        ]
-    )
+    for row in range(1, 4):
+        config = constants.STOCKS_CONFIG[f"row_{row}"][visibility]
+        symbol = constants.STOCKS_CONFIG[f"row_{row}"]["symbol"]
+        icon = constants.STOCKS_CONFIG[f"row_{row}"]["icon"]
+        staged = pyscript.entity_card_stocks.staging[symbol]
+        value = ""
 
-    pyscript.entity_card_stocks.row_1["color"] = misc.get_asset_color(
-        pyscript.entity_card_stocks.staging[constants.STOCK_DISPLAY_SYMBOLS["row_1"]][
-            "change"
-        ]
-    )
-    pyscript.entity_card_stocks.row_2["color"] = misc.get_asset_color(
-        pyscript.entity_card_stocks.staging[constants.STOCK_DISPLAY_SYMBOLS["row_2"]][
-            "change"
-        ]
-    )
-    pyscript.entity_card_stocks.row_3["color"] = misc.get_asset_color(
-        pyscript.entity_card_stocks.staging[constants.STOCK_DISPLAY_SYMBOLS["row_3"]][
-            "change"
-        ]
-    )
+        if abs(staged["change"]) >= constants.ASSET_ACTIVE_THRESHOLD:
+            active = True
 
+        if config["price"]:
+            value += format.format_asset_price(
+                staged["price"], precision=config["price_prec"], cents=config["cents"]
+            )
 
-# @(tap if public)
-# @(double tap for stocks & crypto?)
-# @(unique threading)
-def populate_card_private():
-    pyscript.entity_card_stocks.row_1["value"] = misc.format_asset_price(
-        pyscript.entity_card_stocks.staging[constants.STOCK_DISPLAY_SYMBOLS["row_1"]][
-            "price"
-        ]
-    )
+        if config["price"] and config["change"]:
+            value += " ("
 
-    pyscript.entity_card_stocks.row_2["value"] = misc.format_asset_price(
-        pyscript.entity_card_stocks.staging[constants.STOCK_DISPLAY_SYMBOLS["row_2"]][
-            "price"
-        ]
-    )
+        if config["change"]:
+            value += format.format_asset_change(
+                staged["change"],
+                precision=config["change_prec"],
+                percent_formatted=True,
+            )
 
-    pyscript.entity_card_stocks.row_3["value"] = misc.format_asset_price(
-        pyscript.entity_card_stocks.staging[constants.STOCK_DISPLAY_SYMBOLS["row_3"]][
-            "price"
-        ]
-    )
+        if config["price"] and config["change"]:
+            value += ")"
 
-    pyscript.entity_card_stocks.row_1["icon"] = constants.STOCK_DISPLAY_ICONS["row_1"]
-    pyscript.entity_card_stocks.row_2["icon"] = constants.STOCK_DISPLAY_ICONS["row_2"]
-    pyscript.entity_card_stocks.row_3["icon"] = constants.STOCK_DISPLAY_ICONS["row_3"]
+        color = format.get_asset_color(staged["change"], percent_formatted=True)
+
+        state.setattr(f"pyscript.entity_card_stocks.row_{row}_value", value)
+        state.setattr(f"pyscript.entity_card_stocks.row_{row}_icon", icon)
+        state.setattr(f"pyscript.entity_card_stocks.row_{row}_color", color)
+
+    pyscript.entity_card_stocks.active = active
+    pyscript.entity_card_stocks.private = private
