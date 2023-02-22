@@ -41,7 +41,8 @@ def stocks_hold():
 
 @service("lovelace.stocks_dtap")
 def stocks_dtap():
-    return
+    service.call("lovelace", "stocks_tap")
+    service.call("lovelace", "crypto_tap")
 
 
 @time_trigger("startup", "cron(*/5 9-17 * * 1-5)")
@@ -63,7 +64,6 @@ def stage_entity():
         staging[symbol.lower()] = {
             "price": quote["current"],
             "change": quote["change"],
-            "qty": secrets.STOCKS_QTY[symbol],
         }
         staging["total"] += quote["current"] * secrets.STOCKS_QTY[symbol]
 
@@ -95,7 +95,10 @@ def populate_card(private=False):
 
         if config["price"]:
             value += format.format_asset_price(
-                staged["price"], precision=config["price_prec"], cents=config["cents"]
+                staged["price"],
+                precision=config["price_prec"],
+                cents=config["cents"],
+                k_suffix=config["k_suffix"],
             )
 
         if config["price"] and config["change"]:

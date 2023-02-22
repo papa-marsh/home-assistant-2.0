@@ -1,12 +1,15 @@
 import constants
 
 
-def format_asset_price(price, precision=2, cents=False):
+def format_asset_price(price, precision=2, cents=False, k_suffix=False):
     price = float(price)
     if cents:
-        return f"{price*100:.{precision}f}¢"
+        return f"{price*100:.{precision}f} ¢"
     else:
-        return f"${price:,.{precision}f}"
+        if k_suffix:
+            return f"${price/1000:,.{precision}f}k"
+        else:
+            return f"${price:,.{precision}f}"
 
 
 def format_asset_change(change, precision=2, percent_formatted=False):

@@ -22,13 +22,13 @@ state.persist(
 
 @service("lovelace.office_tap")
 def office_tap():
-    if pyscript.entity_office.active:
-        pyscript.entity_office.active = False
-        pyscript.entity_office = "Available"
+    if pyscript.entity_card_office.active:
+        pyscript.entity_card_office.active = False
+        pyscript.entity_card_office = "Available"
         light.turn_off(entity_id="light.office_door_led")
     else:
-        pyscript.entity_office.active = True
-        pyscript.entity_office = "Busy"
+        pyscript.entity_card_office.active = True
+        pyscript.entity_card_office = "Busy"
         light.turn_on(entity_id="light.office_door_led")
 
 
