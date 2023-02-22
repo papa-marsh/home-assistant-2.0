@@ -98,7 +98,7 @@ CRYPTO_CONFIG = {
         },
         "private": {
             "price": True,
-            "price_prec": 2,
+            "price_prec": 0,
             "cents": False,
             "k_suffix": False,
             "change": False,
@@ -119,7 +119,7 @@ CRYPTO_CONFIG = {
         "private": {
             "price": True,
             "price_prec": 2,
-            "cents": False,
+            "cents": True,
             "k_suffix": False,
             "change": False,
             "change_prec": 0,

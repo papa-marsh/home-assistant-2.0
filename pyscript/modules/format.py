@@ -1,6 +1,19 @@
 import constants
 
 
+def get_battery_icon(battery, charging=False, ev_offset=False):
+    if 0 < battery < 1:
+        battery *= 100
+    if ev_offset:
+        battery *= 100 / 85
+    battery = min(battery, 100)
+
+    icon = "mdi:battery-charging-" if charging else "mdi:battery-"
+    icon += str(round(battery / 10) * 10)
+
+    return "battery" if icon == "battery-100" else icon
+
+
 def format_asset_price(price, precision=2, cents=False, k_suffix=False):
     price = float(price)
     if cents:
