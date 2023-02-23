@@ -15,7 +15,6 @@ state.persist(
         "row_3_icon": "mdi:thermometer",
         "row_3_value": "",
         "row_3_color": "default",
-        "staging": {},
     },
 )
 

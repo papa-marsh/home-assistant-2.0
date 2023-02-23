@@ -76,11 +76,11 @@ def populate_card(private=False):
     active = False
 
     if visibility == "public":
-        pyscript.entity_card_crypto = format.format_asset_change(
+        pyscript.entity_card_crypto = format.asset_change(
             pyscript.entity_card_crypto.staging["btc_week"], percent_formatted=True
         )
     else:
-        pyscript.entity_card_crypto = format.format_asset_price(
+        pyscript.entity_card_crypto = format.asset_price(
             pyscript.entity_card_crypto.staging["total"], precision=0
         )
 
@@ -95,7 +95,7 @@ def populate_card(private=False):
             active = True
 
         if config["price"]:
-            value += format.format_asset_price(
+            value += format.asset_price(
                 staged["price"],
                 precision=config["price_prec"],
                 cents=config["cents"],
@@ -106,7 +106,7 @@ def populate_card(private=False):
             value += " ("
 
         if config["change"]:
-            value += format.format_asset_change(
+            value += format.asset_change(
                 staged["change"],
                 precision=config["change_prec"],
                 percent_formatted=True,
@@ -115,7 +115,7 @@ def populate_card(private=False):
         if config["price"] and config["change"]:
             value += ")"
 
-        color = format.get_asset_color(staged["change"], percent_formatted=True)
+        color = format.asset_color(staged["change"], percent_formatted=True)
 
         state.setattr(f"pyscript.entity_card_crypto.row_{row}_value", value)
         state.setattr(f"pyscript.entity_card_crypto.row_{row}_icon", icon)

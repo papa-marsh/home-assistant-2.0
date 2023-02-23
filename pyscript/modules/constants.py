@@ -44,7 +44,7 @@ STOCKS_CONFIG = {
     },
     "row_3": {
         "symbol": "astr",
-        "icon": "mdi:rocket-launch",
+        "icon": "mdi:rocket",
         "public": {
             "price": True,
             "price_prec": 2,
@@ -90,9 +90,9 @@ CRYPTO_CONFIG = {
         "icon": "mdi:ethereum",
         "public": {
             "price": True,
-            "price_prec": 0,
+            "price_prec": 1,
             "cents": False,
-            "k_suffix": False,
+            "k_suffix": True,
             "change": True,
             "change_prec": 0,
         },
