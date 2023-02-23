@@ -56,13 +56,11 @@ def update_row_1():
 
 
 @time_trigger("startup")
-# @state_trigger("")
 def update_row_2():
     pyscript.entity_card_office.row_2_value = ""
 
 
 @time_trigger("startup")
-# @state_trigger("")
 def update_row_3():
     pyscript.entity_card_office.row_3_value = ""
 
