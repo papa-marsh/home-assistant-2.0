@@ -2,6 +2,21 @@ import constants
 from datetime import date
 
 
+def date_countdown(target, short=False):
+    today = date.today()
+
+    if (target - today).days == 0:
+        countdown = "0" if short else "Today"
+    elif (target - today).days == 1:
+        countdown = "1" if short else "Tomorrow"
+    else:
+        countdown = str((target - today).days)
+        if not short:
+            countdown += " Days"
+
+    return countdown
+
+
 def colloquial_date(target, short=False, ordinals=False):
     today = date.today()
     ord_map = {"1": "st", "2": "nd", "3": "rd"}

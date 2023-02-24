@@ -44,7 +44,7 @@ STOCKS_CONFIG = {
     },
     "row_3": {
         "symbol": "astr",
-        "icon": "mdi:rocket",
+        "icon": "mdi:rocket-launch",
         "public": {
             "price": True,
             "price_prec": 2,

@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 import format
 import util
 
@@ -7,16 +7,16 @@ state.persist(
     default_value="Available",
     default_attributes={
         "name": "Office",
-        "state_icon": "mdi:rocket-launch",
+        "state_icon": "mdi:rocket",
         "active": False,
         "blink": False,
-        "row_1_icon": "mdi:calendar-clock",
+        "row_1_icon": "mdi:home-assistant",
         "row_1_value": "",
         "row_1_color": "default",
         "row_2_icon": "mdi:home-assistant",
         "row_2_value": "",
         "row_2_color": "default",
-        "row_3_icon": "mdi:home-assistant",
+        "row_3_icon": "mdi:calendar-clock",
         "row_3_value": "",
         "row_3_color": "default",
         "staging": {},
@@ -45,24 +45,29 @@ def office_hold():
 def office_dtap():
     pyscript.entity_card_office.staging["last_timecard"] = date.today()
     pyscript.entity_card_office.blink = False
+    update_row_3()
 
 
-@time_trigger("startup", "cron(*/15 * * * *)")
+@time_trigger("startup")
+@state_trigger("media_player.office")
 def update_row_1():
+    pyscript.entity_card_office.row_1_value = media_player.office
+
+
+@time_trigger("startup")
+@state_trigger("media_player.office", "media_player.office.volume_level")
+def update_row_2():
+    pyscript.entity_card_office.row_2_value = (
+        f"{round(media_player.office.volume_level * 100)}%"
+    )
+
+
+@time_trigger("startup", "cron(*/15 3 * * *)")
+def update_row_3():
     next_timecard = get_next_timecard()
     if next_timecard == date.today():
         pyscript.entity_card_office.blink = True
-    pyscript.entity_card_office.row_1_value = format.colloquial_date(next_timecard)
-
-
-@time_trigger("startup")
-def update_row_2():
-    pyscript.entity_card_office.row_2_value = ""
-
-
-@time_trigger("startup")
-def update_row_3():
-    pyscript.entity_card_office.row_3_value = ""
+    pyscript.entity_card_office.row_3_value = format.colloquial_date(next_timecard)
 
 
 def get_next_timecard():

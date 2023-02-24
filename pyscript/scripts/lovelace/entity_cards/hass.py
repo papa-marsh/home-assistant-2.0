@@ -3,7 +3,7 @@ state.persist(
     default_value="Unkown",
     default_attributes={
         "name": "HASS",
-        "state_icon": "mdi:home-assistant",
+        "state_icon": "mdi:raspberry-pi",
         "active": False,
         "blink": False,
         "row_1_icon": "mdi:store",
