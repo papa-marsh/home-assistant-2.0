@@ -30,7 +30,7 @@ state.persist(
 @service("lovelace.stocks_tap")
 def stocks_tap():
     populate_card(not pyscript.entity_card_stocks.private)
-    task.sleep(10)
+    task.sleep(5)
     populate_card(private=False)
 
 

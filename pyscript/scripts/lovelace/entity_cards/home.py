@@ -13,7 +13,7 @@ state.persist(
         "row_1_icon": "mdi:thermometer",
         "row_1_value": "",
         "row_1_color": "default",
-        "row_2_icon": "mdi:water-percent",
+        "row_2_icon": "mdi:water",
         "row_2_value": "",
         "row_2_color": "default",
         "row_3_icon": "mdi:delete",
@@ -70,6 +70,10 @@ def update_row_3():
 
 def get_next_bin_day():
     next_bin_day = util.get_next_weekday("mon")
+    if "last_bin_day" not in pyscript.entity_card_home.staging:
+        pyscript.entity_card_home.staging["last_bin_day"] = date.today() - timedelta(
+            days=7
+        )
     if next_bin_day <= pyscript.entity_card_home.staging["last_bin_day"]:
         next_bin_day += timedelta(days=7)
 

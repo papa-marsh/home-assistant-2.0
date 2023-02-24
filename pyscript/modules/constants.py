@@ -1,6 +1,7 @@
 ASSET_COLOR_THRESHOLD = 10.0
 ASSET_ACTIVE_THRESHOLD = 5.0
 
+
 STOCKS_CONFIG = {
     "row_1": {
         "symbol": "spy",

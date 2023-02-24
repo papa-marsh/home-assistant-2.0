@@ -2,6 +2,7 @@ from datetime import date, timedelta
 import format
 import util
 
+
 state.persist(
     "pyscript.entity_card_office",
     default_value="Available",
@@ -10,10 +11,10 @@ state.persist(
         "state_icon": "mdi:rocket",
         "active": False,
         "blink": False,
-        "row_1_icon": "mdi:home-assistant",
+        "row_1_icon": "mdi:speaker",
         "row_1_value": "",
         "row_1_color": "default",
-        "row_2_icon": "mdi:home-assistant",
+        "row_2_icon": "mdi:volume-high",
         "row_2_value": "",
         "row_2_color": "default",
         "row_3_icon": "mdi:calendar-clock",
@@ -74,7 +75,11 @@ def get_next_timecard():
     next_timecard = util.get_next_weekday("fri")
     if next_timecard.isocalendar().week % 2:
         next_timecard += timedelta(days=7)
-    if next_timecard <= pyscript.entity_card_office.staging["last_timecard"]:
+    if "last_timecard" not in pyscript.entity_card_office.staging:
+        pyscript.entity_card_office.staging["last_timecard"] = date.today() - timedelta(
+            days=14
+        )
+    elif next_timecard <= pyscript.entity_card_office.staging["last_timecard"]:
         next_timecard += timedelta(days=14)
 
     return next_timecard
