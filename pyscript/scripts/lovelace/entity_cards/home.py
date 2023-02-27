@@ -43,6 +43,28 @@ def home_dtap():
 
 @time_trigger("startup")
 @state_trigger(
+    "binary_sensor.garage_door_sensor",
+    "binary_sensor.front_door_sensor",
+    "binary_sensor.service_door_sensor",
+    "binary_sensor.slider_door_sensor",
+)
+def update_state():
+    doors = ["garage", "front", "service", "slider"]
+
+    open_count = 0
+    output = "All Shut"
+
+    for door in doors:
+        if state.get(f"binary_sensor.{door}_door_sensor") == "on":
+            open_count += 1
+            output = f"{door} Door"
+
+    pyscript.entity_card_home = output if open_count < 2 else f"{open_count} Doors"
+    pyscript.entity_card_home.active = open_count > 0
+
+
+@time_trigger("startup")
+@state_trigger(
     "climate.thermostat.current_temperature", "climate.thermostat.hvac_action"
 )
 def update_row_1():
