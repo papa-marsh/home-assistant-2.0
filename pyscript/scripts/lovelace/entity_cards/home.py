@@ -36,8 +36,8 @@ def home_hold():
 
 @service("lovelace.home_dtap")
 def home_dtap():
-    pyscript.entity_card_office.staging["last_bin_day"] = date.today()
-    pyscript.entity_card_office.blink = False
+    pyscript.entity_card_home.staging["last_bin_day"] = date.today()
+    pyscript.entity_card_home.blink = False
     update_row_3()
 
 
@@ -57,7 +57,7 @@ def update_state():
     for door in doors:
         if state.get(f"binary_sensor.{door}_door_sensor") == "on":
             open_count += 1
-            output = f"{door} Door"
+            output = door
 
     pyscript.entity_card_home = output if open_count < 2 else f"{open_count} Doors"
     pyscript.entity_card_home.active = open_count > 0
