@@ -59,11 +59,11 @@ def update_row_2():
     )
 
 
-@time_trigger("startup", "cron(*/15 0,6 * * *)")
+@time_trigger("startup", "cron(*/15 0,18 * * *)")
 def update_row_3():
     now = datetime.today()
     next_bin_day = get_next_bin_day()
-    if next_bin_day == now.date() and now.hour >= 6:
+    if next_bin_day == now.date() and now.hour >= 18:
         pyscript.entity_card_home.blink = True
     pyscript.entity_card_home.row_3_value = format.date_countdown(next_bin_day)
 
