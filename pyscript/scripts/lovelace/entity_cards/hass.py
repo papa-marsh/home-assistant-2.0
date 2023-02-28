@@ -39,7 +39,6 @@ def hass_dtap():
     "update.home_assistant_core_update",
     "update.home_assistant_operating_system_update",
     "update.home_assistant_supervisor_update",
-    state_check_now=True,
 )
 def update_state():
     pyscript.entity_card_hass = update.home_assistant_core_update.installed_version[2:]

@@ -1,6 +1,8 @@
 ASSET_COLOR_THRESHOLD = 10.0
 ASSET_ACTIVE_THRESHOLD = 5.0
 
+NOTI_SOUND = "3rdParty_Failure_Haptic.caf"
+NOTI_CRIT_SOUND = "3rd_party_critical.caf"
 
 STOCKS_CONFIG = {
     "row_1": {

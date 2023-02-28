@@ -39,7 +39,7 @@ def office_tap():
 
 @service("lovelace.office_hold")
 def office_hold():
-    return
+    media_player.media_play_pause(entity_id="media_player.office")
 
 
 @service("lovelace.office_dtap")
