@@ -63,9 +63,10 @@ def update_state():
 
     if open_count > 0:
         pyscript.entity_card_home.state_icon = "mdi:door-open"
-        pyscript.entity_card_home.active = open_count > 0
+        pyscript.entity_card_home.active = True
     else:
         pyscript.entity_card_home.state_icon = "mdi:home"
+        pyscript.entity_card_home.active = False
 
 
 @time_trigger("startup")
