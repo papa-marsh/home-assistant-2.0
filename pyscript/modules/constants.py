@@ -58,7 +58,7 @@ STOCKS_CONFIG = {
         },
         "private": {
             "price": True,
-            "price_prec": 2,
+            "price_prec": 3,
             "cents": False,
             "k_suffix": False,
             "change": False,

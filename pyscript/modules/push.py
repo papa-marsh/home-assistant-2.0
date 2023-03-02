@@ -24,7 +24,9 @@ class Notification:
                 "group": self.group,
                 "tag": self.tag,
                 "push": {
-                    "sound": {
+                    "sound": "none"
+                    if self.sound == "none"
+                    else {
                         "name": constants.NOTI_CRIT_SOUND
                         if self.priority == "critical"
                         else self.sound
@@ -46,16 +48,15 @@ class Notification:
 
     def add_action(
         self,
-        identifier,
+        id,
         title,
         destructive=False,
         nav_view=None,
-        input_placeholder=None,
-        input_button_text=None,
+        input=False,
         require_auth=False,
     ):
         action = {
-            "action": identifier,
+            "action": id,
             "title": title,
             "authenticationRequired": require_auth,
             "destructive": destructive,
@@ -63,12 +64,9 @@ class Notification:
 
         if nav_view:
             action["uri"] = f"/lovelace-mobile/{nav_view}"
-            action["activationMode"] = "foreground"
 
-        if input_placeholder or input_button_text:
+        if input:
             action["behavior"] = "textInput"
-            action["textInputPlaceholder"] = input_placeholder
-            action["textInputButtonTitle"] = input_button_text
 
         self.actions.append(action)
 
