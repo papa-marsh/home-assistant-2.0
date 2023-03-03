@@ -1,5 +1,5 @@
 type: custom:button-card
-entity: sensor.chelsea_next_fixture
+entity: pyscript.chelsea_next_fixture
 show_icon: false
 show_name: false
 styles:
