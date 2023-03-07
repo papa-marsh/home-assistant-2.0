@@ -2,7 +2,7 @@ digitalClock: true
 twelveHourVersion: true
 date: true
 width: 25
-template: "{{ state_attr('sensor.sidebar_text', 'bottom_text') }}"
+template: "{{ states('pyscript.sidebar_text') }}"
 sidebarMenu:
   - action: navigate
     navigation_path: "/lovelace-cast/overview"

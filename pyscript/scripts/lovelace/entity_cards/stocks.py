@@ -4,27 +4,29 @@ import format
 import secrets
 
 
-state.persist(
-    "pyscript.entity_card_stocks",
-    default_value="",
-    default_attributes={
-        "name": "Stocks",
-        "state_icon": "mdi:finance",
-        "active": False,
-        "blink": False,
-        "private": False,
-        "row_1_icon": constants.STOCKS_CONFIG["row_1"]["icon"],
-        "row_1_value": "",
-        "row_1_color": "default",
-        "row_2_icon": constants.STOCKS_CONFIG["row_2"]["icon"],
-        "row_2_value": "",
-        "row_2_color": "default",
-        "row_3_icon": constants.STOCKS_CONFIG["row_3"]["icon"],
-        "row_3_value": "",
-        "row_3_color": "default",
-        "staging": {},
-    },
-)
+@time_trigger("startup")
+def persist_entity_card_stocks():
+    state.persist(
+        "pyscript.entity_card_stocks",
+        default_value="",
+        default_attributes={
+            "name": "Stocks",
+            "state_icon": "mdi:finance",
+            "active": False,
+            "blink": False,
+            "private": False,
+            "row_1_icon": constants.STOCKS_CONFIG["row_1"]["icon"],
+            "row_1_value": "",
+            "row_1_color": "default",
+            "row_2_icon": constants.STOCKS_CONFIG["row_2"]["icon"],
+            "row_2_value": "",
+            "row_2_color": "default",
+            "row_3_icon": constants.STOCKS_CONFIG["row_3"]["icon"],
+            "row_3_value": "",
+            "row_3_color": "default",
+            "staging": {},
+        },
+    )
 
 
 @service("lovelace.stocks_tap")

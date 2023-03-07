@@ -1,8 +1,34 @@
-ASSET_COLOR_THRESHOLD = 10.0
-ASSET_ACTIVE_THRESHOLD = 5.0
-
 NOTI_SOUND = "3rdParty_Failure_Haptic.caf"
 NOTI_CRIT_SOUND = "3rd_party_critical.caf"
+
+SOCCER_CRESTS = [
+    "Arsenal",
+    "Aston Villa",
+    "Bournemouth",
+    "Brentford",
+    "Brighton and Hove Albion",
+    "Burnley",
+    "Chelsea",
+    "Crystal Palace",
+    "Everton",
+    "Fulham",
+    "Leeds United",
+    "Leicester City",
+    "Liverpool",
+    "Manchester City",
+    "Manchester United",
+    "Newcastle United",
+    "Norwich City",
+    "Nottingham Forest",
+    "Southampton",
+    "Tottenham Hotspur",
+    "Watford",
+    "West Ham United",
+    "Wolverhampton Wanderers",
+]
+
+ASSET_COLOR_THRESHOLD = 10.0
+ASSET_ACTIVE_THRESHOLD = 5.0
 
 STOCKS_CONFIG = {
     "row_1": {

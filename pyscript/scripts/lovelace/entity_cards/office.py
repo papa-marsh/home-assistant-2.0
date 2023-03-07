@@ -3,50 +3,60 @@ import format
 import util
 
 
-state.persist(
-    "pyscript.entity_card_office",
-    default_value="Available",
-    default_attributes={
-        "name": "Office",
-        "state_icon": "mdi:rocket",
-        "active": False,
-        "blink": False,
-        "row_1_icon": "mdi:speaker",
-        "row_1_value": "",
-        "row_1_color": "default",
-        "row_2_icon": "mdi:volume-high",
-        "row_2_value": "",
-        "row_2_color": "default",
-        "row_3_icon": "mdi:calendar-clock",
-        "row_3_value": "",
-        "row_3_color": "default",
-        "staging": {},
-    },
-)
+@time_trigger("startup")
+def persist_entity_card_office():
+    state.persist(
+        "pyscript.entity_card_office",
+        default_value="Available",
+        default_attributes={
+            "name": "Office",
+            "state_icon": "mdi:rocket",
+            "active": False,
+            "blink": False,
+            "row_1_icon": "mdi:speaker",
+            "row_1_value": "",
+            "row_1_color": "default",
+            "row_2_icon": "mdi:volume-high",
+            "row_2_value": "",
+            "row_2_color": "default",
+            "row_3_icon": "mdi:calendar-clock",
+            "row_3_value": "",
+            "row_3_color": "default",
+            "staging": {},
+        },
+    )
 
 
 @service("lovelace.office_tap")
 def office_tap():
     if pyscript.entity_card_office.active:
-        pyscript.entity_card_office.active = False
-        pyscript.entity_card_office = "Available"
+        state.set(
+            "pyscript.entity_card_office",
+            value="Available",
+            active=False,
+            state_icon="mdi:rocket",
+        )
         light.turn_off(entity_id="light.office_door_led")
     else:
-        pyscript.entity_card_office.active = True
-        pyscript.entity_card_office = "Busy"
+        state.set(
+            "pyscript.entity_card_office",
+            value="Busy",
+            active=True,
+            state_icon="mdi:headset",
+        )
         light.turn_on(entity_id="light.office_door_led")
 
 
 @service("lovelace.office_hold")
 def office_hold():
-    media_player.media_play_pause(entity_id="media_player.office")
+    pyscript.entity_card_office.staging["last_timecard"] = date.today()
+    pyscript.entity_card_office.blink = False
+    update_row_3()
 
 
 @service("lovelace.office_dtap")
 def office_dtap():
-    pyscript.entity_card_office.staging["last_timecard"] = date.today()
-    pyscript.entity_card_office.blink = False
-    update_row_3()
+    media_player.media_play_pause(entity_id="media_player.office")
 
 
 @time_trigger("startup")

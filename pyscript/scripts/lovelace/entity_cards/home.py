@@ -2,26 +2,29 @@ from datetime import date, datetime, timedelta
 import format
 import util
 
-state.persist(
-    "pyscript.entity_card_home",
-    default_value="",
-    default_attributes={
-        "name": "Home",
-        "state_icon": "mdi:home",
-        "active": False,
-        "blink": False,
-        "row_1_icon": "mdi:thermometer",
-        "row_1_value": "",
-        "row_1_color": "default",
-        "row_2_icon": "mdi:water",
-        "row_2_value": "",
-        "row_2_color": "default",
-        "row_3_icon": "mdi:delete",
-        "row_3_value": "",
-        "row_3_color": "default",
-        "staging": {},
-    },
-)
+
+@time_trigger("startup")
+def persist_entity_card_home():
+    state.persist(
+        "pyscript.entity_card_home",
+        default_value="",
+        default_attributes={
+            "name": "Home",
+            "state_icon": "mdi:home",
+            "active": False,
+            "blink": False,
+            "row_1_icon": "mdi:thermometer",
+            "row_1_value": "",
+            "row_1_color": "default",
+            "row_2_icon": "mdi:water",
+            "row_2_value": "",
+            "row_2_color": "default",
+            "row_3_icon": "mdi:delete",
+            "row_3_value": "",
+            "row_3_color": "default",
+            "staging": {},
+        },
+    )
 
 
 @service("lovelace.home_tap")
@@ -31,14 +34,14 @@ def home_tap():
 
 @service("lovelace.home_hold")
 def home_hold():
-    return
+    pyscript.entity_card_home.staging["last_bin_day"] = date.today()
+    pyscript.entity_card_home.blink = False
+    update_row_3()
 
 
 @service("lovelace.home_dtap")
 def home_dtap():
-    pyscript.entity_card_home.staging["last_bin_day"] = date.today()
-    pyscript.entity_card_home.blink = False
-    update_row_3()
+    pass
 
 
 @time_trigger("startup")
