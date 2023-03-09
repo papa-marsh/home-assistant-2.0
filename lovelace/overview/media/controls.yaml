@@ -1,0 +1,107 @@
+type: custom:fold-entity-row
+padding: 0
+open: true
+head: !include head.yaml
+entities:
+  - type: custom:paper-buttons-row
+    style: |
+      :host {
+        min-width: 340px !important;
+      }
+    buttons:
+      - name: |-
+          {% if is_state('media_player.living_room', 'playing') %}
+            Saved
+          {% else %}
+            Save
+          {% endif %}
+        icon: |-
+          {% if is_state('media_player.living_room', 'playing') %}
+            mdi:playlist-check
+          {% else %}
+            mdi:playlist-plus
+          {% endif %}
+        style:
+          button:
+            width: 31%
+            justify-content: center
+            padding: 8px 36px
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 0 4px
+        tap_action:
+          action: call-service
+          service: media_player.media_previous_track
+          service_data:
+            entity_id: media_player.living_room
+      - name: |-
+          {% if is_state('media_player.living_room', 'playing') %}
+            Synced
+          {% else %}
+            Sync
+          {% endif %}
+        icon: |-
+          {% if is_state('media_player.living_room', 'playing') %}
+            mdi:music-box-multiple
+          {% else %}
+            mdi:music-box-multiple-outline
+          {% endif %}
+        style:
+          button:
+            width: 31%
+            justify-content: center
+            padding: 8px 36px
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 0 4px
+        tap_action:
+          action: call-service
+          service: media_player.media_previous_track
+          service_data:
+            entity_id: media_player.living_room
+  - type: custom:paper-buttons-row
+    buttons:
+      - icon: mdi:skip-previous
+        style:
+          button:
+            width: 10%
+            justify-content: center
+            padding: 8px 36px
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+        tap_action:
+          action: call-service
+          service: media_player.media_previous_track
+          service_data:
+            entity_id: media_player.living_room
+      - icon: |-
+          {% if is_state('media_player.living_room', 'playing') %}
+            mdi:pause
+          {% else %}
+            mdi:play
+          {% endif %}
+        style:
+          button:
+            width: 10%
+            justify-content: center
+            padding: 8px 36px
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+        tap_action:
+          action: call-service
+          service: media_player.media_play_pause
+          service_data:
+            entity_id: media_player.living_room
+      - icon: mdi:skip-next
+        style:
+          button:
+            width: 10%
+            justify-content: center
+            padding: 8px 36px
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+        tap_action:
+          action: call-service
+          service: media_player.media_next_track
+          service_data:
+            entity_id: media_player.living_room

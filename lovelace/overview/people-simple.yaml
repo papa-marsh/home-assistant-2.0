@@ -3,3 +3,8 @@ show_name: false
 entities:
   - entity: person.marshall
   - entity: person.emily
+style: |
+  .no-header {
+    padding-top: 8px !important;  
+    padding-bottom: 0 !important;
+  }

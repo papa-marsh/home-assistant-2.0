@@ -10,7 +10,7 @@ styles:
             else return "var( --ha-card-background, var(--card-background-color, white) )";
         ]]]
   grid:
-    - grid-template-areas: '"h_crest competition a_crest" "h_crest date a_crest" "h_crest time a_crest"'
+    - grid-template-areas: '"h_crest top_row a_crest" "h_crest date a_crest" "h_crest time a_crest"'
     - grid-template-columns: 1fr 1fr 1fr
     - grid-template-rows: 1fr 1fr 1fr
   custom_fields:
@@ -18,7 +18,7 @@ styles:
       - display: inline-grid
       - place-self: center
       - align-self: flex-start
-    competition:
+    top_row:
       - display: inline-grid
       - align-self: center
       - overflow: visible
@@ -35,7 +35,10 @@ styles:
       - align-self: flex-start
 custom_fields:
   h_crest: '[[[ return `<img id="icon" src="${entity.attributes.home_path}" style="position: relative;">` ]]]'
-  competition: '[[[ return `<span>${entity.attributes.competition}</span>`]]]'
+  top_row: '[[[ return `<span>${entity.attributes.top_row}</span>`]]]'
   date: '[[[ return `<span>${entity.attributes.date}</span>` ]]]'
   time: '[[[ return `<span>${entity.attributes.time}</span>` ]]]'
   a_crest: '[[[ return `<img id="icon"src="${entity.attributes.away_path}" style="position: relative;">` ]]]'
+tap_action:
+  action: call-service
+  service: lovelace.chelsea_fixture_tap

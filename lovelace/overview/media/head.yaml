@@ -1,0 +1,38 @@
+artwork: none
+style:
+  .: |
+    ha-card {
+      margin-top: -6px !important;
+    }
+    :host {
+      min-width: 340px !important;
+    }
+  mmp-powerstrip:
+    $: 
+      mmp-media-controls:
+        .: |
+          mmp-media-controls {
+            max-width: 95% !important;
+            margin-right: -5px !important;
+          }
+        $: |
+          ha-icon-button {
+            margin: 0 -10px !important;
+          }
+entity: media_player.living_room
+group: true
+name: Living Room
+hide:
+  controls: true
+  icon: true
+  info: true
+  mute: false
+  next: true
+  play_pause: true
+  power: true
+  prev: true
+  progress: true
+  source: true
+speaker_group:
+  show_group_count: false
+type: custom:mini-media-player

@@ -23,7 +23,7 @@ def persist_entity_card_hass():
 
 @service("lovelace.hass_tap")
 def hass_tap():
-    return
+    pyscript.media_card = "volume" if pyscript.media_card == "controls" else "controls"
 
 
 @service("lovelace.hass_hold")

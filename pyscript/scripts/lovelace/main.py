@@ -43,11 +43,12 @@ def persist_chelsea_next_fixture():
         default_attributes={
             "home_team": "Home",
             "away_team": "Away",
-            "competition": "Competition",
+            "competition": "",
             "date": "Date",
             "time": "Time",
             "home_path": f"/local/PL/Default.png",
             "away_path": f"/local/PL/Default.png",
+            "top_row": "",
         },
     )
 
@@ -66,6 +67,7 @@ def set_chelsea_fixture_card():
         home_team=home,
         away_team=away,
         competition=description[2],
+        top_row=description[2],
         date=format.colloquial_date(start.date()),
         time=start.time().strftime("%-I:%M %p"),
         home_path=f"/local/PL/{home}.png"
@@ -75,3 +77,15 @@ def set_chelsea_fixture_card():
         if away in constants.SOCCER_CRESTS
         else "/local/PL/Default.png",
     )
+
+
+@service("lovelace.chelsea_fixture_tap")
+@task_unique("chelsea_fixture_tap")
+def chelsea_fixture_tap():
+    pyscript.chelsea_next_fixture.top_row = (
+        pyscript.chelsea_next_fixture.home_team
+        if pyscript.chelsea_next_fixture.home_team != "Chelsea"
+        else pyscript.chelsea_next_fixture.away_team
+    )
+    task.sleep(5)
+    pyscript.chelsea_next_fixture.top_row = pyscript.chelsea_next_fixture.competition
