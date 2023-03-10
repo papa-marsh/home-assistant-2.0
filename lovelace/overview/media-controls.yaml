@@ -62,6 +62,10 @@ head:
 entities:
   - artwork: none
     style:
+      .: |
+        ha-card {
+          margin-top: 9px !important;
+        }
       mmp-powerstrip:
         $: 
           mmp-media-controls:
@@ -97,6 +101,7 @@ entities:
     source: icon
     info: short
     name: Frame TV
+    max_volume: 30
     speaker_group:
       show_group_count: false
     hide:

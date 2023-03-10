@@ -105,6 +105,10 @@ def get_next_bin_day():
         pyscript.entity_card_home.staging["last_bin_day"] = date.today() - timedelta(
             days=7
         )
+    if isinstance(pyscript.entity_card_home.staging["last_bin_day"], str):
+        pyscript.entity_card_home.staging["last_bin_day"] = datetime.strptime(
+            pyscript.entity_card_home.staging["last_bin_day"], "%Y-%m-%d"
+        ).date()
     if next_bin_day <= pyscript.entity_card_home.staging["last_bin_day"]:
         next_bin_day += timedelta(days=7)
 

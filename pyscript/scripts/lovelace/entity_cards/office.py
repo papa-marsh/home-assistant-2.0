@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import format
 import util
 
@@ -78,18 +78,20 @@ def update_row_3():
     next_timecard = get_next_timecard()
     if next_timecard == date.today():
         pyscript.entity_card_office.blink = True
-    pyscript.entity_card_office.row_3_value = format.colloquial_date(next_timecard)
+    pyscript.entity_card_office.row_3_value = format.date_countdown(next_timecard)
 
 
 def get_next_timecard():
     next_timecard = util.get_next_weekday("fri")
-    if next_timecard.isocalendar().week % 2:
-        next_timecard += timedelta(days=7)
     if "last_timecard" not in pyscript.entity_card_office.staging:
         pyscript.entity_card_office.staging["last_timecard"] = date.today() - timedelta(
-            days=14
+            days=7
         )
+    if isinstance(pyscript.entity_card_office.staging["last_timecard"], str):
+        pyscript.entity_card_office.staging["last_timecard"] = datetime.strptime(
+            pyscript.entity_card_office.staging["last_timecard"], "%Y-%m-%d"
+        ).date()
     elif next_timecard <= pyscript.entity_card_office.staging["last_timecard"]:
-        next_timecard += timedelta(days=14)
+        next_timecard += timedelta(days=7)
 
     return next_timecard
