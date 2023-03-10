@@ -1,8 +1,4 @@
-# TODO iOS action that set all volume to most recent changed
-
-# TODO highlight button to save/unsave current playlist
-
-# TODO helper (speaker group may be better?) input slider to set all volumes
+import constants
 
 
 @time_trigger("startup")
@@ -11,26 +7,26 @@ def persist_media_card():
         "pyscript.media_card",
         default_value="controls",
         default_attributes={
-            "saved": False,
+            "grouped": False,
             "synced": False,
-            "save_icon": "mdi:playlist-plus",
-            "save_text": "Save",
+            "group_icon": "mdi:speaker",
+            "group_text": "Group",
             "sync_icon": "mdi:music-box-multiple-outline",
             "sync_text": "Sync",
         },
     )
 
 
-@service("lovelace.media_card_save")
-def media_card_save():
-    # TODO
-    pyscript.media_card.saved = not pyscript.media_card.saved
+@service("lovelace.media_card_group")
+def media_card_group():
+    pyscript.media_card.grouped = not pyscript.media_card.grouped
 
 
 @service("lovelace.media_card_sync")
 def media_card_sync():
     # TODO
-    pyscript.media_card.synced = not pyscript.media_card.synced
+    # pyscript.media_card.synced = not pyscript.media_card.synced
+    pass
 
 
 @service("lovelace.media_card_more")
@@ -38,25 +34,49 @@ def media_card_more():
     pyscript.media_card = "volume" if pyscript.media_card == "controls" else "controls"
 
 
-@state_trigger("pyscript.media_card.saved")
-def update_save_button():
-    if pyscript.media_card.saved:
-        pyscript.media_card.save_icon = "mdi:playlist-star"
-        pyscript.media_card.save_text = "Saved"
+@state_trigger("pyscript.media_card.grouped")
+def update_group_button():
+    if pyscript.media_card.grouped:
+        pyscript.media_card.group_icon = "mdi:speaker-multiple"
+        pyscript.media_card.group_text = "Grouped"
     else:
-        pyscript.media_card.save_icon = "mdi:playlist-plus"
-        pyscript.media_card.save_text = "Save"
+        pyscript.media_card.group_icon = "mdi:speaker"
+        pyscript.media_card.group_text = "Group"
 
 
-@state_trigger("pyscript.media_card.syncd")
+@state_trigger("pyscript.media_card.synced")
 def update_sync_button():
-    if pyscript.media_card.syncd:
+    if pyscript.media_card.synced:
         pyscript.media_card.sync_icon = "mdi:music-box-multiple"
-        pyscript.media_card.sync_text = "Syncd"
+        pyscript.media_card.sync_text = "Synced"
     else:
         pyscript.media_card.sync_icon = "mdi:music-box-multiple-outline"
         pyscript.media_card.sync_text = "Sync"
 
 
-def is_playlist_saved(playlist):
-    pass
+@state_trigger("media_player.living_room.group_members", "pyscript.media_card.grouped")
+def join_to_group():
+    if pyscript.media_card.grouped and len(
+        media_player.living_room.group_members
+    ) < len(constants.SPEAKER_GROUP):
+        group_speakers()
+
+
+def group_speakers(target="media_player.living_room"):
+    for speaker in constants.SPEAKER_GROUP:
+        if state.get(speaker) == "playing":
+            media_player.join(entity_id=speaker, group_members=constants.SPEAKER_GROUP)
+            break
+    else:
+        media_player.join(
+            entity_id=target,
+            group_members=constants.SPEAKER_GROUP,
+        )
+
+
+def ungroup_speakers(target=None):
+    if target:
+        media_player.unjoin(entity_id=target)
+    else:
+        for speaker in constants.SPEAKER_GROUP:
+            media_player.unjoin(entity_id=speaker)

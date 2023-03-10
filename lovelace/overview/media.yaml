@@ -34,8 +34,8 @@ entities:
     type: custom:mini-media-player
   - type: custom:paper-buttons-row
     buttons:
-      - name: '{{ state_attr("pyscript.media_card", "save_text") }}'
-        icon: '{{ state_attr("pyscript.media_card", "save_icon") }}'
+      - name: '{{ state_attr("pyscript.media_card", "group_text") }}'
+        icon: '{{ state_attr("pyscript.media_card", "group_icon") }}'
         style:
           button:
             width: 17%
@@ -46,7 +46,7 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: lovelace.media_card_save
+          service: lovelace.media_card_group
       - name: '{{ state_attr("pyscript.media_card", "sync_text") }}'
         icon: '{{ state_attr("pyscript.media_card", "sync_icon") }}'
         style:

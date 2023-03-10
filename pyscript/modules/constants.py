@@ -1,6 +1,13 @@
 NOTI_SOUND = "3rdParty_Failure_Haptic.caf"
 NOTI_CRIT_SOUND = "3rd_party_critical.caf"
 
+SPEAKER_GROUP = [
+    "media_player.basement",
+    "media_player.living_room",
+    "media_player.craft_room",
+    "media_player.front_room",
+]
+
 SOCCER_CRESTS = [
     "Arsenal",
     "Aston Villa",
