@@ -77,11 +77,11 @@ entities:
     default: default
     states:
       controls:
-        !include media/controls.yaml
+        !include media-controls.yaml
       volume:
-        !include media/volume.yaml
+        !include media-volume.yaml
       default:
-        !include media/controls.yaml
+        !include media-controls.yaml
 style: |
   ha-card {
     height: 319px !important;
