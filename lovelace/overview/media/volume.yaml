@@ -1,7 +1,45 @@
 type: custom:fold-entity-row
 padding: 0
 open: true
-head: !include head.yaml
+head:
+  artwork: none
+  style:
+    .: |
+      ha-card {
+        margin-top: -6px !important;
+      }
+      :host {
+        min-width: 340px !important;
+      }
+    mmp-powerstrip:
+      $: 
+        mmp-media-controls:
+          .: |
+            mmp-media-controls {
+              max-width: 95% !important;
+              margin-right: -5px !important;
+            }
+          $: |
+            ha-icon-button {
+              margin: 0 -10px !important;
+            }
+  entity: media_player.living_room
+  group: true
+  name: Living Room
+  hide:
+    controls: true
+    icon: true
+    info: true
+    mute: false
+    next: true
+    play_pause: true
+    power: true
+    prev: true
+    progress: true
+    source: true
+  speaker_group:
+    show_group_count: false
+  type: custom:mini-media-player
 entities:
   - type: custom:mini-media-player
     entity: media_player.craft_room
@@ -25,7 +63,7 @@ entities:
     style:
       .: |
         ha-card {
-          margin-top: -13px !important;
+          margin-top: -14px !important;
         }
       mmp-powerstrip:
         $: 
@@ -61,7 +99,7 @@ entities:
     style:
       .: |
         ha-card {
-          margin-top: -20px !important;
+          margin-top: -21px !important;
         }
       mmp-powerstrip:
         $: 
@@ -97,7 +135,7 @@ entities:
     style:
       .: |
         ha-card {
-          margin-top: -20px !important;
+          margin-top: -21px !important;
         }
       mmp-powerstrip:
         $: 
@@ -110,40 +148,4 @@ entities:
             $: |
               ha-icon-button {
                 margin: 0 -10px 0 4px !important;
-              }
-  - type: custom:mini-media-player
-    entity: media_player.living_room_tv
-    group: true
-    source: icon
-    info: short
-    name: Frame TV
-    speaker_group:
-      show_group_count: false
-    hide:
-      controls: true
-      icon: true
-      info: true
-      mute: false
-      next: true
-      play_pause: true
-      power: true
-      prev: true
-      progress: true
-      source: true
-    style:
-      .: |
-        ha-card {
-          margin-top: -20px !important;
-        }
-      mmp-powerstrip:
-        $: 
-          mmp-media-controls:
-            .: |
-              mmp-media-controls {
-                max-width: 95% !important;
-                margin-right: -5px !important;
-              }
-            $: |
-              ha-icon-button {
-                margin: 0 -10px 0 6px !important;
               }

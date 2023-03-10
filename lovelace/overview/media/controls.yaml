@@ -1,107 +1,129 @@
 type: custom:fold-entity-row
 padding: 0
 open: true
-head: !include head.yaml
-entities:
-  - type: custom:paper-buttons-row
-    style: |
+head: 
+  style:
+    .: |
+      ha-card {
+        margin-top: -6px !important;
+      }
       :host {
         min-width: 340px !important;
       }
-    buttons:
-      - name: |-
-          {% if is_state('media_player.living_room', 'playing') %}
-            Saved
-          {% else %}
-            Save
-          {% endif %}
-        icon: |-
-          {% if is_state('media_player.living_room', 'playing') %}
-            mdi:playlist-check
-          {% else %}
-            mdi:playlist-plus
-          {% endif %}
-        style:
-          button:
-            width: 31%
-            justify-content: center
-            padding: 8px 36px
-            border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
-            margin: 0 4px
-        tap_action:
-          action: call-service
-          service: media_player.media_previous_track
-          service_data:
-            entity_id: media_player.living_room
-      - name: |-
-          {% if is_state('media_player.living_room', 'playing') %}
-            Synced
-          {% else %}
-            Sync
-          {% endif %}
-        icon: |-
-          {% if is_state('media_player.living_room', 'playing') %}
-            mdi:music-box-multiple
-          {% else %}
-            mdi:music-box-multiple-outline
-          {% endif %}
-        style:
-          button:
-            width: 31%
-            justify-content: center
-            padding: 8px 36px
-            border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
-            margin: 0 4px
-        tap_action:
-          action: call-service
-          service: media_player.media_previous_track
-          service_data:
-            entity_id: media_player.living_room
-  - type: custom:paper-buttons-row
-    buttons:
-      - icon: mdi:skip-previous
-        style:
-          button:
-            width: 10%
-            justify-content: center
-            padding: 8px 36px
-            border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
-        tap_action:
-          action: call-service
-          service: media_player.media_previous_track
-          service_data:
-            entity_id: media_player.living_room
-      - icon: |-
-          {% if is_state('media_player.living_room', 'playing') %}
-            mdi:pause
-          {% else %}
-            mdi:play
-          {% endif %}
-        style:
-          button:
-            width: 10%
-            justify-content: center
-            padding: 8px 36px
-            border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
-        tap_action:
-          action: call-service
-          service: media_player.media_play_pause
-          service_data:
-            entity_id: media_player.living_room
-      - icon: mdi:skip-next
-        style:
-          button:
-            width: 10%
-            justify-content: center
-            padding: 8px 36px
-            border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
-        tap_action:
-          action: call-service
-          service: media_player.media_next_track
-          service_data:
-            entity_id: media_player.living_room
+  type: custom:paper-buttons-row
+  buttons:
+    - icon: mdi:skip-previous
+      style:
+        button:
+          width: 30%
+          justify-content: center
+          padding: 8px 36px
+          border-radius: var(--ha-card-border-radius)
+          background-color: var(--paper-card-background-color)
+          margin: 2px 4px 0
+      tap_action:
+        action: call-service
+        service: media_player.media_previous_track
+        service_data:
+          entity_id: media_player.living_room
+    - icon: |-
+        {% if is_state('media_player.living_room', 'playing') %}
+          mdi:pause
+        {% else %}
+          mdi:play
+        {% endif %}
+      style:
+        button:
+          width: 30%
+          justify-content: center
+          padding: 8px 36px
+          border-radius: var(--ha-card-border-radius)
+          background-color: var(--paper-card-background-color)
+          margin: 2px 4px 0
+      tap_action:
+        action: call-service
+        service: media_player.media_play_pause
+        service_data:
+          entity_id: media_player.living_room
+    - icon: mdi:skip-next
+      style:
+        button:
+          width: 30%
+          justify-content: center
+          padding: 8px 36px
+          border-radius: var(--ha-card-border-radius)
+          background-color: var(--paper-card-background-color)
+          margin: 2px 4px 0
+      tap_action:
+        action: call-service
+        service: media_player.media_next_track
+        service_data:
+          entity_id: media_player.living_room
+entities:
+  - artwork: none
+    style:
+      mmp-powerstrip:
+        $: 
+          mmp-media-controls:
+            .: |
+              mmp-media-controls {
+                max-width: 95% !important;
+                margin-right: -5px !important;
+              }
+            $: |
+              ha-icon-button {
+                margin: 0 -10px !important;
+              }
+    entity: media_player.living_room
+    group: true
+    name: Living Room
+    hide:
+      controls: true
+      icon: true
+      info: true
+      mute: false
+      next: true
+      play_pause: true
+      power: true
+      prev: true
+      progress: true
+      source: true
+    speaker_group:
+      show_group_count: false
+    type: custom:mini-media-player
+  - type: custom:mini-media-player
+    entity: media_player.living_room_tv
+    group: true
+    source: icon
+    info: short
+    name: Frame TV
+    speaker_group:
+      show_group_count: false
+    hide:
+      controls: true
+      icon: true
+      info: true
+      mute: false
+      next: true
+      play_pause: true
+      power: true
+      prev: true
+      progress: true
+      source: true
+    style:
+      .: |
+        ha-card {
+          margin-top: -21px !important;
+        }
+      mmp-powerstrip:
+        $: 
+          mmp-media-controls:
+            .: |
+              mmp-media-controls {
+                max-width: 95% !important;
+                margin-right: -5px !important;
+              }
+            $: |
+              ha-icon-button {
+                margin: 0 -10px 0 4px !important;
+              }

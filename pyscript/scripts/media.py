@@ -13,8 +13,27 @@ def persist_media_card():
         default_attributes={
             "saved": False,
             "synced": False,
+            "save_icon": "mdi:playlist-plus",
+            "save_text": "Save",
+            "sync_icon": "mdi:music-box-multiple-outline",
+            "sync_text": "Sync",
         },
     )
+
+
+@service("lovelace.media_card_save")
+def media_card_save():
+    return
+
+
+@service("lovelace.media_card_sync")
+def media_card_sync():
+    return
+
+
+@service("lovelace.media_card_more")
+def media_card_more():
+    pyscript.media_card = "volume" if pyscript.media_card == "controls" else "controls"
 
 
 # @state_trigger("")

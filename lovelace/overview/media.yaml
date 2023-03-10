@@ -3,7 +3,75 @@ entities:
   - entity: input_select.sonos_source_list
     name: Select a Playlist...
     tap_action: none
-  - !include media/now-playing.yaml
+    card_mod:
+      style: |
+        ha-select {
+          margin-bottom: 6px !important;
+        }
+  - entity: media_player.living_room
+    tap_action: none
+    group: true
+    hide:
+      controls: true
+      power: true
+      progress: true
+      source: true
+      volume: true
+    name: ' '
+    speaker_group:
+      show_group_count: false
+    style: |
+      .entity__info {
+        max-height: 40px
+      }
+      .entity__info__media {
+        opacity: 1 !important;
+        color: var(--primary-text-color) !important;
+        font-size: larger !important;
+        white-space: initial !important;
+        max-height: unset !important;
+      }
+    type: custom:mini-media-player
+  - type: custom:paper-buttons-row
+    buttons:
+      - name: '{{ state_attr("pyscript.media_card", "save_text") }}'
+        icon: '{{ state_attr("pyscript.media_card", "save_icon") }}'
+        style:
+          button:
+            width: 17%
+            justify-content: center
+            padding: 8px 36px
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: lovelace.media_card_save
+      - name: '{{ state_attr("pyscript.media_card", "sync_text") }}'
+        icon: '{{ state_attr("pyscript.media_card", "sync_icon") }}'
+        style:
+          button:
+            width: 17%
+            justify-content: center
+            padding: 8px 36px
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: lovelace.media_card_sync
+      - icon: 'mdi:dots-horizontal'
+        style:
+          button:
+            width: 0%
+            justify-content: center
+            padding: 8px 26px
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: lovelace.media_card_more
   - type: custom:state-switch
     entity: pyscript.media_card
     default: default
@@ -16,8 +84,7 @@ entities:
         !include media/controls.yaml
 style: |
   ha-card {
-    height: 328px !important;
-    width: 372px !important;
+    height: 319px !important;
   }
   #states {
     padding-top: 6px !important;
