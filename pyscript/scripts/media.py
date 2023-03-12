@@ -25,8 +25,7 @@ def media_card_group():
 @service("lovelace.media_card_sync")
 def media_card_sync():
     # TODO
-    # pyscript.media_card.synced = not pyscript.media_card.synced
-    pass
+    pyscript.media_card.synced = not pyscript.media_card.synced
 
 
 @service("lovelace.media_card_more")
@@ -60,6 +59,18 @@ def join_to_group():
         media_player.living_room.group_members
     ) < len(constants.SPEAKER_GROUP):
         group_speakers()
+
+
+@state_trigger(
+    "media_player.living_room.volume_level",
+    "media_player.front_room.volume_level",
+    "media_player.craft_room.volume_level",
+    "media_player.basement.volume_level",
+)
+@task_unique("sync_speaker_volume")
+def sync_volume(target="media_player.living_room.volume_level"):
+    log.warning(kwargs)
+    # for speaker in constants.SPEAKER_GROUP:
 
 
 def group_speakers(target="media_player.living_room"):
