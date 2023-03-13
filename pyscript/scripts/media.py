@@ -64,11 +64,11 @@ def join_to_group():
     "media_player.living_room.volume_level",
     "media_player.front_room.volume_level",
     "media_player.craft_room.volume_level",
-    "media_player.basement.volume_level",
+    # "media_player.basement.volume_level",
     "pyscript.media_card.sync",
 )
 @task_unique("sync_speaker_volume")
-def sync_volume(target="media_player.living_room.volume_level", **kwargs):
+def sync_volume(target="media_player.living_room", **kwargs):
     if not pyscript.media_card.sync:
         return
     task.sleep(0.2)
