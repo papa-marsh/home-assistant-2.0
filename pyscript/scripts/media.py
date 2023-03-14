@@ -47,6 +47,7 @@ def update_sync_button():
     if pyscript.media_card.sync:
         pyscript.media_card.sync_icon = "mdi:volume-equal"
         pyscript.media_card.sync_text = "Synced"
+        sync_volume()
     else:
         pyscript.media_card.sync_icon = "mdi:volume-source"
         pyscript.media_card.sync_text = "Sync"
@@ -65,7 +66,6 @@ def join_to_group():
     "media_player.front_room.volume_level",
     "media_player.craft_room.volume_level",
     # "media_player.basement.volume_level",
-    "pyscript.media_card.sync",
 )
 @task_unique("sync_speaker_volume")
 def sync_volume(target="media_player.living_room", **kwargs):
