@@ -1,3 +1,6 @@
+import os
+
+
 @time_trigger("startup")
 def persist_entity_card_hass():
     state.persist(
@@ -5,7 +8,7 @@ def persist_entity_card_hass():
         default_value="Unkown",
         default_attributes={
             "name": "HASS",
-            "state_icon": "mdi:raspberry-pi",
+            "state_icon": "mdi:home-assistant",
             "active": False,
             "blink": False,
             "row_1_icon": "mdi:store",
@@ -17,6 +20,7 @@ def persist_entity_card_hass():
             "row_3_icon": "mdi:thermometer",
             "row_3_value": "",
             "row_3_color": "default",
+            "internet_up": True,
         },
     )
 
@@ -41,11 +45,19 @@ def hass_dtap():
     "update.home_assistant_core_update",
     "update.home_assistant_operating_system_update",
     "update.home_assistant_supervisor_update",
+    "pyscript.entity_card_hass.internet_up",
 )
 def update_state():
     pyscript.entity_card_hass = update.home_assistant_core_update.installed_version[2:]
 
-    if (
+    if pyscript.entity_card_hass.internet_up:
+        pyscript.entity_card_hass.blink = False
+
+    if not pyscript.entity_card_hass.internet_up:
+        pyscript.entity_card_hass.state_icon = "mdi:web-off"
+        pyscript.entity_card_hass.blink = True
+
+    elif (
         update.home_assistant_core_update == "on"
         or update.home_assistant_operating_system_update == "on"
         or update.home_assistant_supervisor_update == "on"
@@ -83,3 +95,14 @@ def update_row_3():
     pyscript.entity_card_hass.row_3_color = (
         "red" if float(sensor.cpu_temperature) >= 120 else "default"
     )
+
+
+@time_trigger("startup", "cron(* * * * *)")
+def get_internet_status():
+    hostnames = ["google.com", "apple.com", "bing.com"]
+    for hostname in hostnames:
+        if os.system(f"ping -c 1 {hostname}") == 0:
+            pyscript.entity_card_hass.internet_up = True
+            break
+    else:
+        pyscript.entity_card_hass.internet_up = False

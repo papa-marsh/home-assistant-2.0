@@ -4,6 +4,9 @@ show_current: true
 show_forecast: true
 name: East Grand Rapids
 style: |
+  ha-card {
+    height: 199px !important;
+  }
   .templow {
     display: none !important;
   }
