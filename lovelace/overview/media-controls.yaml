@@ -23,9 +23,7 @@ head:
           margin: 2px 4px 0
       tap_action:
         action: call-service
-        service: media_player.media_previous_track
-        service_data:
-          entity_id: media_player.living_room
+        service: lovelace.media_card_previous_track
     - icon: |-
         {% if is_state('media_player.living_room', 'playing') %}
           mdi:pause
@@ -42,9 +40,7 @@ head:
           margin: 2px 4px 0
       tap_action:
         action: call-service
-        service: media_player.media_play_pause
-        service_data:
-          entity_id: media_player.living_room
+        service: lovelace.media_card_play_pause
     - icon: mdi:skip-next
       style:
         button:
@@ -56,9 +52,7 @@ head:
           margin: 2px 4px 0
       tap_action:
         action: call-service
-        service: media_player.media_next_track
-        service_data:
-          entity_id: media_player.living_room
+        service: lovelace.media_card_next_track
 entities:
   - artwork: none
     style:

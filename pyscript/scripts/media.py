@@ -32,6 +32,21 @@ def media_card_more():
     pyscript.media_card = "volume" if pyscript.media_card == "controls" else "controls"
 
 
+@service("lovelace.media_card_play_pause")
+def media_card_play_pause():
+    media_player.media_play_pause(entity_id=media_player.living_room)
+
+
+@service("lovelace.media_card_previous_track")
+def media_card_previous_track():
+    media_player.media_previous_track(entity_id=media_player.living_room)
+
+
+@service("lovelace.media_card_next_track")
+def media_card_next_track():
+    media_player.media_next_track(entity_id=media_player.living_room)
+
+
 @state_trigger("pyscript.media_card.group")
 def update_group_button():
     if pyscript.media_card.group:
