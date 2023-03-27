@@ -12,6 +12,7 @@ home-assistant.log.fault
 custom_components
 node-red
 image
+.ps4-games*
 
 deps
 tts
