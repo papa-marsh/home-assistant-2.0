@@ -50,9 +50,19 @@ def yvette_dtap():
 
 
 @time_trigger("startup")
-@state_trigger("climate.yvette_hvac_climate_system")
+@state_trigger(
+    "binary_sensor.yvette_parking_brake", "climate.yvette_hvac_climate_system"
+)
 def update_state():
-    if climate.yvette_hvac_climate_system == "heat_cool":
+    if binary_sensor.yvette_parking_brake == "off":
+        pyscript.entity_card_yvette = (
+            str(device_tracker.yvette_destination_location_tracker)
+            if device_tracker.yvette_destination_location_tracker != "unknown"
+            else "Driving"
+        )
+        pyscript.entity_card_yvette.state_icon = "mdi:navigation-variant"
+        pyscript.entity_card_yvette.active = True
+    elif climate.yvette_hvac_climate_system == "heat_cool":
         pyscript.entity_card_yvette = "Air On"
         pyscript.entity_card_yvette.state_icon = "mdi:fan"
         pyscript.entity_card_yvette.active = True
