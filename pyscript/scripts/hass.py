@@ -26,17 +26,17 @@ def persist_entity_card_hass():
 
 
 @service("lovelace.hass_tap")
-def hass_tap():
+def entity_card_tap():
     return
 
 
 @service("lovelace.hass_hold")
-def hass_hold():
+def entity_card_hold():
     return
 
 
 @service("lovelace.hass_dtap")
-def hass_dtap():
+def entity_card_dtap():
     return
 
 
@@ -47,7 +47,7 @@ def hass_dtap():
     "update.home_assistant_supervisor_update",
     "pyscript.entity_card_hass.internet_up",
 )
-def update_state():
+def entity_card_update_state():
     pyscript.entity_card_hass = update.home_assistant_core_update.installed_version[2:]
 
     if pyscript.entity_card_hass.internet_up:
@@ -72,7 +72,7 @@ def update_state():
 
 @time_trigger("startup")
 @state_trigger("sensor.hacs")
-def update_row_1():
+def entity_card_update_row_1():
     value = f"{sensor.hacs} Update"
     if sensor.hacs != "1":
         value += "s"
@@ -82,7 +82,7 @@ def update_row_1():
 
 @time_trigger("startup")
 @state_trigger("binary_sensor.z_wave_js_running")
-def update_row_2():
+def entity_card_update_row_2():
     pyscript.entity_card_hass.row_2_value = (
         "Running" if binary_sensor.z_wave_js_running == "on" else "Not Running"
     )
@@ -90,7 +90,7 @@ def update_row_2():
 
 @time_trigger("startup")
 @state_trigger("sensor.cpu_temperature")
-def update_row_3():
+def entity_card_update_row_3():
     pyscript.entity_card_hass.row_3_value = f"{sensor.cpu_temperature} °F"
     pyscript.entity_card_hass.row_3_color = (
         "red" if float(sensor.cpu_temperature) >= 120 else "default"

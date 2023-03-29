@@ -28,19 +28,19 @@ def persist_entity_card_home():
 
 
 @service("lovelace.home_tap")
-def home_tap():
+def entity_card_tap():
     return
 
 
 @service("lovelace.home_hold")
-def home_hold():
+def entity_card_hold():
     pyscript.entity_card_home.staging["last_bin_day"] = date.today()
     pyscript.entity_card_home.blink = False
     update_row_3()
 
 
 @service("lovelace.home_dtap")
-def home_dtap():
+def entity_card_dtap():
     pass
 
 
@@ -51,7 +51,7 @@ def home_dtap():
     "binary_sensor.service_door_sensor",
     "binary_sensor.slider_door_sensor",
 )
-def update_state():
+def entity_card_update_state():
     doors = ["garage", "front", "service", "slider"]
 
     open_count = 0
@@ -76,7 +76,7 @@ def update_state():
 @state_trigger(
     "climate.thermostat.current_temperature", "climate.thermostat.hvac_action"
 )
-def update_row_1():
+def entity_card_update_row_1():
     pyscript.entity_card_home.row_1_value = (
         f"{climate.thermostat.hvac_action} - {climate.thermostat.current_temperature}°"
     )
@@ -84,14 +84,14 @@ def update_row_1():
 
 @time_trigger("startup")
 @state_trigger("climate.thermostat.current_humidity")
-def update_row_2():
+def entity_card_update_row_2():
     pyscript.entity_card_home.row_2_value = (
         f"{round(climate.thermostat.current_humidity)}%"
     )
 
 
 @time_trigger("startup", "cron(*/15 0,18 * * *)")
-def update_row_3():
+def entity_card_update_row_3():
     now = datetime.today()
     next_bin_day = get_next_bin_day()
     if next_bin_day == now.date() and now.hour >= 18:

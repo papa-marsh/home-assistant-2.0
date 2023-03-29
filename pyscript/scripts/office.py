@@ -28,7 +28,7 @@ def persist_entity_card_office():
 
 
 @service("lovelace.office_tap")
-def office_tap():
+def entity_card_tap():
     if pyscript.entity_card_office.active:
         state.set(
             "pyscript.entity_card_office",
@@ -48,33 +48,33 @@ def office_tap():
 
 
 @service("lovelace.office_hold")
-def office_hold():
+def entity_card_hold():
     pyscript.entity_card_office.staging["last_timecard"] = date.today()
     pyscript.entity_card_office.blink = False
     update_row_3()
 
 
 @service("lovelace.office_dtap")
-def office_dtap():
+def entity_card_dtap():
     media_player.media_play_pause(entity_id="media_player.office")
 
 
 @time_trigger("startup")
 @state_trigger("media_player.office")
-def update_row_1():
+def entity_card_update_row_1():
     pyscript.entity_card_office.row_1_value = media_player.office
 
 
 @time_trigger("startup")
 @state_trigger("media_player.office", "media_player.office.volume_level")
-def update_row_2():
+def entity_card_update_row_2():
     pyscript.entity_card_office.row_2_value = (
         f"{round(media_player.office.volume_level * 100)}%"
     )
 
 
 @time_trigger("startup", "cron(*/15 3 * * *)")
-def update_row_3():
+def entity_card_update_row_3():
     next_timecard = get_next_timecard()
     if next_timecard == date.today():
         pyscript.entity_card_office.blink = True
