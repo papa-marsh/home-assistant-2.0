@@ -113,3 +113,15 @@ def ungroup_speakers(target=None):
     else:
         for speaker in constants.SPEAKER_GROUP:
             media_player.unjoin(entity_id=speaker)
+
+
+@time_trigger("cron(0 4 * * *)")
+def reset_media_controls():
+    media_player.media_pause(entity_id=constants.SPEAKER_GROUP)
+    media_player.volume_mute(
+        entity_id=constants.SPEAKER_GROUP,
+        is_volume_muted=False,
+    )
+    media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
+    pyscript.media_card.group = True
+    pyscript.media_card.sync = True
