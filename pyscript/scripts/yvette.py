@@ -64,7 +64,7 @@ def entity_card_dtap():
 def entity_card_update_state():
     if binary_sensor.yvette_parking_brake == "off":
         pyscript.entity_card_yvette = "Driving"
-        pyscript.entity_card_yvette.state_icon = "mdi:navigation-variant"
+        pyscript.entity_card_yvette.state_icon = "mdi:road-variant"
         pyscript.entity_card_yvette.active = True
     elif climate.yvette_hvac_climate_system == "heat_cool":
         pyscript.entity_card_yvette = "Air On"
@@ -75,6 +75,8 @@ def entity_card_update_state():
         pyscript.entity_card_yvette.state_icon = "mdi:car-electric"
         pyscript.entity_card_yvette.active = False
     pyscript.entity_card_yvette.blink = False
+    if update.yvette_software_update == "on":
+        pyscript.entity_card_yvette.state_icon = "mdi:update"
 
 
 @time_trigger("startup")
@@ -95,7 +97,10 @@ def entity_card_update_row_1():
     "device_tracker.yvette_destination_location_tracker",
 )
 def entity_card_update_row_2():
-    if binary_sensor.yvette_parking_brake == "on":
+    if (
+        binary_sensor.yvette_parking_brake == "on"
+        or device_tracker.yvette_destination_location_tracker == "unknown"
+    ):
         pyscript.entity_card_yvette.row_2_value = lock.yvette_doors
         pyscript.entity_card_yvette.row_2_icon = (
             "mdi:lock" if lock.yvette_doors == "locked" else "mdi:lock-open-variant"
@@ -108,9 +113,10 @@ def entity_card_update_row_2():
         )
     else:
         pyscript.entity_card_yvette.row_2_value = (
-            device_tracker.yvette_destination_location_tracker
+            device_tracker.yvette_destination_location_tracker  # TODO Need a short name here once ready
         )
-        pyscript.entity_card_yvette.row_2_icon = "mdi:map-marker"
+        pyscript.entity_card_yvette.row_2_icon = "mdi:navigation"
+        pyscript.entity_card_yvette.row_2_color = "default"
 
 
 @time_trigger("startup")
