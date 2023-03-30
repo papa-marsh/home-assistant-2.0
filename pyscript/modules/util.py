@@ -1,17 +1,3 @@
-from datetime import date, timedelta
-
-
-def get_next_weekday(day):
-    today = date.today()
-    day_map = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
-    try:
-        day = int(day)
-    except:
-        day = day_map[day.lower()]
-
-    return today + timedelta((day - today.weekday()) % 7)
-
-
 def battery_icon(battery, charging=False, upper_limit=100):
     if 0 < battery < 1:
         battery *= 100
@@ -20,7 +6,7 @@ def battery_icon(battery, charging=False, upper_limit=100):
     icon = "mdi:battery-charging-" if charging else "mdi:battery-"
     icon += str(round(battery / 10) * 10)
 
-    return "battery" if icon == "battery-100" else icon
+    return "mdi:battery" if icon == "mdi:battery-100" else icon
 
 
 @time_trigger("startup")

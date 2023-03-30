@@ -1,5 +1,29 @@
-import constants
-from datetime import date
+from datetime import date, datetime, timedelta
+from dateutil import tz
+
+
+def parse_timestamp(timestamp, output_format="iso"):
+    output = datetime.fromisoformat(timestamp).astimezone(tz.tzlocal())
+
+    if output_format == "date":
+        output = datetime.strftime(output, "%-m/%-d/%y")
+    elif output_format == "time":
+        output = datetime.strftime(output, "%-I:%M %p")
+    elif output_format == "datetime":
+        output = datetime.strftime(output, "%-m/%-d/%y %-I:%M %p")
+
+    return output
+
+
+def get_next_weekday(day):
+    today = date.today()
+    day_map = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
+    try:
+        day = int(day)
+    except:
+        day = day_map[day.lower()]
+
+    return today + timedelta((day - today.weekday()) % 7)
 
 
 def date_countdown(target, short=False):
@@ -33,40 +57,3 @@ def colloquial_date(target, short=False, ordinals=False):
             output += ord_map[output[-1]] if output[-1] in ord_map else "th"
 
     return output
-
-
-def asset_price(price, precision=2, cents=False, k_suffix=False):
-    price = float(price)
-    if cents:
-        output = f"{price*100:.{precision}f} ¢"
-    else:
-        if k_suffix:
-            output = f"${price/1000:,.{precision}f}k"
-        else:
-            output = f"${price:,.{precision}f}"
-
-    return output
-
-
-def asset_change(change, precision=2, percent_formatted=False):
-    change = float(change)
-    if not percent_formatted:
-        change = 100
-
-    sign = "+" if change >= 0 else ""
-    return f"{sign}{change:.{precision}f}%"
-
-
-def asset_color(change, percent_formatted=False):
-    change = float(change)
-    if not percent_formatted:
-        change *= 100
-
-    if change >= constants.ASSET_COLOR_THRESHOLD:
-        color = "green"
-    elif change <= constants.ASSET_COLOR_THRESHOLD * -1:
-        color = "red"
-    else:
-        color = "default"
-
-    return color

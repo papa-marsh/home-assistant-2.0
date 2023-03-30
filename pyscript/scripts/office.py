@@ -1,6 +1,5 @@
 from datetime import date, datetime, timedelta
-import format
-import util
+import dates
 
 
 @time_trigger("startup")
@@ -78,11 +77,11 @@ def entity_card_update_row_3():
     next_timecard = get_next_timecard()
     if next_timecard == date.today():
         pyscript.entity_card_office.blink = True
-    pyscript.entity_card_office.row_3_value = format.date_countdown(next_timecard)
+    pyscript.entity_card_office.row_3_value = dates.date_countdown(next_timecard)
 
 
 def get_next_timecard():
-    next_timecard = util.get_next_weekday("fri")
+    next_timecard = dates.get_next_weekday("fri")
     if "last_timecard" not in pyscript.entity_card_office.staging:
         pyscript.entity_card_office.staging["last_timecard"] = date.today() - timedelta(
             days=7

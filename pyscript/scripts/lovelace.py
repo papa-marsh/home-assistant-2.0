@@ -1,7 +1,6 @@
 from datetime import date, datetime
-from dateutil import tz
 import constants
-import format
+import dates
 
 
 @time_trigger("startup")
@@ -16,14 +15,12 @@ def set_sidebar_text():
     sun_time = (
         sun.sun.next_setting if sun.sun == "above_horizon" else sun.sun.next_rising
     )
-    sun_time = datetime.strftime(
-        datetime.fromisoformat(sun_time).astimezone(tz.tzlocal()), "%-I:%M %p"
-    )
+    sun_time = dates.parse_timestamp(sun_time, output_format="time")
 
     start_time = datetime.strptime(
         calendar.warnersfam_gmail_com.start_time, "%Y-%m-%d %H:%M:%S"
     )
-    next_up = f"Next up is {calendar.warnersfam_gmail_com.message}, {format.colloquial_date(start_time.date())}"
+    next_up = f"Next up is {calendar.warnersfam_gmail_com.message}, {dates.colloquial_date(start_time.date())}"
     if not calendar.warnersfam_gmail_com.all_day:
         next_up += f" at {datetime.strftime(start_time, '%-I:%M %p')}"
 
@@ -68,7 +65,7 @@ def set_chelsea_fixture_card():
         away_team=away,
         competition=description[2],
         top_row=description[2],
-        date=format.colloquial_date(start.date()),
+        date=dates.colloquial_date(start.date()),
         time=start.time().strftime("%-I:%M %p"),
         home_path=f"/local/PL/{home}.png"
         if home in constants.SOCCER_CRESTS

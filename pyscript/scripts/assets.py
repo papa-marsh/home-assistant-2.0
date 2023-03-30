@@ -78,11 +78,11 @@ def crypto_populate_card(private=False):
     active = False
 
     if visibility == "public":
-        pyscript.entity_card_crypto = format.asset_change(
+        pyscript.entity_card_crypto = format_change(
             pyscript.entity_card_crypto.staging["btc_week"], percent_formatted=True
         )
     else:
-        pyscript.entity_card_crypto = format.asset_price(
+        pyscript.entity_card_crypto = format_price(
             pyscript.entity_card_crypto.staging["total"], precision=0
         )
 
@@ -97,7 +97,7 @@ def crypto_populate_card(private=False):
             active = True
 
         if config["price"]:
-            value += format.asset_price(
+            value += format_price(
                 staged["price"],
                 precision=config["price_prec"],
                 cents=config["cents"],
@@ -108,7 +108,7 @@ def crypto_populate_card(private=False):
             value += " ("
 
         if config["change"]:
-            value += format.asset_change(
+            value += format_change(
                 staged["change"],
                 precision=config["change_prec"],
                 percent_formatted=True,
@@ -117,7 +117,7 @@ def crypto_populate_card(private=False):
         if config["price"] and config["change"]:
             value += ")"
 
-        color = format.asset_color(staged["change"], percent_formatted=True)
+        color = format_color(staged["change"], percent_formatted=True)
 
         state.setattr(f"pyscript.entity_card_crypto.row_{row}_value", value)
         state.setattr(f"pyscript.entity_card_crypto.row_{row}_icon", icon)
@@ -200,11 +200,11 @@ def stocks_populate_card(private=False):
     active = False
 
     if visibility == "public":
-        pyscript.entity_card_stocks = format.asset_change(
+        pyscript.entity_card_stocks = format_change(
             pyscript.entity_card_stocks.staging["spy_week"], percent_formatted=True
         )
     else:
-        pyscript.entity_card_stocks = format.asset_price(
+        pyscript.entity_card_stocks = format_price(
             pyscript.entity_card_stocks.staging["total"], precision=0
         )
 
@@ -219,7 +219,7 @@ def stocks_populate_card(private=False):
             active = True
 
         if config["price"]:
-            value += format.asset_price(
+            value += format_price(
                 staged["price"],
                 precision=config["price_prec"],
                 cents=config["cents"],
@@ -230,7 +230,7 @@ def stocks_populate_card(private=False):
             value += " ("
 
         if config["change"]:
-            value += format.asset_change(
+            value += format_change(
                 staged["change"],
                 precision=config["change_prec"],
                 percent_formatted=True,
@@ -239,7 +239,7 @@ def stocks_populate_card(private=False):
         if config["price"] and config["change"]:
             value += ")"
 
-        color = format.asset_color(staged["change"], percent_formatted=True)
+        color = format_color(staged["change"], percent_formatted=True)
 
         state.setattr(f"pyscript.entity_card_stocks.row_{row}_value", value)
         state.setattr(f"pyscript.entity_card_stocks.row_{row}_icon", icon)
@@ -247,3 +247,40 @@ def stocks_populate_card(private=False):
 
     pyscript.entity_card_stocks.active = active
     pyscript.entity_card_stocks.private = private
+
+
+def format_price(price, precision=2, cents=False, k_suffix=False):
+    price = float(price)
+    if cents:
+        output = f"{price*100:.{precision}f} ¢"
+    else:
+        if k_suffix:
+            output = f"${price/1000:,.{precision}f}k"
+        else:
+            output = f"${price:,.{precision}f}"
+
+    return output
+
+
+def format_change(change, precision=2, percent_formatted=False):
+    change = float(change)
+    if not percent_formatted:
+        change = 100
+
+    sign = "+" if change >= 0 else ""
+    return f"{sign}{change:.{precision}f}%"
+
+
+def format_color(change, percent_formatted=False):
+    change = float(change)
+    if not percent_formatted:
+        change *= 100
+
+    if change >= constants.ASSET_COLOR_THRESHOLD:
+        color = "green"
+    elif change <= constants.ASSET_COLOR_THRESHOLD * -1:
+        color = "red"
+    else:
+        color = "default"
+
+    return color
