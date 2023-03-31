@@ -131,12 +131,13 @@ def entity_card_update_row_2():
 )
 def entity_card_update_row_3():
     try:
-        eta = dates.parse_timestamp(
+        delta = dates.parse_timestamp(
             sensor.yvette_arrival_time
         ) - datetime.now().astimezone(tz.tzlocal())
+        eta = delta.days * 86400 + delta.seconds
     except:
         eta = 0
-    if binary_sensor.yvette_parking_brake == "on" or eta.seconds <= 0:
+    if binary_sensor.yvette_parking_brake == "on" or eta <= 0:
         pyscript.entity_card_yvette.row_3_value = (
             f"{climate.yvette_hvac_climate_system.current_temperature}° F"
         )
@@ -147,7 +148,7 @@ def entity_card_update_row_3():
             else "default"
         )
     else:
-        pyscript.entity_card_yvette.row_3_value = f"{eta.seconds//60} minutes"
+        pyscript.entity_card_yvette.row_3_value = f"{eta//60} minutes"
         pyscript.entity_card_yvette.row_3_icon = "mdi:map-clock"
         task.unique("yvette_eta_update_loop")
         task.sleep(30)
