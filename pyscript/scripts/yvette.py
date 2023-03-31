@@ -1,12 +1,14 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+from dateutil import tz
+import dates
 import util
 
 
-# @state_trigger(
-#     "person.marshall == 'home' and person.marshall.old != 'home'",
-#     "person.emily == 'home' and person.emily.old != 'home'",
-# )
+# @state_trigger("person.marshall", "person.emily", "pyscript.debug2")
 # def garage_auto_open(**kwargs):
+#     trigger = kwargs["var_name"]
+#     pyscript.debug.old_val = kwargs["old_value"]
+#     pyscript.debug = trigger
 
 
 @time_trigger("startup")
@@ -59,7 +61,9 @@ def entity_card_dtap():
 
 @time_trigger("startup")
 @state_trigger(
-    "binary_sensor.yvette_parking_brake", "climate.yvette_hvac_climate_system"
+    "binary_sensor.yvette_parking_brake",
+    "climate.yvette_hvac_climate_system",
+    "update.yvette_software_update",
 )
 def entity_card_update_state():
     if binary_sensor.yvette_parking_brake == "off":
@@ -126,7 +130,13 @@ def entity_card_update_row_2():
     "sensor.yvette_arrival_time",
 )
 def entity_card_update_row_3():
-    if binary_sensor.yvette_parking_brake == "on":
+    try:
+        eta = dates.parse_timestamp(
+            sensor.yvette_arrival_time
+        ) - datetime.now().astimezone(tz.tzlocal())
+    except:
+        eta = 0
+    if binary_sensor.yvette_parking_brake == "on" or eta.seconds <= 0:
         pyscript.entity_card_yvette.row_3_value = (
             f"{climate.yvette_hvac_climate_system.current_temperature}° F"
         )
@@ -137,11 +147,11 @@ def entity_card_update_row_3():
             else "default"
         )
     else:
-        pyscript.entity_card_yvette.row_3_value = dates.parse_timestamp(
-            sensor.yvette_arrival_time, output_format="time"
-        )
-
+        pyscript.entity_card_yvette.row_3_value = f"{eta.seconds//60} minutes"
         pyscript.entity_card_yvette.row_3_icon = "mdi:map-clock"
+        task.unique("yvette_eta_update_loop")
+        task.sleep(30)
+        entity_card_update_row_3()
 
 
 @time_trigger("startup")

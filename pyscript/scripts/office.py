@@ -50,7 +50,7 @@ def entity_card_tap():
 def entity_card_hold():
     pyscript.entity_card_office.staging["last_timecard"] = date.today()
     pyscript.entity_card_office.blink = False
-    update_row_3()
+    entity_card_update_row_3()
 
 
 @service("lovelace.office_dtap")

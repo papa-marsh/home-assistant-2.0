@@ -2,6 +2,10 @@ from datetime import date, datetime, timedelta
 from dateutil import tz
 
 
+# def last_changed(entity):
+#     return state.get(entity)
+
+
 def parse_timestamp(timestamp, output_format="iso"):
     output = datetime.fromisoformat(timestamp).astimezone(tz.tzlocal())
 
