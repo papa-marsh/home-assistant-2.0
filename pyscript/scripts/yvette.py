@@ -160,7 +160,7 @@ def entity_card_update_row_3():
 def persist_complication_yvette():
     state.persist(
         "pyscript.complication_yvette",
-        default_value=datetime.now(),
+        default_value="",
         default_attributes={"leading": "", "outer": "", "trailing": "", "gauge": 0},
     )
 

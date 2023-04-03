@@ -6,8 +6,11 @@ from dateutil import tz
 #     return state.get(entity)
 
 
-def parse_timestamp(timestamp, output_format="iso"):
-    output = datetime.fromisoformat(timestamp).astimezone(tz.tzlocal())
+def parse_timestamp(timestamp=None, output_format="iso"):
+    if not timestamp:
+        output = datetime.now()
+    elif isinstance(timestamp, str):
+        output = datetime.fromisoformat(timestamp).astimezone(tz.tzlocal())
 
     if output_format == "date":
         output = datetime.strftime(output, "%-m/%-d/%y")
