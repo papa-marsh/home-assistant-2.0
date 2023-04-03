@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from dateutil import tz
 import dates
+import files
 import util
 
 
@@ -116,8 +117,8 @@ def entity_card_update_row_2():
             else "default"
         )
     else:
-        pyscript.entity_card_yvette.row_2_value = (
-            device_tracker.yvette_destination_location_tracker  # TODO Need a short name here once ready
+        pyscript.entity_card_yvette.row_2_value = files.zone_short_name(
+            device_tracker.yvette_destination_location_tracker
         )
         pyscript.entity_card_yvette.row_2_icon = "mdi:navigation"
         pyscript.entity_card_yvette.row_2_color = "default"

@@ -3,6 +3,15 @@ import dates
 
 
 @time_trigger("startup")
+@state_trigger("media_player.playstation_4")
+def update_playstation_fans():
+    if media_player.playstation_4 == "playing":
+        switch.turn_on(entity_id="switch.playstation_fans")
+    else:
+        switch.turn_off(entity_id="switch.playstation_fans")
+
+
+@time_trigger("startup")
 def persist_entity_card_office():
     state.persist(
         "pyscript.entity_card_office",

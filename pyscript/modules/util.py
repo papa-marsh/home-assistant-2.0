@@ -1,3 +1,6 @@
+import constants
+
+
 def battery_icon(battery, charging=False, upper_limit=100):
     if 0 < battery < 1:
         battery *= 100
@@ -35,6 +38,7 @@ def mutex(mutex_id, override=False):
                 log.warning(f"Exception caught during execution of mutex {mutex_id}")
                 output = None
             state.setattr(f"pyscript.mutex.{mutex_id}", False)
+
             return output
 
         return inner

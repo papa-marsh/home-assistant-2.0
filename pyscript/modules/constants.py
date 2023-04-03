@@ -1,6 +1,8 @@
 NOTI_SOUND = "3rdParty_Failure_Haptic.caf"
 NOTI_CRIT_SOUND = "3rd_party_critical.caf"
 
+BASE_FILE_PATH = "/config/pyscript/files/"
+
 SPEAKER_GROUP = [
     "media_player.basement",
     "media_player.living_room",
