@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil import tz
 import dates
 import files
@@ -10,6 +10,11 @@ import util
 #     trigger = kwargs["var_name"]
 #     pyscript.debug.old_val = kwargs["old_value"]
 #     pyscript.debug = trigger
+
+
+@event_trigger("ios.action_fired", "actionName=='Yvette Climate On'")
+def ios_climate_on(**kwargs):
+    climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
 
 
 @time_trigger("startup")

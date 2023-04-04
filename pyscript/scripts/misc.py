@@ -7,11 +7,6 @@ def push_action_placeholder(**kwargs):
     log.warning(kwargs)
 
 
-@event_trigger("ios.action_fired", "actionName=='test'")
-def ios_action_placeholder(**kwargs):
-    log.warning(kwargs)
-
-
 @time_trigger("startup")
 def persist_complication_emily_location():
     state.persist(
