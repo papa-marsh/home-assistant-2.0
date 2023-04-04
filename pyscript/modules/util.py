@@ -16,37 +16,3 @@ def zone_short_name(zone):
     return files.read(
         "zones", key_list=[zone, "short_name"], default_value=zone, file_type="yaml"
     )
-
-
-@time_trigger("startup")
-def persist_mutex():
-    state.persist(
-        "pyscript.mutex",
-        default_value="",
-        default_attributes={},
-    )
-
-
-def mutex(mutex_id, override=False):
-    def mutex_decorator(func):
-        def inner(*args, **kwargs):
-            if (
-                mutex_id in pyscript.mutex
-                and state.getattr("pyscript.mutex")[mutex_id]
-                and not override
-            ):
-                log.warning(f"Mutex {mutex_id} is already set. Skipping execution")
-                return
-            state.setattr(f"pyscript.mutex.{mutex_id}", True)
-            try:
-                output = func(*args, **kwargs)
-            except:
-                log.warning(f"Exception caught during execution of mutex {mutex_id}")
-                output = None
-            state.setattr(f"pyscript.mutex.{mutex_id}", False)
-
-            return output
-
-        return inner
-
-    return mutex_decorator
