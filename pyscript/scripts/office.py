@@ -1,5 +1,17 @@
 from datetime import date, datetime, timedelta
 import dates
+import push
+
+
+@state_trigger(
+    "person.emily == 'home' and pyscript.entity_card_office == 'Busy'",
+    watch=["person.emily"],
+)
+def meeting_active_notification():
+    noti = push.Notification(
+        target="marshall", title="Heads Up", message="Dad's in a meeting"
+    )
+    noti.send()
 
 
 @time_trigger("startup")
