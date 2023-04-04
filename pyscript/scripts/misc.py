@@ -1,5 +1,5 @@
 import dates
-import files
+import util
 
 
 @event_trigger("mobile_app_notification_action", "action=='test'")
@@ -18,7 +18,7 @@ def persist_complication_emily_location():
 
 @state_trigger("person.emily")
 def complication_emily_location_update():
-    pyscript.complication_emily_location.inner = files.zone_short_name(person.emily)
+    pyscript.complication_emily_location.inner = util.zone_short_name(person.emily)
     pyscript.complication_emily_location.outer = dates.parse_timestamp(
         output_format="time"
     )

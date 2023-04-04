@@ -3,21 +3,18 @@ import constants
 
 
 @pyscript_executor
-def read_file(file_name):
-    with open(f"{constants.BASE_FILE_PATH}{file_name}") as f:
-        if ".yaml" in file_name:
-            contents = yaml.safe_load(f)
-        else:
-            contents = f.read()
+def read(file_name, key_list=None, default_value=None, file_type="yaml"):
+    try:
+        with open(f"{constants.BASE_FILE_PATH}{file_name}.yaml") as file:
+            if file_type == "yaml":
+                result = yaml.safe_load(file)
+            else:
+                result = file.read()
 
-    return contents
+        if key_list and isinstance(result, dict):
+            for key in key_list:
+                result = result[key]
+    except:
+        result = default_value
 
-
-def zone_short_name(zone_name):
-    zones = read_file("zones.yaml")
-    if zone_name in zones and "short_name" in zones[zone_name]:
-        name = zones[zone_name]["short_name"]
-    else:
-        name = zone_name
-
-    return name
+    return result

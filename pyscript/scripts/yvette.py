@@ -1,7 +1,6 @@
 from datetime import datetime
 from dateutil import tz
 import dates
-import files
 import util
 
 
@@ -122,9 +121,10 @@ def entity_card_update_row_2():
             else "default"
         )
     else:
-        pyscript.entity_card_yvette.row_2_value = files.zone_short_name(
+        pyscript.entity_card_yvette.row_2_value = util.zone_short_name(
             device_tracker.yvette_destination_location_tracker
         )
+
         pyscript.entity_card_yvette.row_2_icon = "mdi:navigation"
         pyscript.entity_card_yvette.row_2_color = "default"
 
@@ -183,10 +183,10 @@ def complication_outer():
 
 
 @time_trigger("startup")
-@state_trigger("binary_sensor.yvette_charging")
+@state_trigger("binary_sensor.yvette_charger")
 def complication_trailing():
     pyscript.complication_yvette.trailing = (
-        "⚡️" if binary_sensor.yvette_charging == "on" else ""
+        "⚡️" if binary_sensor.yvette_charger == "on" else ""
     )
 
 

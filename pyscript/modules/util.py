@@ -1,4 +1,4 @@
-import constants
+import files
 
 
 def battery_icon(battery, charging=False, upper_limit=100):
@@ -10,6 +10,12 @@ def battery_icon(battery, charging=False, upper_limit=100):
     icon += str(round(battery / 10) * 10)
 
     return "mdi:battery" if icon == "mdi:battery-100" else icon
+
+
+def zone_short_name(zone):
+    return files.read(
+        "zones", key_list=[zone, "short_name"], default_value=zone, file_type="yaml"
+    )
 
 
 @time_trigger("startup")
