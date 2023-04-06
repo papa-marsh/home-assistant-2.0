@@ -14,6 +14,6 @@ showLoader: false
 showProgressBar: false
 style: |
   ha-card {
-    height: 552px !important;
+    height: 584px !important;
     overflow: hidden !important;
   }
