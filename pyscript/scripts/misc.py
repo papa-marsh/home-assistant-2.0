@@ -1,4 +1,5 @@
 import dates
+import files
 import push
 import util
 
@@ -10,24 +11,24 @@ def push_action_placeholder(**kwargs):
 
 @state_trigger("person.marshall", "person.emily")
 def notify_on_zone_change(**kwargs):
-    target = "Emily" if kwargs["var_name"] == "person.marshall" else "Marshall"
-    new_prefix = files.read("zones", [kwargs[value], "prefix"], "")
-    old_prefix = files.read("zones", [kwargs[old_value], "prefix"], "")
+    name = state.getattr(kwargs["var_name"])["friendly_name"]
+    new_prefix = files.read("zones", [kwargs["value"], "prefix"], "")
+    old_prefix = files.read("zones", [kwargs["old_value"], "prefix"], "")
 
-    if not files.read("zones", [kwargs[value], "is_region"], False):
-        message = f"{target} arrived at {new_prefix}{kwargs[value]}"
-    elif not files.read("zones", [kwargs[old_value], "is_region"], False):
-        message = f"{target} left {old_prefix}{kwargs[old_value]}"
-    elif kwargs[value] != "not_home":
-        message = f"{target} is in {new_prefix}{kwargs[value]}"
+    if not files.read("zones", [kwargs["value"], "is_region"], False):
+        message = f"{name} arrived at {new_prefix}{kwargs['value']}"
+    elif not files.read("zones", [kwargs["old_value"], "is_region"], False):
+        message = f"{name} left {old_prefix}{kwargs['old_value']}"
+    elif kwargs["value"] != "not_home":
+        message = f"{name} is in {new_prefix}{kwargs['value']}"
     else:
-        message = f"{target} left {old_prefix}{kwargs[old_value]}"
+        message = f"{name} left {old_prefix}{kwargs['old_value']}"
 
     noti = push.Notification(
         message=message,
         group="notify_on_zone_change",
         tag="notify_on_zone_change",
-        target=target,
+        target="Emily" if name == "Marshall" else "Marshall",
     )
 
     noti.send()
