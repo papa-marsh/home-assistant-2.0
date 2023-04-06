@@ -9,6 +9,20 @@ def push_action_placeholder(**kwargs):
     log.warning(kwargs)
 
 
+@event_trigger("ios.action_fired", "actionName=='Sound Machines On'")
+def ios_sound_machines_on(**kwargs):
+    switch.turn_on(
+        entity_id=["switch.ellies_sound_machine", "switch.master_sound_machine"]
+    )
+
+
+@event_trigger("ios.action_fired", "actionName=='Sound Machines Off'")
+def ios_sound_machines_off(**kwargs):
+    switch.turn_off(
+        entity_id=["switch.ellies_sound_machine", "switch.master_sound_machine"]
+    )
+
+
 @state_trigger("person.marshall", "person.emily")
 def notify_on_zone_change(**kwargs):
     name = state.getattr(kwargs["var_name"])["friendly_name"]
@@ -28,7 +42,7 @@ def notify_on_zone_change(**kwargs):
         message=message,
         group="notify_on_zone_change",
         tag="notify_on_zone_change",
-        target="Emily" if name == "Marshall" else "Marshall",
+        target="emily" if name == "Marshall" else "marshall",
     )
 
     noti.send()
