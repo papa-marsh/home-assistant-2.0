@@ -23,6 +23,12 @@ def ios_sound_machines_off(**kwargs):
     )
 
 
+@state_trigger("switch.space_heater=='on'")
+def space_heater_auto_off():
+    task.sleep(3 * 60 * 60)
+    switch.turn_off(entity_id="switch.space_heater")
+
+
 @state_trigger("person.marshall", "person.emily")
 def notify_on_zone_change(**kwargs):
     name = state.getattr(kwargs["var_name"])["friendly_name"]
