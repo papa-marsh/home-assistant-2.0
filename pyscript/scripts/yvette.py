@@ -1,5 +1,6 @@
 from datetime import datetime
 from dateutil import tz
+import secrets
 import dates
 import util
 
@@ -9,6 +10,19 @@ import util
 #     trigger = kwargs["var_name"]
 #     pyscript.debug.old_val = kwargs["old_value"]
 #     pyscript.debug = trigger
+
+
+@state_trigger(
+    "switch.yvette_sentry_mode",
+    "device_tracker.yvette_location_tracker",
+)
+def sentry_off_at_in_laws():
+    if (
+        switch.yvette_sentry_mode == "on"
+        and device_tracker.yvette_location_tracker
+        == state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]
+    ):
+        switch.turn_off(entity_id=secrets.IN_LAWS_ZONE)
 
 
 @event_trigger("ios.action_fired", "actionName=='Yvette Climate On'")
