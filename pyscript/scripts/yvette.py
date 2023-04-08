@@ -13,7 +13,7 @@ import util
 #     pyscript.debug = trigger
 
 
-@time_trigger("startup", "cron(30 10 * * *)")
+@time_trigger("cron(30 22 * * *)")
 def yvette_charge_reminder():
     if (
         device_tracker.yvette_location_tracker == "home"
@@ -28,6 +28,12 @@ def yvette_charge_reminder():
             group="yvette_unplugged",
         )
         noti.send()
+
+
+@state_trigger("binary_sensor.yvette_charger=='on'")
+def clear_yvette_charge_reminder():
+    noti = push.Notification(tag="yvette_unplugged")
+    noti.clear()
 
 
 @state_trigger(
