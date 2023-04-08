@@ -2,6 +2,7 @@ from datetime import datetime
 from dateutil import tz
 import secrets
 import dates
+import push
 import util
 
 
@@ -10,6 +11,23 @@ import util
 #     trigger = kwargs["var_name"]
 #     pyscript.debug.old_val = kwargs["old_value"]
 #     pyscript.debug = trigger
+
+
+@time_trigger("startup", "cron(30 10 * * *)")
+def yvette_charge_reminder():
+    if (
+        device_tracker.yvette_location_tracker == "home"
+        and binary_sensor.yvette_charger == "off"
+        and int(sensor.yvette_battery) < 80
+    ):
+        noti = push.Notification(
+            title="Yvette is Unplugged",
+            message=f"Heads up - Yvette is unplugged with {sensor.yvette_battery}% battery",
+            target="all",
+            tag="yvette_unplugged",
+            group="yvette_unplugged",
+        )
+        noti.send()
 
 
 @state_trigger(
@@ -28,6 +46,43 @@ def sentry_off_at_in_laws():
 @event_trigger("ios.action_fired", "actionName=='Yvette Climate On'")
 def ios_climate_on(**kwargs):
     climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
+
+
+@time_trigger("startup")
+def persist_complication_yvette():
+    state.persist(
+        "pyscript.complication_yvette",
+        default_value="",
+        default_attributes={"leading": "", "outer": "", "trailing": "", "gauge": 0},
+    )
+
+
+@time_trigger("startup")
+@state_trigger("lock.yvette_doors")
+def complication_leading():
+    pyscript.complication_yvette.leading = "🔒" if lock.yvette_doors == "locked" else ""
+
+
+@time_trigger("startup")
+@state_trigger("sensor.yvette_battery")
+def complication_outer():
+    pyscript.complication_yvette.outer = f"{sensor.yvette_battery}%"
+
+
+@time_trigger("startup")
+@state_trigger("binary_sensor.yvette_charger")
+def complication_trailing():
+    pyscript.complication_yvette.trailing = (
+        "⚡️" if binary_sensor.yvette_charger == "on" else ""
+    )
+
+
+@time_trigger("startup")
+@state_trigger("sensor.yvette_battery", "number.yvette_charge_limit")
+def complication_gauge():
+    pyscript.complication_yvette.gauge = int(sensor.yvette_battery) / int(
+        number.yvette_charge_limit
+    )
 
 
 @time_trigger("startup")
@@ -173,40 +228,3 @@ def entity_card_update_row_3():
         task.unique("yvette_eta_update_loop")
         task.sleep(30)
         entity_card_update_row_3()
-
-
-@time_trigger("startup")
-def persist_complication_yvette():
-    state.persist(
-        "pyscript.complication_yvette",
-        default_value="",
-        default_attributes={"leading": "", "outer": "", "trailing": "", "gauge": 0},
-    )
-
-
-@time_trigger("startup")
-@state_trigger("lock.yvette_doors")
-def complication_leading():
-    pyscript.complication_yvette.leading = "🔒" if lock.yvette_doors == "locked" else ""
-
-
-@time_trigger("startup")
-@state_trigger("sensor.yvette_battery")
-def complication_outer():
-    pyscript.complication_yvette.outer = f"{sensor.yvette_battery}%"
-
-
-@time_trigger("startup")
-@state_trigger("binary_sensor.yvette_charger")
-def complication_trailing():
-    pyscript.complication_yvette.trailing = (
-        "⚡️" if binary_sensor.yvette_charger == "on" else ""
-    )
-
-
-@time_trigger("startup")
-@state_trigger("sensor.yvette_battery", "number.yvette_charge_limit")
-def complication_gauge():
-    pyscript.complication_yvette.gauge = int(sensor.yvette_battery) / int(
-        number.yvette_charge_limit
-    )
