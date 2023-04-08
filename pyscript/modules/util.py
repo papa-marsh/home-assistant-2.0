@@ -14,3 +14,7 @@ def battery_icon(battery, charging=False, upper_limit=100):
 
 def zone_short_name(zone):
     return files.read("zones", key_list=[zone, "short_name"], default_value=zone)
+
+
+def rolling_delay(delay):
+    pass
