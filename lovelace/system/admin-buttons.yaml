@@ -1,0 +1,16 @@
+type: horizontal-stack
+cards:
+  - type: custom:button-card
+    name: Restart HASS
+    icon: mdi:home-assistant
+    tap_action:
+      action: call-service
+      service: homeassistant.restart
+  - type: custom:button-card
+    name: Restart SSH
+    icon: mdi:
+    tap_action:
+      action: call-service
+      service: hassio.addon_restart
+      service_data:
+        addon: a0d7b954_ssh
