@@ -13,6 +13,4 @@ def battery_icon(battery, charging=False, upper_limit=100):
 
 
 def zone_short_name(zone):
-    return files.read(
-        "zones", key_list=[zone, "short_name"], default_value=zone, file_type="yaml"
-    )
+    return files.read("zones", key_list=[zone, "short_name"], default_value=zone)
