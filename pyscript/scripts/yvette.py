@@ -6,6 +6,40 @@ import push
 import util
 
 
+@state_trigger("cover.east_stall", "cover.west_stall")
+def garage_left_open_notification(**kwargs):
+    if kwargs[value] == "open" and kwargs[old_value] == "closed":
+        stall = state.getattr(kwargs["var_name"])["friendly_name"].split(" ")[0]
+        task.unique(f"{stall}_stall_left_open")
+        noti = None
+        time = 0
+
+        while True:
+            wait = task.wait_until(event_trigger="TODO", timeout=10 * 60)
+            if wait["trigger_type"] == "timeout":
+                time += 10
+                if not noti:
+                    noti = push.Notification(
+                        title="Garage Is Open",
+                        message=f"{'Emily' if stall == 'West' else 'Marshall'}'s garage stall has been open for {time} minutes",
+                        tag=f"{stall}_stall_left_open",
+                        group=f"{stall}_stall_left_open",
+                    )
+                    noti.add_action(
+                        id=f"silence_{stall}_stall",
+                        title="Silence",
+                    )
+                    noti.add_action(
+                        id=f"close_{stall}_stall",
+                        title="Close Garage",
+                        destructive=True,
+                    )
+                noti.send()
+            elif wait["trigger_type"] == "event" and "TODO":
+                # TODO
+                break
+
+
 # @state_trigger("person.marshall", "person.emily", "pyscript.debug2")
 # def garage_auto_open(**kwargs):
 #     trigger = kwargs["var_name"]
