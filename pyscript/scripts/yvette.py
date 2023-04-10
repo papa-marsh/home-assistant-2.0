@@ -4,14 +4,24 @@ import dates
 import util
 
 
-# @state_trigger("person.marshall", "person.emily", "pyscript.debug2")
-# def garage_auto_open(**kwargs):
-#     trigger = kwargs["var_name"]
-#     pyscript.debug.old_val = kwargs["old_value"]
-#     pyscript.debug = trigger
+@state_trigger("person.marshall", "person.emily")
+def garage_auto_open(**kwargs):
+    now = datetime.now().astimezone(tz.tzlocal())
+    if (
+        kwargs["value"] == "home"
+        and kwargs["old_value"] != "home"
+        and cover.east_stall == "closed"
+        and 6 <= now.hour < 23
+        and (now - cover.east_stall.last_changed).seconds > 300
+        and (
+            device_tracker.yvette_location_tracker != "home"
+            or (now - device_tracker.yvette_location_tracker.last_changed).seconds < 300
+        )
+    ):
+        cover.open_cover(entity_id="cover.east_stall")
 
 
-@event_trigger("ios.action_fired", "actionName=='Yvette Climate On'")
+@event_trigger("ios.action_fired", "actionName=='Yvette Air On'")
 def ios_climate_on(**kwargs):
     climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
 

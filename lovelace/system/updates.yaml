@@ -31,10 +31,9 @@ entities:
               {% endif %}
             tap_action:
               action: call-service
-              service: input_select.select_option
+              service: update.install
               service_data:
-                entity_id: input_select.lovelace_action
-                option: Update Home Assistant Core
+                entity_id: update.home_assistant_core_update
   - type: custom:fold-entity-row
     padding: 0
     head:
@@ -66,10 +65,9 @@ entities:
               {% endif %}
             tap_action:
               action: call-service
-              service: input_select.select_option
+              service: update.install
               service_data:
-                entity_id: input_select.lovelace_action
-                option: Update Operating System
+                entity_id: update.home_assistant_operating_system_update
   - type: custom:fold-entity-row
     padding: 0
     head:
@@ -101,10 +99,9 @@ entities:
               {% endif %}
             tap_action:
               action: call-service
-              service: input_select.select_option
+              service: update.install
               service_data:
-                entity_id: input_select.lovelace_action
-                option: Update Supervisor
+                entity_id: update.home_assistant_supervisor_update
   - type: custom:fold-entity-row
     padding: 0
     head:
@@ -136,10 +133,9 @@ entities:
               {% endif %}
             tap_action:
               action: call-service
-              service: input_select.select_option
+              service: update.install
               service_data:
-                entity_id: input_select.lovelace_action
-                option: Update File Editor
+                entity_id: update.file_editor_update
   - type: custom:fold-entity-row
     padding: 0
     head:
@@ -171,10 +167,9 @@ entities:
               {% endif %}
             tap_action:
               action: call-service
-              service: input_select.select_option
+              service: update.install
               service_data:
-                entity_id: input_select.lovelace_action
-                option: Update Google Drive Backup
+                entity_id: update.home_assistant_google_drive_backup_update
   - type: custom:fold-entity-row
     padding: 0
     head:
@@ -206,10 +201,9 @@ entities:
               {% endif %}
             tap_action:
               action: call-service
-              service: input_select.select_option
+              service: update.install
               service_data:
-                entity_id: input_select.lovelace_action
-                option: Update Node-RED
+                entity_id: update.node_red_update
   - type: custom:fold-entity-row
     padding: 0
     head:
@@ -241,10 +235,9 @@ entities:
               {% endif %}
             tap_action:
               action: call-service
-              service: input_select.select_option
+              service: update.install
               service_data:
-                entity_id: input_select.lovelace_action
-                option: Update Samba Share
+                entity_id: update.samba_share_update
   - type: custom:fold-entity-row
     padding: 0
     head:
@@ -276,10 +269,9 @@ entities:
               {% endif %}
             tap_action:
               action: call-service
-              service: input_select.select_option
+              service: update.install
               service_data:
-                entity_id: input_select.lovelace_action
-                option: Update SSH & Web Terminal
+                entity_id: update.ssh_web_terminal_update
   - type: custom:fold-entity-row
     padding: 0
     head:
@@ -311,7 +303,6 @@ entities:
               {% endif %}
             tap_action:
               action: call-service
-              service: input_select.select_option
+              service: update.install
               service_data:
-                entity_id: input_select.lovelace_action
-                option: Update Z-Wave JS
+                entity_id: update.z_wave_js_update

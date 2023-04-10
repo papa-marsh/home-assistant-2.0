@@ -9,7 +9,7 @@ import push
 )
 def meeting_active_notification():
     noti = push.Notification(
-        target="marshall", title="Heads Up", message="Dad's in a meeting"
+        target="emily", title="Heads Up", message="Dad's in a meeting"
     )
     noti.send()
 
@@ -93,7 +93,7 @@ def entity_card_update_row_2():
     )
 
 
-@time_trigger("startup", "cron(*/15 3 * * *)")
+@time_trigger("startup", "cron(0 3 * * *)")
 def entity_card_update_row_3():
     next_timecard = get_next_timecard()
     if next_timecard == date.today():
