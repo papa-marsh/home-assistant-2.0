@@ -6,91 +6,6 @@ import push
 import util
 
 
-@state_trigger("cover.east_stall", "cover.west_stall")
-def garage_left_open_notification(**kwargs):
-    if kwargs[value] == "open" and kwargs[old_value] == "closed":
-        stall = state.getattr(kwargs["var_name"])["friendly_name"].split(" ")[0]
-        task.unique(f"{stall}_stall_left_open")
-        noti = None
-        time = 0
-
-        while True:
-            wait = task.wait_until(event_trigger="TODO", timeout=10 * 60)
-            if wait["trigger_type"] == "timeout":
-                time += 10
-                if not noti:
-                    noti = push.Notification(
-                        title="Garage Is Open",
-                        message=f"{'Emily' if stall == 'West' else 'Marshall'}'s garage stall has been open for {time} minutes",
-                        tag=f"{stall}_stall_left_open",
-                        group=f"{stall}_stall_left_open",
-                    )
-                    noti.add_action(
-                        id=f"silence_{stall}_stall",
-                        title="Silence",
-                    )
-                    noti.add_action(
-                        id=f"close_{stall}_stall",
-                        title="Close Garage",
-                        destructive=True,
-                    )
-                noti.send()
-            elif wait["trigger_type"] == "event" and "TODO":
-                # TODO
-                break
-
-
-@state_trigger("cover.east_stall", "cover.west_stall")
-def garage_left_open_notification(**kwargs):
-    if kwargs[value] == "open" and kwargs[old_value] == "closed":
-        stall = state.getattr(kwargs["var_name"])["friendly_name"].split(" ")[0]
-        task.unique(f"{stall}_stall_left_open")
-        noti = None
-        time = 0
-
-        while True:
-            wait = task.wait_until(event_trigger="TODO", timeout=10 * 60)
-            if wait["trigger_type"] == "timeout":
-                time += 10
-                if not noti:
-                    noti = push.Notification(
-                        title="Garage Is Open",
-                        message=f"{'Emily' if stall == 'West' else 'Marshall'}'s garage stall has been open for {time} minutes",
-                        tag=f"{stall}_stall_left_open",
-                        group=f"{stall}_stall_left_open",
-                    )
-                    noti.add_action(
-                        id=f"silence_{stall}_stall",
-                        title="Silence",
-                    )
-                    noti.add_action(
-                        id=f"close_{stall}_stall",
-                        title="Close Garage",
-                        destructive=True,
-                    )
-                noti.send()
-            elif wait["trigger_type"] == "event" and "TODO":
-                # TODO
-                break
-
-
-@state_trigger("person.marshall", "person.emily")
-def garage_auto_open(**kwargs):
-    now = datetime.now().astimezone(tz.tzlocal())
-    if (
-        kwargs["value"] == "home"
-        and kwargs["old_value"] != "home"
-        and cover.east_stall == "closed"
-        and 6 <= now.hour < 23
-        and (now - cover.east_stall.last_changed).seconds > 300
-        and (
-            device_tracker.yvette_location_tracker != "home"
-            or (now - device_tracker.yvette_location_tracker.last_changed).seconds < 300
-        )
-    ):
-        cover.open_cover(entity_id="cover.east_stall")
-
-
 @time_trigger("cron(30 22 * * *)")
 def yvette_charge_reminder():
     if (
@@ -108,6 +23,7 @@ def yvette_charge_reminder():
         noti.send()
 
 
+@time_trigger("cron(0 4 * * *)")
 @state_trigger("binary_sensor.yvette_charger=='on'")
 def clear_yvette_charge_reminder():
     noti = push.Notification(tag="yvette_unplugged")

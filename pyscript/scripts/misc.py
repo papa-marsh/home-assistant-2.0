@@ -9,37 +9,6 @@ def push_action_placeholder(**kwargs):
     log.warning(kwargs)
 
 
-@state_trigger(
-    "binary_sensor.front_door_sensor",
-    "binary_sensor.garage_door_sensor",
-    "binary_sensor.service_door_sensor",
-    "binary_sensor.slider_door_sensor",
-)
-def door_open_critical(**kwargs):
-    if kwargs["value"] == "on" and kwargs["old_value"] == "off":
-        target = None
-        if (
-            person.marshall not in ["home", "East Grand Rapids"]
-            and person.emily != "home"
-        ):
-            target = "all"
-        elif 1 <= datetime.now().hour < 6:
-            target = "marshall"
-
-        if target:
-            door = state.getattr(kwargs["var_name"])["friendly_name"].split(" ")[0]
-            noti = push.Notification(
-                title=f"{door} Door Open",
-                message=f"{door} door opened at {dates.parse_timestamp(output_format='time')}",
-                tag=f"{door}_critical",
-                group=f"{door}_critical",
-                priority="critical",
-                target=target,
-            )
-
-            noti.send()
-
-
 @event_trigger("ios.action_fired", "actionName=='Sound Machines On'")
 def ios_sound_machines_on(**kwargs):
     switch.turn_on(

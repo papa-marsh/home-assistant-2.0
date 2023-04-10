@@ -2,6 +2,88 @@ from datetime import date, datetime, timedelta
 import dates
 
 
+@state_trigger("cover.east_stall", "cover.west_stall")
+def garage_left_open_notification(**kwargs):
+    if kwargs[value] == "open" and kwargs[old_value] == "closed":
+        stall = state.getattr(kwargs["var_name"])["friendly_name"].split(" ")[0]
+        task.unique(f"{stall}_stall_left_open")
+        noti = None
+        time = 0
+
+        while True:
+            wait = task.wait_until(event_trigger="TODO", timeout=10 * 60)
+            if wait["trigger_type"] == "timeout":
+                time += 10
+                if not noti:
+                    noti = push.Notification(
+                        title="Garage Is Open",
+                        message=f"{'Emily' if stall == 'West' else 'Marshall'}'s garage stall has been open for {time} minutes",
+                        tag=f"{stall}_stall_left_open",
+                        group=f"{stall}_stall_left_open",
+                    )
+                    noti.add_action(
+                        id=f"silence_{stall}_stall",
+                        title="Silence",
+                    )
+                    noti.add_action(
+                        id=f"close_{stall}_stall",
+                        title="Close Garage",
+                        destructive=True,
+                    )
+                noti.send()
+            elif wait["trigger_type"] == "event" and "TODO":
+                # TODO
+                break
+
+
+@state_trigger("person.marshall", "person.emily")
+def garage_auto_open(**kwargs):
+    now = datetime.now().astimezone(tz.tzlocal())
+    if (
+        kwargs["value"] == "home"
+        and kwargs["old_value"] != "home"
+        and cover.east_stall == "closed"
+        and 6 <= now.hour < 23
+        and (now - cover.east_stall.last_changed).seconds > 300
+        and (
+            device_tracker.yvette_location_tracker != "home"
+            or (now - device_tracker.yvette_location_tracker.last_changed).seconds < 300
+        )
+    ):
+        cover.open_cover(entity_id="cover.east_stall")
+
+
+@state_trigger(
+    "binary_sensor.front_door_sensor",
+    "binary_sensor.garage_door_sensor",
+    "binary_sensor.service_door_sensor",
+    "binary_sensor.slider_door_sensor",
+)
+def door_open_critical(**kwargs):
+    if kwargs["value"] == "on" and kwargs["old_value"] == "off":
+        target = None
+        if (
+            person.marshall not in ["home", "East Grand Rapids"]
+            and person.emily != "home"
+        ):
+            target = "all"
+        elif 1 <= datetime.now().hour < 6:
+            target = "marshall"
+
+        if target:
+            door = state.getattr(kwargs["var_name"])["friendly_name"].split(" ")[0]
+            noti = push.Notification(
+                title=f"{door} Door Open",
+                message=f"{door} door opened at {dates.parse_timestamp(output_format='time')}",
+                tag=f"{door}_critical",
+                group=f"{door}_critical",
+                priority="critical",
+                target=target,
+            )
+
+            noti.send()
+
+
 @time_trigger("startup")
 def persist_entity_card_home():
     state.persist(
