@@ -59,7 +59,7 @@ def garage_auto_open(**kwargs):
     "binary_sensor.service_door_sensor",
     "binary_sensor.slider_door_sensor",
 )
-def door_open_critical(**kwargs):
+def door_open_critical_notification(**kwargs):
     if kwargs["value"] == "on" and kwargs["old_value"] == "off":
         target = None
         if (
