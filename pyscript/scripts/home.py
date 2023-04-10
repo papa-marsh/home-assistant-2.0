@@ -158,8 +158,13 @@ def entity_card_update_state():
     "climate.thermostat.current_temperature", "climate.thermostat.hvac_action"
 )
 def entity_card_update_row_1():
+    action = (
+        climate.thermostat.hvac_action
+        if "hvac_action" in climate.thermostat
+        else climate.thermostat
+    )
     pyscript.entity_card_home.row_1_value = (
-        f"{climate.thermostat.hvac_action} - {climate.thermostat.current_temperature}°"
+        f"{action} - {climate.thermostat.current_temperature}°"
     )
 
 
