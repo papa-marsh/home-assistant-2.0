@@ -8,7 +8,7 @@ cards:
       service: homeassistant.restart
   - type: custom:button-card
     name: Restart SSH
-    icon: mdi:
+    icon: mdi:ssh
     tap_action:
       action: call-service
       service: hassio.addon_restart
