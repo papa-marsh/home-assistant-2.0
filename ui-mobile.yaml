@@ -78,6 +78,5 @@ views:
         card:
             type: vertical-stack
             cards:
-              - !include lovelace/system/admin-entities.yaml
               - !include lovelace/system/admin-buttons.yaml
               - !include lovelace/system/updates.yaml
