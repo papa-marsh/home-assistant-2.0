@@ -40,11 +40,55 @@ def garage_left_open_notification(**kwargs):
                 break
 
 
-# @state_trigger("person.marshall", "person.emily", "pyscript.debug2")
-# def garage_auto_open(**kwargs):
-#     trigger = kwargs["var_name"]
-#     pyscript.debug.old_val = kwargs["old_value"]
-#     pyscript.debug = trigger
+@state_trigger("cover.east_stall", "cover.west_stall")
+def garage_left_open_notification(**kwargs):
+    if kwargs[value] == "open" and kwargs[old_value] == "closed":
+        stall = state.getattr(kwargs["var_name"])["friendly_name"].split(" ")[0]
+        task.unique(f"{stall}_stall_left_open")
+        noti = None
+        time = 0
+
+        while True:
+            wait = task.wait_until(event_trigger="TODO", timeout=10 * 60)
+            if wait["trigger_type"] == "timeout":
+                time += 10
+                if not noti:
+                    noti = push.Notification(
+                        title="Garage Is Open",
+                        message=f"{'Emily' if stall == 'West' else 'Marshall'}'s garage stall has been open for {time} minutes",
+                        tag=f"{stall}_stall_left_open",
+                        group=f"{stall}_stall_left_open",
+                    )
+                    noti.add_action(
+                        id=f"silence_{stall}_stall",
+                        title="Silence",
+                    )
+                    noti.add_action(
+                        id=f"close_{stall}_stall",
+                        title="Close Garage",
+                        destructive=True,
+                    )
+                noti.send()
+            elif wait["trigger_type"] == "event" and "TODO":
+                # TODO
+                break
+
+
+@state_trigger("person.marshall", "person.emily")
+def garage_auto_open(**kwargs):
+    now = datetime.now().astimezone(tz.tzlocal())
+    if (
+        kwargs["value"] == "home"
+        and kwargs["old_value"] != "home"
+        and cover.east_stall == "closed"
+        and 6 <= now.hour < 23
+        and (now - cover.east_stall.last_changed).seconds > 300
+        and (
+            device_tracker.yvette_location_tracker != "home"
+            or (now - device_tracker.yvette_location_tracker.last_changed).seconds < 300
+        )
+    ):
+        cover.open_cover(entity_id="cover.east_stall")
 
 
 @time_trigger("cron(30 22 * * *)")
@@ -83,7 +127,43 @@ def sentry_off_at_in_laws():
         switch.turn_off(entity_id=secrets.IN_LAWS_ZONE)
 
 
-@event_trigger("ios.action_fired", "actionName=='Yvette Climate On'")
+@time_trigger("cron(30 22 * * *)")
+def yvette_charge_reminder():
+    if (
+        device_tracker.yvette_location_tracker == "home"
+        and binary_sensor.yvette_charger == "off"
+        and int(sensor.yvette_battery) < 80
+    ):
+        noti = push.Notification(
+            title="Yvette is Unplugged",
+            message=f"Heads up - Yvette is unplugged with {sensor.yvette_battery}% battery",
+            target="all",
+            tag="yvette_unplugged",
+            group="yvette_unplugged",
+        )
+        noti.send()
+
+
+@state_trigger("binary_sensor.yvette_charger=='on'")
+def clear_yvette_charge_reminder():
+    noti = push.Notification(tag="yvette_unplugged")
+    noti.clear()
+
+
+@state_trigger(
+    "switch.yvette_sentry_mode",
+    "device_tracker.yvette_location_tracker",
+)
+def sentry_off_at_in_laws():
+    if (
+        switch.yvette_sentry_mode == "on"
+        and device_tracker.yvette_location_tracker
+        == state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]
+    ):
+        switch.turn_off(entity_id=secrets.IN_LAWS_ZONE)
+
+
+@event_trigger("ios.action_fired", "actionName=='Yvette Air On'")
 def ios_climate_on(**kwargs):
     climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
 

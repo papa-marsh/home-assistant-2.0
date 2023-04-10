@@ -8,7 +8,7 @@ def persist_sidebar_text():
     state.persist("pyscript.sidebar_text", default_value="")
 
 
-@time_trigger("startup", "cron(*/15 0 * * *)")
+@time_trigger("startup", "cron(0 0 * * *)")
 @state_trigger("calendar.warnersfam_gmail_com.start_time", "sun.sun")
 def set_sidebar_text():
     sun_action = "sets" if sun.sun == "above_horizon" else "rises"
@@ -50,7 +50,7 @@ def persist_chelsea_next_fixture():
     )
 
 
-@time_trigger("startup", "cron(*/15 0 * * *)")
+@time_trigger("startup", "cron(0 0 * * *)")
 @state_trigger("calendar.chelsea_fixtures.start_time")
 def set_chelsea_fixture_card():
     description = calendar.chelsea_fixtures.description.split("\n")

@@ -89,7 +89,7 @@ def entity_card_update_row_2():
     )
 
 
-@time_trigger("startup", "cron(*/15 0,18 * * *)")
+@time_trigger("startup", "cron(0 0,19 * * *)")
 def entity_card_update_row_3():
     now = datetime.today()
     next_bin_day = get_next_bin_day()

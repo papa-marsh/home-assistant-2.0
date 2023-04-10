@@ -2,10 +2,6 @@ from datetime import date, datetime, timedelta
 from dateutil import tz
 
 
-# def last_changed(entity):
-#     return state.get(entity)
-
-
 def parse_timestamp(timestamp=None, output_format="iso"):
     if not timestamp:
         output = datetime.now()
