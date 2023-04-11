@@ -102,7 +102,8 @@ def complication_leading():
 @time_trigger("startup")
 @state_trigger("sensor.yvette_battery")
 def complication_outer():
-    pyscript.complication_yvette.outer = f"{sensor.yvette_battery}%"
+    if sensor.yvette_battery != "unavailable":
+        pyscript.complication_yvette.outer = f"{sensor.yvette_battery}%"
 
 
 @time_trigger("startup")

@@ -1,10 +1,12 @@
 from datetime import date, datetime, timedelta
+from dateutil import tz
 import dates
+import push
 
 
 @state_trigger("cover.east_stall", "cover.west_stall")
 def garage_left_open_notification(**kwargs):
-    if kwargs[value] == "open" and kwargs[old_value] == "closed":
+    if kwargs["value"] == "open" and kwargs["old_value"] == "closed":
         stall = state.getattr(kwargs["var_name"])["friendly_name"].split(" ")[0]
         task.unique(f"{stall}_stall_left_open")
         noti = None
@@ -117,7 +119,7 @@ def entity_card_tap():
 def entity_card_hold():
     pyscript.entity_card_home.staging["last_bin_day"] = date.today()
     pyscript.entity_card_home.blink = False
-    update_row_3()
+    entity_card_update_row_3()
 
 
 @service("lovelace.home_dtap")
