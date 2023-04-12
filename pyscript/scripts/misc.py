@@ -57,7 +57,7 @@ def notify_on_zone_change(**kwargs):
 @time_trigger("cron(0 5 * * *)")
 def clear_zone_change_notifications():
     noti = push.Notification(tag="notify_on_zone_change")
-    noti.send()
+    noti.clear()
 
 
 @time_trigger("startup")

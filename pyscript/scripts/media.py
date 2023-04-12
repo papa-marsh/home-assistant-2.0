@@ -13,7 +13,7 @@ def reset_media_controls():
     pyscript.media_card.sync = True
     pyscript.media_card = "controls"
 
-    media_player.volume_set(entity_id=media_player.living_room_tv, volume_level=0.08)
+    media_player.volume_set(entity_id="media_player.living_room_tv", volume_level=0.08)
     media_player.media_pause(entity_id="media_player.office")
     media_player.volume_mute(entity_id="media_player.office", is_volume_muted=False)
     media_player.volume_set(entity_id="media_player.office", volume_level=0.2)
@@ -48,21 +48,6 @@ def media_card_sync():
 @service("lovelace.media_card_more")
 def media_card_more():
     pyscript.media_card = "volume" if pyscript.media_card == "controls" else "controls"
-
-
-@service("lovelace.media_card_play_pause")
-def media_card_play_pause():
-    media_player.media_play_pause(entity_id=media_player.living_room)
-
-
-@service("lovelace.media_card_previous_track")
-def media_card_previous_track():
-    media_player.media_previous_track(entity_id=media_player.living_room)
-
-
-@service("lovelace.media_card_next_track")
-def media_card_next_track():
-    media_player.media_next_track(entity_id=media_player.living_room)
 
 
 @state_trigger("pyscript.media_card.group")
