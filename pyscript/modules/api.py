@@ -4,7 +4,7 @@ from datetime import date, datetime
 
 
 def get_stock_week_change(symbol="SPY"):
-    return get_stock_quote(symbol)["current"] / float(get_stock_week(symbol))
+    return (get_stock_quote(symbol)["current"] / float(get_stock_week(symbol))) - 1
 
 
 def get_stock_quote(symbol="SPY"):

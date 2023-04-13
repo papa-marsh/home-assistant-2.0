@@ -200,7 +200,7 @@ def stocks_populate_card(private=False):
 
     if visibility == "public":
         pyscript.entity_card_stocks = format_change(
-            pyscript.entity_card_stocks.staging["spy_week"], percent_formatted=True
+            pyscript.entity_card_stocks.staging["spy_week"], percent_formatted=False
         )
     else:
         pyscript.entity_card_stocks = format_price(
@@ -264,7 +264,7 @@ def format_price(price, precision=2, cents=False, k_suffix=False):
 def format_change(change, precision=2, percent_formatted=False):
     change = float(change)
     if not percent_formatted:
-        change = 100
+        change *= 100
 
     sign = "+" if change >= 0 else ""
     return f"{sign}{change:.{precision}f}%"
