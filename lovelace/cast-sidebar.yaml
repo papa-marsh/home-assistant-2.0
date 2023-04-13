@@ -3,6 +3,7 @@ twelveHourVersion: true
 date: true
 width: 25
 template: "{{ states('pyscript.sidebar_text') }}"
+hideTopMenu: true
 sidebarMenu:
   - action: navigate
     navigation_path: "/lovelace-cast/overview"
