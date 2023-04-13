@@ -9,6 +9,7 @@ home-assistant.log
 home-assistant.log.1
 home-assistant.log.fault
 
+www/community
 custom_components
 node-red
 image
