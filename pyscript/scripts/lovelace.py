@@ -77,8 +77,8 @@ def set_chelsea_fixture_card():
 
 
 @service("lovelace.chelsea_fixture_tap")
-@task_unique("chelsea_fixture_tap")
 def chelsea_fixture_tap():
+    task.unique("chelsea_fixture_tap")
     pyscript.chelsea_next_fixture.top_row = (
         pyscript.chelsea_next_fixture.home_team
         if pyscript.chelsea_next_fixture.home_team != "Chelsea"

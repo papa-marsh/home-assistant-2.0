@@ -52,7 +52,7 @@ def persist_media_card():
 @time_trigger("startup")
 @state_trigger("media_player.living_room.media_playlist", "sensor.sonos_favorites")
 def set_media_card_playlists():
-    task.unique("set_media_card_current_playlist")
+    task.unique("set_media_card_playlists")
     options = [
         sensor.sonos_favorites.items[source] for source in sensor.sonos_favorites.items
     ]
@@ -160,8 +160,8 @@ def join_to_group():
     "media_player.front_room.volume_level",
     "media_player.craft_room.volume_level",
 )
-@task_unique("sync_speaker_volume")
 def sync_volume(target="media_player.living_room", **kwargs):
+    task.unique("sync_speaker_volume")
     if not pyscript.media_card.sync:
         return
     task.sleep(0.2)
