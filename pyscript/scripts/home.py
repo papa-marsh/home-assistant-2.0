@@ -8,11 +8,12 @@ import push
 @state_trigger("cover.east_stall", "cover.west_stall")
 def garage_open_notification(**kwargs):
     if kwargs["value"] == "open" and kwargs["old_value"] == "closed":
+        stall=kwargs["var_name"].split(".")[1].split("_")[0]
         task.unique(f"{stall}_stall_left_open")
         task.sleep(10 * 60)
         garage_open_notification_loop(
-            stall=kwargs["var_name"].split(".")[1].split("_")[0],
-            open_time=dates.parse_timestamp(format="time"),
+            stall=stall,
+            open_time=dates.parse_timestamp(output_format="time"),
             silent=False,
         )
 
@@ -58,10 +59,17 @@ def garage_open_notification_loop(stall, open_time, silent):
         sound="none" if silent else constants.NOTI_SOUND,
         action_data={"stall": stall, "open_time": open_time},
     )
-    noti.add_action(
-        id=f"silence_{stall}_stall",
-        title="Silence",
-    )
+    if silent:
+        noti.add_action(
+            id=f"ignore_{stall}_stall",
+            title="Ignore",
+        )
+        
+    else:
+        noti.add_action(
+            id=f"silence_{stall}_stall",
+            title="Silence",
+        )
     noti.add_action(
         id=f"close_{stall}_stall",
         title="Close Garage",

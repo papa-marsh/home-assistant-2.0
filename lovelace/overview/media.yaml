@@ -1,6 +1,6 @@
 type: entities
 entities:
-  - entity: input_select.sonos_source_list
+  - entity: input_select.media_card_playlist
     name: Select a Playlist...
     tap_action: none
     card_mod:
