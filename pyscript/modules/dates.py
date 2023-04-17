@@ -4,18 +4,20 @@ from dateutil import tz
 
 def parse_timestamp(timestamp=None, output_format="iso"):
     if not timestamp:
-        output = datetime.now()
+        timestamp = datetime.now()
     elif isinstance(timestamp, str):
-        output = datetime.fromisoformat(timestamp).astimezone(tz.tzlocal())
+        timestamp = datetime.fromisoformat(timestamp).astimezone(tz.tzlocal())
+    else:
+        timestamp = timestamp.astimezone(tz.tzlocal())
 
     if output_format == "date":
-        output = datetime.strftime(output, "%-m/%-d/%y")
+        timestamp = datetime.strftime(timestamp, "%-m/%-d/%y")
     elif output_format == "time":
-        output = datetime.strftime(output, "%-I:%M %p")
+        timestamp = datetime.strftime(timestamp, "%-I:%M %p")
     elif output_format == "datetime":
-        output = datetime.strftime(output, "%-m/%-d/%y %-I:%M %p")
+        timestamp = datetime.strftime(timestamp, "%-m/%-d/%y %-I:%M %p")
 
-    return output
+    return timestamp
 
 
 def get_next_weekday(day):
