@@ -13,7 +13,7 @@ import os
 )
 def cast_to_display(target=None, **kwargs):
     if not target:
-        target = kwargs[var_name]
+        target = kwargs["var_name"]
     if state.get(target) == "off":
         task.unique(f"cast_to_{target.split('.')[1]}")
         shell_command.pip_install_catt
