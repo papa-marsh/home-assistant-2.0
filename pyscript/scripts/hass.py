@@ -1,33 +1,22 @@
 import os
 
 
-# @time_trigger("cron(0 */2 * * *)")
-# def restart_ssh_addon():
-#     hassio.addon_restart(addon="a0d7b954_ssh")
-
-
-@state_trigger(
-    "media_player.kitchen_display",
-    "media_player.living_room_display",
-    "media_player.office_display",
-)
-def cast_to_display(target=None, **kwargs):
-    if not target:
-        target = kwargs["var_name"]
-    if state.get(target) == "off":
-        task.unique(f"cast_to_{target.split('.')[1]}")
-        shell_command.pip_install_catt
-        task.sleep(20)
-        shell_command.cast_to_display(target=state.getattr(target)["friendly_name"])
-
-
-@time_trigger("startup")
-def initialize_cast():
-    cast_to_display(target="media_player.office_display")
-    task.sleep(60)
-    cast_to_display(target="media_player.living_room_display")
-    task.sleep(60)
-    cast_to_display(target="media_player.kitchen_display")
+@time_trigger("cron(*/10 * * * *)")
+def cast_to_displays():
+    task.unique("cast_to_displays", kill_me=True)
+    displays = [
+        "media_player.office_display",
+        "media_player.living_room_display",
+        "media_player.kitchen_display",
+    ]
+    for display in displays:
+        if state.get(display) == "off":
+            shell_command.pip_install_catt
+            task.sleep(30)
+            shell_command.cast_to_display(
+                target=state.getattr(display)["friendly_name"]
+            )
+            task.sleep(30)
 
 
 @time_trigger("startup")
