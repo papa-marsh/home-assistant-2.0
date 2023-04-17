@@ -3,6 +3,8 @@ NOTI_CRIT_SOUND = "3rd_party_critical.caf"
 
 BASE_FILE_PATH = "/config/pyscript/files/"
 
+YVETTE_CHARGE_LIMIT = 85
+
 SPEAKER_GROUP = [
     "media_player.basement",
     "media_player.living_room",

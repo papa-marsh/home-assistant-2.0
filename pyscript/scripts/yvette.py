@@ -6,6 +6,12 @@ import push
 import util
 
 
+# def charge_to_max(start_hour=None):
+
+
+# def reset_charge_to_max(start_hour=None):
+
+
 @time_trigger("cron(30 22 * * *)")
 def yvette_charge_reminder():
     if (
@@ -44,7 +50,7 @@ def sentry_off_at_in_laws():
 
 
 @time_trigger("cron(30 22 * * *)")
-def yvette_charge_reminder():
+def charge_reminder():
     if (
         device_tracker.yvette_location_tracker == "home"
         and binary_sensor.yvette_charger == "off"
@@ -61,7 +67,7 @@ def yvette_charge_reminder():
 
 
 @state_trigger("binary_sensor.yvette_charger=='on'")
-def clear_yvette_charge_reminder():
+def clear_charge_reminder():
     noti = push.Notification(tag="yvette_unplugged")
     noti.clear()
 
