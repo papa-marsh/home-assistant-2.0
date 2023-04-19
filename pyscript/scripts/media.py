@@ -11,12 +11,12 @@ def reset_media_controls():
         is_volume_muted=False,
     )
     media_player.volume_set(
-        entity_id=constants.SPEAKER_GROUP + ["media_player.office"], volume_level=0.25
+        entity_id=constants.SPEAKER_GROUP + ["media_player.office"], volume_level=0.3
     )
     pyscript.media_card.group = True
     pyscript.media_card.sync = True
     pyscript.media_card = "controls"
-    media_player.volume_set(entity_id="media_player.living_room_tv", volume_level=0.08)
+    media_player.volume_set(entity_id="media_player.living_room_tv", volume_level=0.1)
 
 
 @time_trigger("startup")
