@@ -72,7 +72,7 @@ def set_media_card_playlists():
 @state_trigger("input_select.media_card_playlist != 'None Selected'")
 def play_media_card_playlist():
     if (
-        media_player.living_room.media_playlist
+        "media_playlist" in media_player.living_room
         and media_player.living_room.media_playlist != input_select.media_card_playlist
     ):
         media_player.select_source(
