@@ -5,6 +5,12 @@ BASE_FILE_PATH = "/config/pyscript/files/"
 
 YVETTE_CHARGE_LIMIT = 85
 
+NEST_DISPLAYS = [
+    "media_player.office_display",
+    "media_player.living_room_display",
+    "media_player.kitchen_display",
+]
+
 SPEAKER_GROUP = [
     "media_player.basement",
     "media_player.living_room",

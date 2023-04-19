@@ -3,20 +3,20 @@ import constants
 
 @time_trigger("cron(0 4 * * *)")
 def reset_media_controls():
-    media_player.media_pause(entity_id=constants.SPEAKER_GROUP)
+    media_player.media_pause(
+        entity_id=constants.SPEAKER_GROUP + ["media_player.office"]
+    )
     media_player.volume_mute(
-        entity_id=constants.SPEAKER_GROUP,
+        entity_id=constants.SPEAKER_GROUP + ["media_player.office"],
         is_volume_muted=False,
     )
-    media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
+    media_player.volume_set(
+        entity_id=constants.SPEAKER_GROUP + ["media_player.office"], volume_level=0.3
+    )
     pyscript.media_card.group = True
     pyscript.media_card.sync = True
     pyscript.media_card = "controls"
-
     media_player.volume_set(entity_id="media_player.living_room_tv", volume_level=0.08)
-    media_player.media_pause(entity_id="media_player.office")
-    media_player.volume_mute(entity_id="media_player.office", is_volume_muted=False)
-    media_player.volume_set(entity_id="media_player.office", volume_level=0.2)
 
 
 @time_trigger("startup")
