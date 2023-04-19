@@ -3,16 +3,21 @@ import constants
 
 
 @time_trigger("cron(*/10 * * * *)")
-def cast_to_displays():
+def cast_to_displays(reset=False):
     task.unique("cast_to_displays")
     for display in constants.NEST_DISPLAYS:
-        if state.get(display) == "off":
+        if state.get(display) == "off" or reset:
             media_player.turn_on(entity_id=display)
             task.sleep(5)
             media_player.turn_off(entity_id=display)
             task.sleep(5)
             service.call("shell_command", f"cast_to_{display.split('.')[1]}")
             task.sleep(30)
+
+
+@time_trigger("cron(0 3 * * *)")
+def reset_displays():
+    cast_to_displays(reset=True)
 
 
 @time_trigger("startup")
