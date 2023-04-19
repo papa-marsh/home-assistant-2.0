@@ -11,7 +11,7 @@ def cast_to_displays():
             task.sleep(5)
             media_player.turn_off(entity_id=display)
             task.sleep(5)
-            shell_command.cast_to_display(name=state.getattr(display)["friendly_name"])
+            service.call("shell_command", f"cast_to_{display.split('.')[1]}")
             task.sleep(30)
 
 

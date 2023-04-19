@@ -11,7 +11,7 @@ def reset_media_controls():
         is_volume_muted=False,
     )
     media_player.volume_set(
-        entity_id=constants.SPEAKER_GROUP + ["media_player.office"], volume_level=0.3
+        entity_id=constants.SPEAKER_GROUP + ["media_player.office"], volume_level=0.25
     )
     pyscript.media_card.group = True
     pyscript.media_card.sync = True
