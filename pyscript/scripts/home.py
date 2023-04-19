@@ -5,81 +5,80 @@ import dates
 import push
 
 
-@state_trigger("cover.east_stall", "cover.west_stall")
-def garage_open_notification(**kwargs):
-    if kwargs["value"] == "open" and kwargs["old_value"] == "closed":
-        stall=kwargs["var_name"].split(".")[1].split("_")[0]
-        task.unique(f"{stall}_stall_left_open")
-        task.sleep(10 * 60)
-        garage_open_notification_loop(
-            stall=stall,
-            open_time=dates.parse_timestamp(output_format="time"),
-            silent=False,
-        )
+# @state_trigger("cover.east_stall", "cover.west_stall")
+# def garage_open_notification(**kwargs):
+#     if kwargs["value"] == "open" and kwargs["old_value"] == "closed":
+#         stall = kwargs["var_name"].split(".")[1].split("_")[0]
+#         task.unique(f"{stall}_stall_left_open")
+#         task.sleep(10 * 60)
+#         garage_open_notification_loop(
+#             stall=stall,
+#             open_time=dates.parse_timestamp(output_format="time"),
+#             silent=False,
+#         )
 
 
-@event_trigger(
-    "mobile_app_notification_action",
-    "action in ['silence_east_stall', 'silence_wast_stall']",
-)
-def silence_garage_open_notification(**kwargs):
-    task.unique(f"{kwargs['action_data']['stall']}_stall_left_open")
-    task.sleep(10 * 60)
-    garage_open_notification_loop(
-        stall=kwargs["action_data"]["stall"],
-        open_time=kwargs["action_data"]["open_time"],
-        silent=True,
-    )
+# @event_trigger(
+#     "mobile_app_notification_action",
+#     "action in ['silence_east_stall', 'silence_wast_stall']",
+# )
+# def silence_garage_open_notification(**kwargs):
+#     task.unique(f"{kwargs['action_data']['stall']}_stall_left_open")
+#     task.sleep(10 * 60)
+#     garage_open_notification_loop(
+#         stall=kwargs["action_data"]["stall"],
+#         open_time=kwargs["action_data"]["open_time"],
+#         silent=True,
+#     )
 
 
-@event_trigger(
-    "mobile_app_notification_action",
-    "action in ['close_east_stall', 'close_wast_stall']",
-)
-def close_garage_from_notification(**kwargs):
-    cover.close_cover(entity_id=f"cover.{kwargs['action_data']['stall']}_stall")
+# @event_trigger(
+#     "mobile_app_notification_action",
+#     "action in ['close_east_stall', 'close_wast_stall']",
+# )
+# def close_garage_from_notification(**kwargs):
+#     cover.close_cover(entity_id=f"cover.{kwargs['action_data']['stall']}_stall")
 
 
-@state_trigger("cover.east_stall=='closed'", "cover.west_stall=='closed'")
-def clear_garage_open_notification(**kwargs):
-    if kwargs["value"] == "closed" and kwargs["old_value"] == "closed":
-        stall = kwargs["var_name"].split(".")[1].split("_")[0]
-        task.unique(f"{stall}_stall_left_open")
-        noti = push.Notification(tag=f"{stall}_stall_left_open")
-        noti.clear()
+# @state_trigger("cover.east_stall=='closed'", "cover.west_stall=='closed'")
+# def clear_garage_open_notification(**kwargs):
+#     if kwargs["value"] == "closed" and kwargs["old_value"] == "closed":
+#         stall = kwargs["var_name"].split(".")[1].split("_")[0]
+#         task.unique(f"{stall}_stall_left_open")
+#         noti = push.Notification(tag=f"{stall}_stall_left_open")
+#         noti.clear()
 
 
-def garage_open_notification_loop(stall, open_time, silent):
-    task.unique(f"{stall}_stall_left_open")
-    noti = push.Notification(
-        title=f"{stall.capitalize()} Stall Open",
-        tag=f"{stall}_stall_left_open",
-        group=f"{stall}_stall_left_open",
-        target="marshall",  # TODO
-        sound="none" if silent else constants.NOTI_SOUND,
-        action_data={"stall": stall, "open_time": open_time},
-    )
-    if silent:
-        noti.add_action(
-            id=f"ignore_{stall}_stall",
-            title="Ignore",
-        )
-        
-    else:
-        noti.add_action(
-            id=f"silence_{stall}_stall",
-            title="Silence",
-        )
-    noti.add_action(
-        id=f"close_{stall}_stall",
-        title="Close Garage",
-        destructive=True,
-    )
-    while True:
-        if not noti:
-            noti.message = f"{'Emily' if stall == 'west' else 'Marshall'}'s garage stall has been open since {open_time}"
-            noti.send()
-            task.sleep(10 * 60)
+# def garage_open_notification_loop(stall, open_time, silent):
+#     task.unique(f"{stall}_stall_left_open")
+#     noti = push.Notification(
+#         title=f"{stall.capitalize()} Stall Open",
+#         tag=f"{stall}_stall_left_open",
+#         group=f"{stall}_stall_left_open",
+#         target="marshall",  # TODO
+#         sound="none" if silent else constants.NOTI_SOUND,
+#         action_data={"stall": stall, "open_time": open_time},
+#     )
+#     if silent:
+#         noti.add_action(
+#             id=f"ignore_{stall}_stall",
+#             title="Ignore",
+#         )
+
+#     else:
+#         noti.add_action(
+#             id=f"silence_{stall}_stall",
+#             title="Silence",
+#         )
+#     noti.add_action(
+#         id=f"close_{stall}_stall",
+#         title="Close Garage",
+#         destructive=True,
+#     )
+#     while True:
+#         noti.message = f"{'Emily' if stall == 'west' else 'Marshall'}'s garage stall has been open since {open_time}"
+#         noti.send()
+#         task.sleep(10 * 60)
 
 
 @state_trigger("person.marshall", "person.emily")

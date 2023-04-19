@@ -36,46 +36,49 @@ def persist_media_card():
     )
 
 
-# @time_trigger("startup")
-# @state_trigger("media_player.living_room.media_playlist", "sensor.sonos_favorites")
-# def set_media_card_playlists():
-#     task.unique("set_media_card_playlists")
-#     options = [
-#         sensor.sonos_favorites.items[source] for source in sensor.sonos_favorites.items
-#     ]
+@time_trigger("startup")
+@state_trigger("media_player.living_room.media_playlist", "sensor.sonos_favorites")
+def set_media_card_playlists():
+    task.unique("set_media_card_playlists")
+    options = [
+        sensor.sonos_favorites.items[source] for source in sensor.sonos_favorites.items
+    ]
 
-#     if "media_playlist" not in state.getattr("media_player.living_room"):
-#         playlist = "None Selected"
-#         options = [playlist] + options
-#     elif media_player.living_room.media_playlist not in options:
-#         playlist = f"{media_player.living_room.media_playlist} (not saved)"
-#         options = [playlist] + options
-#     else:
-#         playlist = media_player.living_room.media_playlist
-#         options = ["None Selected"] + options
+    if "media_playlist" not in state.getattr("media_player.living_room"):
+        playlist = "None Selected"
+        options = [playlist] + options
+    elif media_player.living_room.media_playlist not in options:
+        playlist = f"{media_player.living_room.media_playlist} (not saved)"
+        options = [playlist] + options
+    else:
+        playlist = media_player.living_room.media_playlist
+        options = ["None Selected"] + options
 
-#     if options[0] == "None Selected":
-#         task.sleep(5)
+    if options[0] == "None Selected":
+        task.sleep(5)
 
-#     input_select.set_options(
-#         entity_id="input_select.media_card_playlist",
-#         options=options,
-#         blocking=True,
-#         limit=5,
-#     )
-#     input_select.select_option(
-#         entity_id="input_select.media_card_playlist", option=playlist
-#     )
+    input_select.set_options(
+        entity_id="input_select.media_card_playlist",
+        options=options,
+        blocking=True,
+        limit=5,
+    )
+    input_select.select_option(
+        entity_id="input_select.media_card_playlist", option=playlist
+    )
 
 
-# @time_trigger("startup")
-# @state_trigger("input_select.media_card_playlist != 'None Selected'")
-# def play_media_card_playlist():
-#     if media_player.living_room.media_playlist != input_select.media_card_playlist:
-#         media_player.select_source(
-#             entity_id="media_player.living_room",
-#             source=input_select.media_card_playlist,
-#         )
+@time_trigger("startup")
+@state_trigger("input_select.media_card_playlist != 'None Selected'")
+def play_media_card_playlist():
+    if (
+        media_player.living_room.media_playlist
+        and media_player.living_room.media_playlist != input_select.media_card_playlist
+    ):
+        media_player.select_source(
+            entity_id="media_player.living_room",
+            source=input_select.media_card_playlist,
+        )
 
 
 @service("lovelace.media_card_group")

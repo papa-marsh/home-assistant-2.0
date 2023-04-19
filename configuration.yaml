@@ -40,8 +40,9 @@ scene: !include scenes.yaml
 script: !include scripts.yaml
 
 shell_command:
-  pip_install_catt: python3 -m pip install catt
-  cast_to_display: catt -d '{{ target }}' cast_site 'http://192.168.0.2:8123/lovelace-cast/overview'
+  cast_to_office: python3 -m pip install catt && catt -d 'Office Display' cast_site 'http://192.168.0.2:8123/lovelace-cast/overview'
+  cast_to_living_room: python3 -m pip install catt && catt -d 'Living Room Display' cast_site 'http://192.168.0.2:8123/lovelace-cast/overview'
+  cast_to_kitchen: python3 -m pip install catt && catt -d 'Kitchen Display' cast_site 'http://192.168.0.2:8123/lovelace-cast/overview'
 
 tts:
   - platform: google_translate

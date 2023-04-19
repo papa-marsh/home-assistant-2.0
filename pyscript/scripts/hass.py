@@ -1,22 +1,22 @@
 import os
 
 
-@time_trigger("cron(*/10 * * * *)")
-def cast_to_displays():
-    task.unique("cast_to_displays", kill_me=True)
-    displays = [
-        "media_player.office_display",
-        "media_player.living_room_display",
-        "media_player.kitchen_display",
-    ]
-    for display in displays:
-        if state.get(display) == "off":
-            shell_command.pip_install_catt
-            task.sleep(30)
-            shell_command.cast_to_display(
-                target=state.getattr(display)["friendly_name"]
-            )
-            task.sleep(30)
+# @time_trigger("cron(*/10 * * * *)")
+# def cast_to_displays():
+#     task.unique("cast_to_displays", kill_me=True)
+#     displays = [
+#         "media_player.office_display",
+#         "media_player.living_room_display",
+#         "media_player.kitchen_display",
+#     ]
+#     for display in displays:
+#         if state.get(display) == "off":
+#             shell_command.pip_install_catt
+#             task.sleep(30)
+#             shell_command.cast_to_display(
+#                 target=state.getattr(display)["friendly_name"]
+#             )
+#             task.sleep(30)
 
 
 @time_trigger("startup")
