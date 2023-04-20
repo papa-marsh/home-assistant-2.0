@@ -203,22 +203,28 @@ def entity_card_update_state():
     "climate.thermostat.current_temperature", "climate.thermostat.hvac_action"
 )
 def entity_card_update_row_1():
-    action = (
-        climate.thermostat.hvac_action
-        if "hvac_action" in climate.thermostat
-        else climate.thermostat
-    )
-    pyscript.entity_card_home.row_1_value = (
-        f"{action} - {climate.thermostat.current_temperature}°"
-    )
+    if climate.thermostat == "unavailable":
+        pyscript.entity_card_home.row_1_value = "Offline"
+    else:
+        action = (
+            climate.thermostat.hvac_action
+            if "hvac_action" in climate.thermostat
+            else climate.thermostat
+        )
+        pyscript.entity_card_home.row_1_value = (
+            f"{action} - {climate.thermostat.current_temperature}°"
+        )
 
 
 @time_trigger("startup")
 @state_trigger("climate.thermostat.current_humidity")
 def entity_card_update_row_2():
-    pyscript.entity_card_home.row_2_value = (
-        f"{round(climate.thermostat.current_humidity)}%"
-    )
+    if climate.thermostat == "unavailable":
+        pyscript.entity_card_home.row_2_value = "Offline"
+    else:
+        pyscript.entity_card_home.row_2_value = (
+            f"{round(climate.thermostat.current_humidity)}%"
+        )
 
 
 @time_trigger("startup", "cron(0 0,19 * * *)")

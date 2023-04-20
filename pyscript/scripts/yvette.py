@@ -160,8 +160,8 @@ def entity_card_tap():
         climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
         pyscript.entity_card_yvette.active = True
     pyscript.entity_card_yvette.blink = True
-    task.wait_until(state_trigger="climate.yvette_hvac_climate_system", timeout=60)
-    if trig_info["trigger_type"] == "timeout":
+    trigger_info = task.wait_until(state_trigger="climate.yvette_hvac_climate_system", timeout=60)
+    if trigger_info["trigger_type"] == "timeout":
         pyscript.entity_card_yvette.blink = False
         pyscript.entity_card_yvette.active = not pyscript.entity_card_yvette.active
 
