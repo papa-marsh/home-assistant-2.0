@@ -160,7 +160,9 @@ def entity_card_tap():
         climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
         pyscript.entity_card_yvette.active = True
     pyscript.entity_card_yvette.blink = True
-    trigger_info = task.wait_until(state_trigger="climate.yvette_hvac_climate_system", timeout=60)
+    trigger_info = task.wait_until(
+        state_trigger="climate.yvette_hvac_climate_system", timeout=60
+    )
     if trigger_info["trigger_type"] == "timeout":
         pyscript.entity_card_yvette.blink = False
         pyscript.entity_card_yvette.active = not pyscript.entity_card_yvette.active
@@ -195,9 +197,19 @@ def entity_card_update_state():
         pyscript.entity_card_yvette = "Air Off"
         pyscript.entity_card_yvette.state_icon = "mdi:car-electric"
         pyscript.entity_card_yvette.active = False
-    pyscript.entity_card_yvette.blink = False
-    if update.yvette_software_update == "on":
+
+    if (
+        update.yvette_software_update == "on"
+        and "(Waiting on Wi-Fi)" not in update.yvette_software_update.latest_version
+        and binary_sensor.yvette_parking_brake != "off"
+        and climate.yvette_hvac_climate_system != "heat_cool"
+    ):
         pyscript.entity_card_yvette.state_icon = "mdi:update"
+
+
+@state_trigger("climate.yvette_hvac_climate_system")
+def entity_card_clear_blink():
+    pyscript.entity_card_yvette.blink = False
 
 
 @time_trigger("startup")

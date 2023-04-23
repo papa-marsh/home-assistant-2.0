@@ -9,9 +9,20 @@ import push
 )
 def meeting_active_notification():
     noti = push.Notification(
-        target="emily", title="Heads Up", message="Dad's in a meeting"
+        target="emily",
+        title="Heads Up",
+        message="Dad's in a meeting",
+        tag="meeting_active",
+        group="meeting_active",
     )
     noti.send()
+
+
+@time_trigger("startup")
+@state_trigger("pyscript.entity_card_office == 'Available'")
+def clear_meeting_active_notification():
+    noti = push.Notification(tag="meeting_active")
+    noti.clear()
 
 
 @time_trigger("startup")
