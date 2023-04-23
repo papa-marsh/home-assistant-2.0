@@ -14,6 +14,7 @@ def meeting_active_notification():
         message="Dad's in a meeting",
         tag="meeting_active",
         group="meeting_active",
+        priority="time-sensitive",
     )
     noti.send()
 

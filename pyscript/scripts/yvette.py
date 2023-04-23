@@ -62,6 +62,7 @@ def charge_reminder():
             target="all",
             tag="yvette_unplugged",
             group="yvette_unplugged",
+            priority="time-sensitive",
         )
         noti.send()
 
@@ -86,8 +87,10 @@ def sentry_off_at_in_laws():
 
 
 @event_trigger("ios.action_fired", "actionName=='Yvette Air On'")
-def ios_climate_on(**kwargs):
+def ios_climate_on():
     climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
+    if climate.yvette_hvac_climate_system == "off":
+        pyscript.entity_card_yvette.blink = True
 
 
 @time_trigger("startup")

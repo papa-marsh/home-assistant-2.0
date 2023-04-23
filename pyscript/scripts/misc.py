@@ -4,6 +4,29 @@ import push
 import util
 
 
+@time_trigger("cron(0 9,19 * * *)")
+def feed_chelsea_notification():
+    now = datetime.now().astimezone(tz.tzlocal())
+    opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
+    if now - opened > (2 * 60 * 60):
+        noti = push.Notification(
+            title="Feed Beth",
+            message="Don't forget to feed Chelsea",
+            tag="feed_chelsea",
+            group="feed_chelsea",
+            priority="time-sensitive",
+            target="all",
+        )
+        noti.send()
+
+
+@time_trigger("startup")
+@state_trigger("binary_sensor.chelsea_cabinet_sensor")
+def clear_feed_chelsea_notification():
+    noti = push.Notification(tag="feed_chelsea")
+    noti.clear()
+
+
 @event_trigger("ios.action_fired", "actionName=='Sound Machines On'")
 def ios_sound_machines_on(**kwargs):
     switch.turn_on(
