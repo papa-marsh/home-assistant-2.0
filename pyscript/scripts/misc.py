@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+from dateutil import tz
 import dates
 import files
 import push
@@ -6,9 +8,9 @@ import util
 
 @time_trigger("cron(0 9,19 * * *)")
 def feed_chelsea_notification():
-    now = datetime.now().astimezone(tz.tzlocal())
-    opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
-    if now - opened > (2 * 60 * 60):
+    if binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(
+        tz.tzlocal()
+    ) < datetime.now().astimezone(tz.tzlocal()) - timedelta(hours=2):
         noti = push.Notification(
             title="Feed Beth",
             message="Don't forget to feed Chelsea",

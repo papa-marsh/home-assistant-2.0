@@ -87,7 +87,7 @@ def sentry_off_at_in_laws():
 
 
 @event_trigger("ios.action_fired", "actionName=='Yvette Air On'")
-def ios_climate_on():
+def ios_climate_on(**kwargs):
     climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
     if climate.yvette_hvac_climate_system == "off":
         pyscript.entity_card_yvette.blink = True
