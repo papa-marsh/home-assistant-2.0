@@ -74,7 +74,7 @@ entities:
           service: lovelace.media_card_more
   - type: custom:state-switch
     entity: pyscript.media_card
-    default: default
+    default: hidden
     states:
       controls:
         type: entities
@@ -170,7 +170,7 @@ entities:
     type: custom:mini-media-player
   - type: custom:state-switch
     entity: pyscript.media_card
-    default: default
+    default: hidden
     states:
       controls:
         type: custom:mini-media-player
@@ -212,7 +212,7 @@ entities:
                   }
   - type: custom:state-switch
     entity: pyscript.media_card
-    default: default
+    default: hidden
     states:
       volume:
         type: custom:mini-media-player
@@ -253,7 +253,7 @@ entities:
                   }
   - type: custom:state-switch
     entity: pyscript.media_card
-    default: default
+    default: hidden
     states:
       volume:
         type: custom:mini-media-player
@@ -294,7 +294,7 @@ entities:
                   }
   - type: custom:state-switch
     entity: pyscript.media_card
-    default: default
+    default: hidden
     states:
       volume:
         type: custom:mini-media-player
