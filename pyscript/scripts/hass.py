@@ -6,8 +6,9 @@ import constants
 def cast_to_displays(reset=False):
     task.unique("cast_to_displays")
     for display in constants.NEST_DISPLAYS:
-        media_player.turn_off(entity_id=display)
-        task.sleep(5)
+        if state.get(display) == "on" and reset:
+            media_player.turn_off(entity_id=display)
+            task.sleep(5)
         if state.get(display) == "off" or reset:
             media_player.turn_on(entity_id=display)
             task.sleep(5)
