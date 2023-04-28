@@ -7,10 +7,8 @@ cards:
       action: call-service
       service: homeassistant.restart
   - type: custom:button-card
-    name: Restart SSH
-    icon: mdi:ssh
+    name: Reset Displays
+    icon: mdi:cast
     tap_action:
       action: call-service
-      service: hassio.addon_restart
-      service_data:
-        addon: a0d7b954_ssh
+      service: pyscript.reset_displays

@@ -241,40 +241,6 @@ entities:
   - type: custom:fold-entity-row
     padding: 0
     head:
-      entity: update.ssh_web_terminal_update
-      name: SSH & Web Terminal
-      tap_action:
-        action: fire-dom-event
-        fold_row: true
-    entities:
-      - type: attribute
-        entity: update.ssh_web_terminal_update
-        attribute: installed_version
-        name: Installed Version
-        icon: none
-      - type: custom:paper-buttons-row
-        buttons:
-          - entity: update.ssh_web_terminal_update
-            icon: |
-              {% if state_attr("update.ssh_web_terminal_update", "installed_version") == state_attr("update.ssh_web_terminal_update", "latest_version") %}
-                mdi:check-circle
-              {% else %}
-                mdi:update
-              {% endif %}
-            name: |
-              {% if state_attr("update.ssh_web_terminal_update", "installed_version") == state_attr("update.ssh_web_terminal_update", "latest_version") %}
-                Up to Date
-              {% else %}
-                Update To Version {{ state_attr("update.ssh_web_terminal_update", "latest_version") }}
-              {% endif %}
-            tap_action:
-              action: call-service
-              service: update.install
-              service_data:
-                entity_id: update.ssh_web_terminal_update
-  - type: custom:fold-entity-row
-    padding: 0
-    head:
       entity: update.z_wave_js_update
       name: Z-Wave JS
       tap_action:

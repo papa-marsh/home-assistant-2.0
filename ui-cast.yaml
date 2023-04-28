@@ -85,14 +85,14 @@ views:
               cards:
                 - !include lovelace/soccer/calendar-fixtures.yaml
             - type: vertical-stack
-              cards: 
+              cards:
                 - !include lovelace/soccer/league-tabs.yaml
                 - !include lovelace/soccer/league-data.yaml
   - theme: Backend-selected
     title: System
     type: panel
     icon: mdi:tools
-    path: system 
+    path: system
     badges: []
     cards:
       - type: custom:mod-card

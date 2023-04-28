@@ -6,6 +6,8 @@ import constants
 def cast_to_displays(reset=False):
     task.unique("cast_to_displays")
     for display in constants.NEST_DISPLAYS:
+        media_player.turn_off(entity_id=display)
+        task.sleep(5)
         if state.get(display) == "off" or reset:
             media_player.turn_on(entity_id=display)
             task.sleep(5)
@@ -16,6 +18,7 @@ def cast_to_displays(reset=False):
 
 
 @time_trigger("cron(0 3 * * *)")
+@service("pyscript.reset_displays")
 def reset_displays():
     cast_to_displays(reset=True)
 
