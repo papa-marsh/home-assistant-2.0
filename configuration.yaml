@@ -15,6 +15,10 @@ homeassistant:
       allow_bypass_login: true
     - type: homeassistant
 
+logger:
+  logs:
+    led_ble.led_ble: error
+
 lovelace:
   mode: storage
   dashboards:

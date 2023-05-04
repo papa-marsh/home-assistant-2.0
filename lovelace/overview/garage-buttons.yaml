@@ -13,10 +13,9 @@ cards:
             ]]]
     tap_action:
       action: call-service
-      service: input_select.select_option
+      service: cover.toggle
       service_data:
-        entity_id: input_select.lovelace_action
-        option: '[[[ return entity.attributes.friendly_name ]]]'
+        entity_id: cover.east_stall
   - type: custom:button-card
     entity: cover.west_stall
     name: Emily's Stall
@@ -30,7 +29,6 @@ cards:
             ]]]
     tap_action:
       action: call-service
-      service: input_select.select_option
+      service: cover.toggle
       service_data:
-        entity_id: input_select.lovelace_action
-        option: '[[[ return entity.attributes.friendly_name ]]]'
+        entity_id: cover.west_stall

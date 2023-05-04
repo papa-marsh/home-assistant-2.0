@@ -173,40 +173,6 @@ entities:
   - type: custom:fold-entity-row
     padding: 0
     head:
-      entity: update.node_red_update
-      name: Node-RED
-      tap_action:
-        action: fire-dom-event
-        fold_row: true
-    entities:
-      - type: attribute
-        entity: update.node_red_update
-        attribute: installed_version
-        name: Installed Version
-        icon: none
-      - type: custom:paper-buttons-row
-        buttons:
-          - entity: update.node_red_update
-            icon: |
-              {% if state_attr("update.node_red_update", "installed_version") == state_attr("update.node_red_update", "latest_version") %}
-                mdi:check-circle
-              {% else %}
-                mdi:update
-              {% endif %}
-            name: |
-              {% if state_attr("update.node_red_update", "installed_version") == state_attr("update.node_red_update", "latest_version") %}
-                Up to Date
-              {% else %}
-                Update To Version {{ state_attr("update.node_red_update", "latest_version") }}
-              {% endif %}
-            tap_action:
-              action: call-service
-              service: update.install
-              service_data:
-                entity_id: update.node_red_update
-  - type: custom:fold-entity-row
-    padding: 0
-    head:
       entity: update.samba_share_update
       name: Samba Share
       tap_action:

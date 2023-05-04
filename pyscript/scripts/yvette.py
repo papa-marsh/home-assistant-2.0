@@ -88,9 +88,10 @@ def sentry_off_at_in_laws():
 
 @event_trigger("ios.action_fired", "actionName=='Yvette Air On'")
 def ios_climate_on(**kwargs):
-    climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
     if climate.yvette_hvac_climate_system == "off":
         pyscript.entity_card_yvette.blink = True
+    task.sleep(1)
+    climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
 
 
 @time_trigger("startup")
@@ -218,22 +219,28 @@ def entity_card_clear_blink():
 @time_trigger("startup")
 @state_trigger("sensor.yvette_battery", "binary_sensor.yvette_charger")
 def entity_card_update_row_1():
-    pyscript.entity_card_yvette.row_1_value = f"{sensor.yvette_battery}%"
-    pyscript.entity_card_yvette.row_1_icon = util.battery_icon(
-        battery=int(sensor.yvette_battery),
-        charging=binary_sensor.yvette_charger == "on",
-        upper_limit=int(number.yvette_charge_limit),
-    )
+    if sensor.yvette_battery == "unavailable":
+        pyscript.entity_card_yvette.row_1_icon = "mdi:battery-unknown"
+    else:
+        pyscript.entity_card_yvette.row_1_value = f"{sensor.yvette_battery}%"
+        pyscript.entity_card_yvette.row_1_icon = util.battery_icon(
+            battery=int(sensor.yvette_battery),
+            charging=binary_sensor.yvette_charger == "on",
+            upper_limit=int(number.yvette_charge_limit),
+        )
 
 
 @time_trigger("startup")
 @state_trigger(
     "lock.yvette_doors",
     "binary_sensor.yvette_parking_brake",
+    "device_tracker.yvette_location_tracker",
     "device_tracker.yvette_destination_location_tracker",
 )
 def entity_card_update_row_2():
-    if (
+    if lock.yvette_doors == "unavailable":
+        pyscript.entity_card_yvette.row_2_icon = "mdi:lock-question"
+    elif (
         binary_sensor.yvette_parking_brake == "on"
         or device_tracker.yvette_destination_location_tracker == "unknown"
     ):
@@ -263,26 +270,29 @@ def entity_card_update_row_2():
     "sensor.yvette_arrival_time",
 )
 def entity_card_update_row_3():
-    try:
-        delta = dates.parse_timestamp(
-            sensor.yvette_arrival_time
-        ) - datetime.now().astimezone(tz.tzlocal())
-        eta = delta.days * 86400 + delta.seconds
-    except:
-        eta = 0
-    if binary_sensor.yvette_parking_brake == "on" or eta <= 0:
-        pyscript.entity_card_yvette.row_3_value = (
-            f"{climate.yvette_hvac_climate_system.current_temperature}° F"
-        )
-        pyscript.entity_card_yvette.row_3_icon = "mdi:thermometer"
-        pyscript.entity_card_yvette.row_3_color = (
-            "red"
-            if climate.yvette_hvac_climate_system.current_temperature >= 100
-            else "default"
-        )
+    if climate.yvette_hvac_climate_system == "unknown":
+        pyscript.entity_card_yvette.row_3_icon = "mdi:thermometer-off"
     else:
-        pyscript.entity_card_yvette.row_3_value = f"{eta//60} minutes"
-        pyscript.entity_card_yvette.row_3_icon = "mdi:map-clock"
-        task.unique("yvette_eta_update_loop")
-        task.sleep(30)
-        entity_card_update_row_3()
+        try:
+            delta = dates.parse_timestamp(
+                sensor.yvette_arrival_time
+            ) - datetime.now().astimezone(tz.tzlocal())
+            eta = delta.days * 86400 + delta.seconds
+        except:
+            eta = 0
+        if binary_sensor.yvette_parking_brake == "on" or eta <= 0:
+            pyscript.entity_card_yvette.row_3_value = (
+                f"{climate.yvette_hvac_climate_system.current_temperature}° F"
+            )
+            pyscript.entity_card_yvette.row_3_icon = "mdi:thermometer"
+            pyscript.entity_card_yvette.row_3_color = (
+                "red"
+                if climate.yvette_hvac_climate_system.current_temperature >= 100
+                else "default"
+            )
+        else:
+            pyscript.entity_card_yvette.row_3_value = f"{eta//60} minutes"
+            pyscript.entity_card_yvette.row_3_icon = "mdi:map-clock"
+            task.unique("yvette_eta_update_loop")
+            task.sleep(30)
+            entity_card_update_row_3()

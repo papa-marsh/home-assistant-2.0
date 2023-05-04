@@ -109,7 +109,7 @@ def door_open_critical_notification(**kwargs):
         target = None
         if (
             person.marshall not in ["home", "East Grand Rapids"]
-            and person.emily != "home"
+            and person.emily not in ["home", "East Grand Rapids"]
         ):
             target = "all"
         elif 1 <= datetime.now().hour < 6:
