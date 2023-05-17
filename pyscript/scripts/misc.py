@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from dateutil import tz
+import constants
 import dates
 import files
 import push
@@ -11,6 +12,7 @@ def ios_shortcut_sleepy_time():
     switch.turn_on(
         entity_id=["switch.ellies_sound_machine", "switch.master_sound_machine"]
     )
+    media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
 
 
 @event_trigger("wakeup_time")
