@@ -76,6 +76,16 @@ def ios_backseat_heat_on():
         select.select_option(
             entity_id="select.yvette_heated_seat_rear_left", option="High"
         )
+    else:
+        noti = push.Notification(
+            title="Command Failed",
+            message=f"Yvette climate must be on to turn on seat heater",
+            target="emily",
+            tag="command_failed_seat_heater",
+            group="command_failed_seat_heater",
+            priority="time-sensitive",
+        )
+        noti.send()
 
 
 @time_trigger("startup")
