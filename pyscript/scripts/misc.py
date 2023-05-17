@@ -15,7 +15,7 @@ def ios_shortcut_sleepy_time():
 
 @event_trigger("wakeup_time")
 def ios_shortcut_wakeup_time():
-    if 6 <= datetime.now().hour < 4:
+    if 6 <= datetime.now().hour < 17:
         switch.turn_off(
             entity_id=["switch.ellies_sound_machine", "switch.master_sound_machine"]
         )
