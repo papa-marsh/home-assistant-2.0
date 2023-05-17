@@ -70,6 +70,14 @@ def ios_climate_on(**kwargs):
     climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
 
 
+@event_trigger("ios.action_fired", "actionName=='Backseat Heat On'")
+def ios_backseat_heat_on():
+    if climate.yvette_hvac_climate_system == "on":
+        select.select_option(
+            entity_id="select.yvette_heated_seat_rear_left", option="High"
+        )
+
+
 @time_trigger("startup")
 def persist_complication_yvette():
     state.persist(
@@ -203,6 +211,9 @@ def entity_card_update_row_1():
             battery=int(sensor.yvette_battery),
             charging=binary_sensor.yvette_charger == "on",
             upper_limit=int(number.yvette_charge_limit),
+        )
+        pyscript.entity_card_yvette.row_1_color = (
+            "green" if binary_sensor.yvette_charging == "on" else "default"
         )
 
 

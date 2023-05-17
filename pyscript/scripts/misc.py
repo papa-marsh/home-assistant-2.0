@@ -37,19 +37,6 @@ def feed_chelsea_notification():
         noti.send()
 
 
-@state_trigger("binary_sensor.chelsea_cabinet_sensor == 'off'")
-def water_chelsea_notification():
-    noti = push.Notification(
-        title="Water Beth",
-        message="Don't forget Chelsea's water",
-        tag="water_chelsea",
-        group="water_chelsea",
-        priority="time-sensitive",
-        target="emily",
-    )
-    noti.send()
-
-
 @time_trigger("startup")
 @state_trigger("binary_sensor.chelsea_cabinet_sensor")
 def clear_feed_chelsea_notification():
