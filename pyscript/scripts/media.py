@@ -10,20 +10,6 @@ import constants
 #   force_playback: true
 
 
-@state_trigger("media_player.spotify.source")
-def testeroni(**kwargs):
-    log.warning(f"testeroni kwargs: {kwargs}")
-
-
-@state_trigger(
-    "media_player.spotify.source == 'Tesla Yvette' \
-    and media_player.spotify.old.source == 'Office' \
-    and media_player.spotify.old == 'playing'"
-)
-def prevent_transfer_to_yvette(**kwargs):
-    log.warning(f"PREVENT_TRANSFER_TO_YVETTE_KWARGS: {kwargs}")
-
-
 @time_trigger("cron(0 4 * * *)")
 def reset_media_controls():
     media_player.media_pause(

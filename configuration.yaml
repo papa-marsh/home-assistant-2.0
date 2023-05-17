@@ -16,6 +16,7 @@ homeassistant:
     - type: homeassistant
 
 logger:
+  default: warn
   logs:
     led_ble.led_ble: error
 

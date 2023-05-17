@@ -12,30 +12,6 @@ import util
 # def reset_charge_to_max(start_hour=None):
 
 
-@time_trigger("cron(30 22 * * *)")
-def yvette_charge_reminder():
-    if (
-        device_tracker.yvette_location_tracker == "home"
-        and binary_sensor.yvette_charger == "off"
-        and int(sensor.yvette_battery) < 80
-    ):
-        noti = push.Notification(
-            title="Yvette is Unplugged",
-            message=f"Heads up - Yvette is unplugged with {sensor.yvette_battery}% battery",
-            target="all",
-            tag="yvette_unplugged",
-            group="yvette_unplugged",
-        )
-        noti.send()
-
-
-@time_trigger("cron(0 4 * * *)")
-@state_trigger("binary_sensor.yvette_charger=='on'")
-def clear_yvette_charge_reminder():
-    noti = push.Notification(tag="yvette_unplugged")
-    noti.clear()
-
-
 @state_trigger(
     "switch.yvette_sentry_mode",
     "device_tracker.yvette_location_tracker",
@@ -219,7 +195,7 @@ def entity_card_clear_blink():
 @time_trigger("startup")
 @state_trigger("sensor.yvette_battery", "binary_sensor.yvette_charger")
 def entity_card_update_row_1():
-    if sensor.yvette_battery == "unavailable":
+    if sensor.yvette_battery in ["unknown", "unavailable"]:
         pyscript.entity_card_yvette.row_1_icon = "mdi:battery-unknown"
     else:
         pyscript.entity_card_yvette.row_1_value = f"{sensor.yvette_battery}%"
@@ -238,7 +214,7 @@ def entity_card_update_row_1():
     "device_tracker.yvette_destination_location_tracker",
 )
 def entity_card_update_row_2():
-    if lock.yvette_doors == "unavailable":
+    if lock.yvette_doors in ["unknown", "unavailable"]:
         pyscript.entity_card_yvette.row_2_icon = "mdi:lock-question"
     elif (
         binary_sensor.yvette_parking_brake == "on"
@@ -270,7 +246,7 @@ def entity_card_update_row_2():
     "sensor.yvette_arrival_time",
 )
 def entity_card_update_row_3():
-    if climate.yvette_hvac_climate_system == "unknown":
+    if climate.yvette_hvac_climate_system in ["unknown", "unavailable"]:
         pyscript.entity_card_yvette.row_3_icon = "mdi:thermometer-off"
     else:
         try:

@@ -3,20 +3,19 @@ import dates
 import push
 
 
-@state_trigger(
-    "person.emily == 'home' and pyscript.entity_card_office == 'Busy'",
-    watch=["person.emily"],
-)
+@event_trigger("wakeup_time")
+@state_trigger("person.emily == 'home'")
 def meeting_active_notification():
-    noti = push.Notification(
-        target="emily",
-        title="Heads Up",
-        message="Dad's in a meeting",
-        tag="meeting_active",
-        group="meeting_active",
-        priority="time-sensitive",
-    )
-    noti.send()
+    if pyscript.entity_card_office == "Busy":
+        noti = push.Notification(
+            target="emily",
+            title="Heads Up",
+            message="Dad's in a meeting",
+            tag="meeting_active",
+            group="meeting_active",
+            priority="time-sensitive",
+        )
+        noti.send()
 
 
 @time_trigger("startup")
