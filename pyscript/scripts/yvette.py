@@ -71,7 +71,7 @@ def ios_climate_on(**kwargs):
 
 
 @event_trigger("ios.action_fired", "actionName=='Backseat Heat On'")
-def ios_backseat_heat_on():
+def ios_backseat_heat_on(**kwargs):
     if climate.yvette_hvac_climate_system == "on":
         select.select_option(
             entity_id="select.yvette_heated_seat_rear_left", option="High"
