@@ -211,7 +211,7 @@ def entity_card_clear_blink():
 
 
 @time_trigger("startup")
-@state_trigger("sensor.yvette_battery", "binary_sensor.yvette_charger")
+@state_trigger("sensor.yvette_battery", "binary_sensor.yvette_charger", "binary_sensor.yvette_charging")
 def entity_card_update_row_1():
     if sensor.yvette_battery in ["unknown", "unavailable"]:
         pyscript.entity_card_yvette.row_1_icon = "mdi:battery-unknown"
@@ -221,9 +221,6 @@ def entity_card_update_row_1():
             battery=int(sensor.yvette_battery),
             charging=binary_sensor.yvette_charger == "on",
             upper_limit=int(number.yvette_charge_limit),
-        )
-        pyscript.entity_card_yvette.row_1_color = (
-            "green" if binary_sensor.yvette_charging == "on" else "default"
         )
 
 
