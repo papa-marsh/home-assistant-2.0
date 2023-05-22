@@ -22,7 +22,7 @@ def sentry_off_at_in_laws():
         and device_tracker.yvette_location_tracker
         == state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]
     ):
-        switch.turn_off(entity_id=secrets.IN_LAWS_ZONE)
+        switch.turn_off(entity_id=switch.yvette_sentry_mode)
 
 
 @time_trigger("cron(30 22 * * *)")

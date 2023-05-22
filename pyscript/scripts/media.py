@@ -26,6 +26,9 @@ def reset_media_controls():
     pyscript.media_card.sync = True
     pyscript.media_card = "controls"
     media_player.volume_set(entity_id="media_player.living_room_tv", volume_level=0.1)
+    input_select.select_option(
+        entity_id="input_select.media_card_playlist", option="None Selected"
+    )
 
 
 @time_trigger("startup")
@@ -77,13 +80,14 @@ def set_media_card_playlists():
     )
 
 
-@time_trigger("startup")
 @state_trigger("input_select.media_card_playlist != 'None Selected'")
 def play_media_card_playlist():
-    if (
-        "media_playlist" in media_player.living_room
-        and media_player.living_room.media_playlist != input_select.media_card_playlist
-    ):
+    current_playlist = (
+        media_player.living_room.media_playlist
+        if "media_playlist" in media_player.living_room
+        else None
+    )
+    if current_playlist != input_select.media_card_playlist:
         media_player.select_source(
             entity_id="media_player.living_room",
             source=input_select.media_card_playlist,
