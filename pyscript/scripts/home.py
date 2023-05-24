@@ -14,15 +14,16 @@ import push
     "binary_sensor.slider_door_sensor",
 )
 def door_open_notification(**kwargs):
-    if kwargs["value"] == "open" and kwargs["old_value"] == "closed":
+    if kwargs["value"] in ["open", "on"] and kwargs["old_value"] in ["closed", "off"]:
         id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
         name = state.getattr(kwargs["var_name"])["friendly_name"].replace(" Sensor", "")
+        now = datetime.now()
         task.unique(f"{id}_left_open")
         task.sleep(10 * 60)
         door_open_notification_loop(
             id=id,
             name=name,
-            open_time=dates.parse_timestamp(output_format="time"),
+            open_time=now,
             silent=False,
         )
 
@@ -33,9 +34,9 @@ def door_open_notification_loop(id, name, open_time, silent):
         title=f"{name} Open",
         tag=f"{id}_left_open",
         group=f"{id}_left_open",
-        target="marshall",  # TODO
+        target="all",
         sound="none" if silent else constants.NOTI_SOUND,
-        priority="time-sensitive",
+        priority="active" if silent else "time-sensitive",
         action_data={"id": id, "name": name, "open_time": open_time},
     )
 
@@ -55,7 +56,7 @@ def door_open_notification_loop(id, name, open_time, silent):
             destructive=True,
         )
     while True:
-        noti.message = f"{name} has been open since {open_time}"
+        noti.message = f"{name} has been open for {(datetime.now() - open_time).seconds // 60} minutes"
         noti.send()
         task.sleep(10 * 60)
 
@@ -90,7 +91,7 @@ def close_garage_from_notification(**kwargs):
             title=f"Command Failed",
             tag=f"{id}_left_open",
             group=f"{id}_left_open",
-            target="marshall",  # TODO
+            target="all",
             priority="time-sensitive",
             message=f"{name} failed to close",
         )
@@ -100,17 +101,16 @@ def close_garage_from_notification(**kwargs):
 @state_trigger(
     "cover.east_stall=='closed'",
     "cover.west_stall=='closed'",
-    "binary_sensor.front_door_sensor=='closed'",
-    "binary_sensor.garage_door_sensor=='closed'",
-    "binary_sensor.service_door_sensor=='closed'",
-    "binary_sensor.slider_door_sensor=='closed'",
+    "binary_sensor.front_door_sensor=='off'",
+    "binary_sensor.garage_door_sensor=='off'",
+    "binary_sensor.service_door_sensor=='off'",
+    "binary_sensor.slider_door_sensor=='off'",
 )
 def clear_door_open_notification(**kwargs):
-    if kwargs["value"] == "closed":
-        id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
-        task.unique(f"{id}_left_open")
-        noti = push.Notification(tag=f"{id}_left_open")
-        noti.clear()
+    id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
+    task.unique(f"{id}_left_open")
+    noti = push.Notification(tag=f"{id}_left_open")
+    noti.clear()
 
 
 @state_trigger("person.marshall", "person.emily")
