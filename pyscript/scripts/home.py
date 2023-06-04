@@ -31,7 +31,7 @@ def door_open_notification(**kwargs):
 def door_open_notification_loop(id, name, open_time, silent):
     task.unique(f"{id}_left_open")
     noti = push.Notification(
-        title=f"{name} Open",
+        title=f"{'Garage' if 'stall' in id else 'Door'} Open",
         tag=f"{id}_left_open",
         group=f"{id}_left_open",
         target="all",
@@ -113,7 +113,7 @@ def clear_door_open_notification(**kwargs):
     noti.clear()
 
 
-@state_trigger("person.marshall", "person.emily")
+@state_trigger("person.marshall", "person.emily", "device_tracker.yvette_location_tracker")
 def garage_auto_open(**kwargs):
     now = datetime.now().astimezone(tz.tzlocal())
     if (

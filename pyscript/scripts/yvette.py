@@ -12,19 +12,6 @@ import util
 # def reset_charge_to_max(start_hour=None):
 
 
-@state_trigger(
-    "switch.yvette_sentry_mode",
-    "device_tracker.yvette_location_tracker",
-)
-def sentry_off_at_in_laws():
-    if (
-        switch.yvette_sentry_mode == "on"
-        and device_tracker.yvette_location_tracker
-        == state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]
-    ):
-        switch.turn_off(entity_id=switch.yvette_sentry_mode)
-
-
 @time_trigger("cron(30 22 * * *)")
 def charge_reminder():
     if (
@@ -49,6 +36,7 @@ def clear_charge_reminder():
     noti.clear()
 
 
+@time_trigger("startup")
 @state_trigger(
     "switch.yvette_sentry_mode",
     "device_tracker.yvette_location_tracker",
@@ -59,7 +47,7 @@ def sentry_off_at_in_laws():
         and device_tracker.yvette_location_tracker
         == state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]
     ):
-        switch.turn_off(entity_id=secrets.IN_LAWS_ZONE)
+        switch.turn_off(entity_id="switch.yvette_sentry_mode")
 
 
 @event_trigger("ios.action_fired", "actionName=='Yvette Air On'")
@@ -211,7 +199,11 @@ def entity_card_clear_blink():
 
 
 @time_trigger("startup")
-@state_trigger("sensor.yvette_battery", "binary_sensor.yvette_charger", "binary_sensor.yvette_charging")
+@state_trigger(
+    "sensor.yvette_battery",
+    "binary_sensor.yvette_charger",
+    "binary_sensor.yvette_charging",
+)
 def entity_card_update_row_1():
     if sensor.yvette_battery in ["unknown", "unavailable"]:
         pyscript.entity_card_yvette.row_1_icon = "mdi:battery-unknown"
