@@ -2,6 +2,25 @@ import os
 import constants
 
 
+@time_trigger("startup")
+def persist_flags():
+    state.persist(
+        "pyscript.flags",
+        default_value="",
+        default_attributes={
+            "ios_actions_unlocked": False,
+        },
+    )
+    pyscript.flags.ios_actions_unlocked = False
+
+
+@event_trigger("ios.action_fired", "actionName=='Unlock Actions'")
+def ios_unlock_actions(**kwargs):
+    state.setattr(f"pyscript.flags.ios_actions_unlocked", True)
+    task.sleep(10)
+    state.setattr(f"pyscript.flags.ios_actions_unlocked", False)
+
+
 @time_trigger("cron(*/10 * * * *)")
 def cast_to_displays(reset=False):
     task.unique("cast_to_displays")
@@ -28,7 +47,7 @@ def reset_displays():
 def persist_entity_card_hass():
     state.persist(
         "pyscript.entity_card_hass",
-        default_value="Unkown",
+        default_value="Unknown",
         default_attributes={
             "name": "HASS",
             "state_icon": "mdi:home-assistant",

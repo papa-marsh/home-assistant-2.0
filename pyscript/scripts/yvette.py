@@ -76,6 +76,12 @@ def ios_backseat_heat_on(**kwargs):
         noti.send()
 
 
+@util.require_ios_action_unlock
+@event_trigger("ios.action_fired", "actionName=='Open Frunk'")
+def ios_open_frunk(**kwargs):
+    cover.open_cover(entity_id="cover.yvette_frunk")
+
+
 @time_trigger("startup")
 def persist_complication_yvette():
     state.persist(

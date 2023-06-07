@@ -1,4 +1,5 @@
 import files
+import push
 
 
 def battery_icon(battery, charging=False, upper_limit=100):
@@ -38,3 +39,21 @@ def set_pref(pref, value):
         new_value = value
 
     files.write("preferences", [pref, "value"], new_value)
+
+
+def require_ios_action_unlock(func):
+    def inner(*args, **kwargs):
+        if pyscript.flags.ios_actions_unlocked:
+            func(*args, **kwargs)
+        else:
+            noti = push.Notification(
+                title="Command Failed",
+                message=f"iOS actions must be unlocked before using this command",
+                target="all",
+                tag="command_failed_ios_action",
+                group="command_failed_ios_action",
+                priority="time-sensitive",
+            )
+            noti.send()
+
+    return inner

@@ -179,7 +179,7 @@ entities:
         source: icon
         info: short
         name: Frame TV
-        max_volume: 30
+        max_volume: 40
         speaker_group:
           show_group_count: false
         hide:

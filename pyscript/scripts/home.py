@@ -3,6 +3,7 @@ from dateutil import tz
 import constants
 import dates
 import push
+import util
 
 
 @state_trigger(
@@ -113,7 +114,9 @@ def clear_door_open_notification(**kwargs):
     noti.clear()
 
 
-@state_trigger("person.marshall", "person.emily", "device_tracker.yvette_location_tracker")
+@state_trigger(
+    "person.marshall", "person.emily", "device_tracker.yvette_location_tracker"
+)
 def garage_auto_open(**kwargs):
     now = datetime.now().astimezone(tz.tzlocal())
     if (
@@ -128,6 +131,14 @@ def garage_auto_open(**kwargs):
         )
     ):
         cover.open_cover(entity_id="cover.east_stall")
+
+
+@util.require_ios_action_unlock
+@event_trigger("ios.action_fired", "actionName=='Toggle East Stall'")
+@event_trigger("ios.action_fired", "actionName=='Toggle West Stall'")
+def ios_toggle_garage_stall(**kwargs):
+    stall = kwargs["actionName"].split(" ")[1].lower()
+    cover.toggle(entity_id=f"cover.{stall}_stall")
 
 
 @state_trigger(
