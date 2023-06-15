@@ -2,6 +2,8 @@ from datetime import date, datetime, timedelta
 import dates
 import push
 
+# import secrets
+
 
 @event_trigger("wakeup_time")
 @state_trigger("person.emily == 'home'")
@@ -87,6 +89,15 @@ def entity_card_hold():
 
 @service("lovelace.office_dtap")
 def entity_card_dtap():
+    # if media_player.office == "idle":
+    #     spotcast.start(
+    #         spotify_device_id=secrets.OFFICE_SPOTIFY_DEVICE_ID,
+    #         shuffle=True,
+    #         repeat=False,
+    #         random_song=True,
+    #         force_playback=True,
+    #     )
+    # else:
     media_player.media_play_pause(entity_id="media_player.office")
 
 
