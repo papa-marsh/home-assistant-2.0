@@ -1,8 +1,56 @@
-type: entities
-entities:
-  - entity: switch.space_heater
-  - entity: switch.master_sound_machine
-  - entity: switch.ellies_sound_machine
-  - entity: media_player.living_room_tv
-title: Devices
-show_header_toggle: false
+type: vertical-stack
+cards:
+  - type: custom:mushroom-climate-card
+    entity: climate.thermostat
+    name: Thermostat
+    icon: mdi:home-thermometer
+    layout: horizontal
+    fill_container: false
+    hvac_modes:
+      - "off"
+      - cool
+      - heat
+    show_temperature_control: true
+    collapsible_controls: false
+    tap_action:
+      action: none
+    hold_action:
+      action: none
+    double_tap_action:
+      action: none
+  - type: custom:mushroom-climate-card
+    entity: climate.bathroom_floor_thermostat
+    layout: horizontal
+    icon: mdi:heating-coil
+    fill_container: false
+    show_temperature_control: true
+    collapsible_controls: false
+    tap_action:
+      action: none
+    hold_action:
+      action: none
+    double_tap_action:
+      action: none
+    name: Bathroom Floor
+    hvac_modes:
+      - auto
+      - heat
+  - type: custom:mushroom-media-player-card
+    entity: media_player.living_room_tv
+    layout: horizontal
+    use_media_info: false
+    volume_controls:
+      - volume_set
+  - type: horizontal-stack
+    cards:
+      - type: custom:mushroom-entity-card
+        entity: switch.master_sound_machine
+        layout: vertical
+      - type: custom:mushroom-entity-card
+        entity: switch.ellies_sound_machine
+        layout: vertical
+  - type: horizontal-stack
+    cards:
+      - type: custom:mushroom-entity-card
+        entity: switch.space_heater
+        layout: vertical

@@ -1,20 +1,31 @@
-type: custom:simple-thermostat
-entity: climate.thermostat
-layout:
-  step: row
-header: false
-control: false
-decimals: 0
-step_size: 1
-label:
-  temperature: Current
-hide:
-  state: true
-sensors:
-  - entity: climate.thermostat
-    name: Humidity
-    attribute: current_humidity
-    unit: "%"
-  - entity: climate.thermostat
-    name: State
-    attribute: hvac_action
+type: vertical-stack
+cards:
+  # - type: thermostat
+  #   entity: climate.thermostat
+  #   name: Thermostat
+  # - type: thermostat
+  #   entity: climate.bathroom_floor_thermostat
+  #   name: Bathroom Floor
+  # - type: thermostat
+  #   entity: climate.yvette_hvac_climate_system
+  #   name: Yvette
+# type: custom:simple-thermostat
+# entity: climate.thermostat
+# layout:
+#   step: row
+# header: false
+# control: false
+# decimals: 0
+# step_size: 1
+# label:
+#   temperature: Current
+# hide:
+#   state: true
+# sensors:
+#   - entity: climate.thermostat
+#     name: Humidity
+#     attribute: current_humidity
+#     unit: "%"
+#   - entity: climate.thermostat
+#     name: State
+#     attribute: hvac_action

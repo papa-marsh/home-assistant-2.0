@@ -1,3 +1,4 @@
+import constants
 import files
 import push
 
@@ -19,6 +20,27 @@ def zone_short_name(zone):
 
 def get_pref(pref, value_only=True):
     pref_object = files.read("preferences", key_list=[pref])
+    if not value_only and isinstance(pref_object["options"], str):
+        match pref_object["options"]:
+            case "boolean":
+                pref_object["options"] = ["On", "Off"]
+            case "time_15":
+                pref_object["options"] = [
+                    "{:02d}:{:02d}".format(h, m)
+                    for h in range(24)
+                    for m in range(0, 60, 15)
+                ]
+            case "time_30":
+                pref_object["options"] = [
+                    "{:02d}:{:02d}".format(h, m)
+                    for h in range(24)
+                    for m in range(0, 60, 30)
+                ]
+            case "time_60":
+                pref_object["options"] = ["{:02d}:00".format(h) for h in range(24)]
+            case _:
+                log.error("Couldn't match preference option string to keyword")
+
     return pref_object["value"] if value_only else pref_object
 
 

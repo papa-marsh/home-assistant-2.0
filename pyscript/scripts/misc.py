@@ -19,15 +19,15 @@ def ios_shortcut_wakeup_time():
         sound_machines_off()
 
 
-@event_trigger("ios.action_fired", "actionName=='Sound Machines On'")
-def sound_machines_on(**kwargs):
+@event_trigger("ios.action_fired", "actionName=='Sound On'")
+def sound_on(**kwargs):
     switch.turn_on(
         entity_id=["switch.ellies_sound_machine", "switch.master_sound_machine"]
     )
 
 
-@event_trigger("ios.action_fired", "actionName=='Sound Machines Off'")
-def sound_machines_off(**kwargs):
+@event_trigger("ios.action_fired", "actionName=='Sound Off'")
+def sound_off(**kwargs):
     switch.turn_off(
         entity_id=["switch.ellies_sound_machine", "switch.master_sound_machine"]
     )

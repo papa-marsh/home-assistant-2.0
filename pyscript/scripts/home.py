@@ -134,9 +134,9 @@ def garage_auto_open(**kwargs):
 
 
 @util.require_ios_action_unlock
-@event_trigger("ios.action_fired", "actionName=='Toggle East Stall'")
-@event_trigger("ios.action_fired", "actionName=='Toggle West Stall'")
-def ios_toggle_garage_stall(**kwargs):
+@event_trigger("ios.action_fired", "actionName=='East Stall'")
+@event_trigger("ios.action_fired", "actionName=='West Stall'")
+def ios_garage_stall(**kwargs):
     stall = kwargs["actionName"].split(" ")[1].lower()
     cover.toggle(entity_id=f"cover.{stall}_stall")
 

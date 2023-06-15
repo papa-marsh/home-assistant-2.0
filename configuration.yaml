@@ -58,6 +58,12 @@ tts:
 
 ########################################
 
+command_line:
+  - sensor:
+      name: CPU Temperature
+      command: "cat /sys/class/thermal/thermal_zone0/temp"
+      value_template: "{{ value | multiply(0.0018) | round(0) + 32 }}"
+
 cover:
   - platform: template
     covers:
@@ -106,7 +112,3 @@ sensor:
       - type: last_boot
       - type: swap_use
       - type: swap_free
-  - platform: command_line
-    name: CPU Temperature
-    command: "cat /sys/class/thermal/thermal_zone0/temp"
-    value_template: "{{ value | multiply(0.0018) | round(0) + 32 }}"

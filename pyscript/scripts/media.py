@@ -29,6 +29,7 @@ def reset_media_controls():
     input_select.select_option(
         entity_id="input_select.media_card_playlist", option="None Selected"
     )
+    pyscript.media_card = "controls"
 
 
 @time_trigger("startup")

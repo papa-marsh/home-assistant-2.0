@@ -50,16 +50,16 @@ def sentry_off_at_in_laws():
         switch.turn_off(entity_id="switch.yvette_sentry_mode")
 
 
-@event_trigger("ios.action_fired", "actionName=='Yvette Air On'")
-def ios_climate_on(**kwargs):
+@event_trigger("ios.action_fired", "actionName=='Yvette Air'")
+def ios_yvette_air(**kwargs):
     if climate.yvette_hvac_climate_system == "off":
         pyscript.entity_card_yvette.blink = True
     task.sleep(1)
     climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
 
 
-@event_trigger("ios.action_fired", "actionName=='Backseat Heat On'")
-def ios_backseat_heat_on(**kwargs):
+@event_trigger("ios.action_fired", "actionName=='Seat Heat'")
+def ios_seat_heat(**kwargs):
     if climate.yvette_hvac_climate_system == "heat_cool":
         select.select_option(
             entity_id="select.yvette_heated_seat_rear_left", option="High"
@@ -77,8 +77,8 @@ def ios_backseat_heat_on(**kwargs):
 
 
 @util.require_ios_action_unlock
-@event_trigger("ios.action_fired", "actionName=='Open Frunk'")
-def ios_open_frunk(**kwargs):
+@event_trigger("ios.action_fired", "actionName=='Frunk'")
+def ios_frunk(**kwargs):
     cover.open_cover(entity_id="cover.yvette_frunk")
 
 
