@@ -108,10 +108,11 @@ def close_garage_from_notification(**kwargs):
     "binary_sensor.slider_door_sensor=='off'",
 )
 def clear_door_open_notification(**kwargs):
-    id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
-    task.unique(f"{id}_left_open")
-    noti = push.Notification(tag=f"{id}_left_open")
-    noti.clear()
+    if kwargs["value"] in ["open", "on"] and kwargs["old_value"] in ["closed", "off"]:
+        id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
+        task.unique(f"{id}_left_open")
+        noti = push.Notification(tag=f"{id}_left_open")
+        noti.clear()
 
 
 @state_trigger(
@@ -137,7 +138,7 @@ def garage_auto_open(**kwargs):
 @event_trigger("ios.action_fired", "actionName=='East Stall'")
 @event_trigger("ios.action_fired", "actionName=='West Stall'")
 def ios_garage_stall(**kwargs):
-    stall = kwargs["actionName"].split(" ")[1].lower()
+    stall = kwargs["actionName"].split(" ")[0].lower()
     cover.toggle(entity_id=f"cover.{stall}_stall")
 
 

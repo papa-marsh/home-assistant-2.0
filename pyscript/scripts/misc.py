@@ -9,25 +9,25 @@ import util
 
 @event_trigger("sleepy_time")
 def ios_shortcut_sleepy_time():
-    sound_machines_on()
+    turn_on_sound_machines()
     media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
 
 
 @event_trigger("wakeup_time")
 def ios_shortcut_wakeup_time():
     if 6 <= datetime.now().hour < 17:
-        sound_machines_off()
+        turn_off_sound_machines()
 
 
 @event_trigger("ios.action_fired", "actionName=='Sound On'")
-def sound_on(**kwargs):
+def turn_on_sound_machines(**kwargs):
     switch.turn_on(
         entity_id=["switch.ellies_sound_machine", "switch.master_sound_machine"]
     )
 
 
 @event_trigger("ios.action_fired", "actionName=='Sound Off'")
-def sound_off(**kwargs):
+def turn_off_sound_machines(**kwargs):
     switch.turn_off(
         entity_id=["switch.ellies_sound_machine", "switch.master_sound_machine"]
     )
