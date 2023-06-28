@@ -20,6 +20,10 @@ def populate_preferences():
         options=[option for option in files.read(file_name="preferences")],
         blocking=True,
     )
+    input_select.select_first(
+        entity_id="input_select.preference_selector",
+        blocking=True,
+    )
 
 
 @state_trigger("input_select.preference_selector")
@@ -40,7 +44,10 @@ def populate_preference_options(**kwargs):
 @state_trigger("input_select.preference_value")
 def set_preference_value(**kwargs):
     if not pyscript.flags.preference_value_mutex:
-        util.set_pref(input_select.preference_selector, str(kwargs["value"]))
+        util.set_pref(
+            input_select.preference_selector,
+            str(kwargs["value"]),
+        )
 
 
 @time_trigger("startup")
