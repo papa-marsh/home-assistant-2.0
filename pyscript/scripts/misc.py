@@ -9,14 +9,32 @@ import util
 
 @event_trigger("sleepy_time")
 def ios_shortcut_sleepy_time():
-    turn_on_sound_machines()
-    media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
-
+    if person.emily != "The DePrees":
+        turn_on_sound_machines()
+        media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
+    if person.marshall != person.emily:
+        noti = push.Notification(
+            title="Sleepy Time",
+            message=f"Emily triggered sleepy time at {dates.parse_timestamp(output_format='time')}",
+            tag="sleepy_wake_time",
+            group="sleepy_wake_time",
+            target="marshall"
+        )
+        noti.send()
 
 @event_trigger("wakeup_time")
 def ios_shortcut_wakeup_time():
     if 6 <= datetime.now().hour < 17:
         turn_off_sound_machines()
+    if person.marshall != person.emily:
+        noti = push.Notification(
+            title="Wakeup Time",
+            message=f"Emily triggered wakeup time at {dates.parse_timestamp(output_format='time')}",
+            tag="sleepy_wake_time",
+            group="sleepy_wake_time",
+            target="marshall"
+        )
+        noti.send()
 
 
 @event_trigger("ios.action_fired", "actionName=='Sound On'")
@@ -44,7 +62,7 @@ def feed_chelsea_notification():
             tag="feed_chelsea",
             group="feed_chelsea",
             priority="time-sensitive",
-            target="all",
+            target="marshall" if person.marshall == "home" and person.emily == "The DePrees" else "all",
         )
         noti.send()
 
