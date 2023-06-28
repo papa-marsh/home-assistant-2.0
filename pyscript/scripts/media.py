@@ -71,10 +71,7 @@ def set_media_card_playlists():
         task.sleep(5)
 
     input_select.set_options(
-        entity_id="input_select.media_card_playlist",
-        options=options,
-        blocking=True,
-        limit=5,
+        entity_id="input_select.media_card_playlist", options=options, blocking=True
     )
     input_select.select_option(
         entity_id="input_select.media_card_playlist", option=playlist

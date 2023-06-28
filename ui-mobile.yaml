@@ -9,21 +9,21 @@ views:
       - type: custom:mod-card
         style: !include lovelace/style-mobile-view.yaml
         card:
-            type: vertical-stack
-            cards:
-              - !include lovelace/overview/people-simple.yaml
-              - !include lovelace/overview/garage-buttons.yaml
-              - !include lovelace/overview/media.yaml
-              - type: horizontal-stack
-                cards:
-                  - !include lovelace/entity-cards/card-1.yaml
-                  - !include lovelace/entity-cards/card-2.yaml
-                  - !include lovelace/entity-cards/card-3.yaml
-              - type: horizontal-stack
-                cards:
-                  - !include lovelace/entity-cards/card-4.yaml
-                  - !include lovelace/entity-cards/card-5.yaml
-                  - !include lovelace/entity-cards/card-6.yaml
+          type: vertical-stack
+          cards:
+            - !include lovelace/overview/people-simple.yaml
+            - !include lovelace/overview/garage-buttons.yaml
+            - !include lovelace/overview/media.yaml
+            - type: horizontal-stack
+              cards:
+                - !include lovelace/entity-cards/card-1.yaml
+                - !include lovelace/entity-cards/card-2.yaml
+                - !include lovelace/entity-cards/card-3.yaml
+            - type: horizontal-stack
+              cards:
+                - !include lovelace/entity-cards/card-4.yaml
+                - !include lovelace/entity-cards/card-5.yaml
+                - !include lovelace/entity-cards/card-6.yaml
   - theme: Backend-selected
     title: Family
     type: panel
@@ -34,10 +34,10 @@ views:
       - type: custom:mod-card
         style: !include lovelace/style-mobile-view.yaml
         card:
-            type: vertical-stack
-            cards:
-              - !include lovelace/family/people-detailed.yaml
-              - !include lovelace/family/map.yaml
+          type: vertical-stack
+          cards:
+            - !include lovelace/family/people-detailed.yaml
+            - !include lovelace/family/map.yaml
   - theme: Backend-selected
     title: Home
     type: panel
@@ -48,10 +48,10 @@ views:
       - type: custom:mod-card
         style: !include lovelace/style-mobile-view.yaml
         card:
-            type: vertical-stack
-            cards:
-              - !include lovelace/home/devices.yaml
-              - !include lovelace/home/thermostat.yaml
+          type: vertical-stack
+          cards:
+            - !include lovelace/home/devices.yaml
+            - !include lovelace/home/thermostat.yaml
   - theme: Backend-selected
     title: Soccer
     type: panel
@@ -62,21 +62,22 @@ views:
       - type: custom:mod-card
         style: !include lovelace/style-mobile-view.yaml
         card:
-            type: vertical-stack
-            cards:
-              - !include lovelace/soccer/league-tabs.yaml
-              - !include lovelace/soccer/league-data.yaml
+          type: vertical-stack
+          cards:
+            - !include lovelace/soccer/league-tabs.yaml
+            - !include lovelace/soccer/league-data.yaml
   - theme: Backend-selected
     title: System
     type: panel
     icon: mdi:tools
-    path: system 
+    path: system
     badges: []
     cards:
       - type: custom:mod-card
         style: !include lovelace/style-mobile-view.yaml
         card:
-            type: vertical-stack
-            cards:
-              - !include lovelace/system/admin-buttons.yaml
-              - !include lovelace/system/updates.yaml
+          type: vertical-stack
+          cards:
+            - !include lovelace/system/preferences.yaml
+            - !include lovelace/system/admin-buttons.yaml
+            - !include lovelace/system/updates.yaml

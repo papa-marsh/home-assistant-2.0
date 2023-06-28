@@ -1,5 +1,46 @@
 import os
 import constants
+import files
+import util
+
+
+@time_trigger("cron(0 0 * * *)")
+def backup_files():
+    for file in [f for f in os.listdir(constants.BASE_FILE_PATH)]:
+        if ".yaml" in file:
+            file_name = file.split(".yaml")[0]
+            files.overwrite(f"backups/{file_name}", files.read(file_name))
+
+
+@service("lovelace.populate_preferences")
+@time_trigger("startup")
+def populate_preferences():
+    input_select.set_options(
+        entity_id="input_select.preference_selector",
+        options=[option for option in files.read(file_name="preferences")],
+        blocking=True,
+    )
+
+
+@state_trigger("input_select.preference_selector")
+def populate_preference_options(**kwargs):
+    pref = util.get_pref(kwargs["value"], value_only=False)
+    pyscript.flags.preference_value_mutex = True
+    input_select.set_options(
+        entity_id="input_select.preference_value",
+        options=pref["options"],
+        blocking=True,
+    )
+    input_select.select_option(
+        entity_id="input_select.preference_value", option=pref["value"], blocking=True
+    )
+    pyscript.flags.preference_value_mutex = False
+
+
+@state_trigger("input_select.preference_value")
+def set_preference_value(**kwargs):
+    if not pyscript.flags.preference_value_mutex:
+        util.set_pref(input_select.preference_selector, str(kwargs["value"]))
 
 
 @time_trigger("startup")
@@ -7,11 +48,10 @@ def persist_flags():
     state.persist(
         "pyscript.flags",
         default_value="",
-        default_attributes={
-            "ios_actions_unlocked": False,
-        },
+        default_attributes={},
     )
     pyscript.flags.ios_actions_unlocked = False
+    pyscript.flags.preference_value_mutex = False
 
 
 @event_trigger("ios.action_fired", "actionName=='Unlock Actions'")

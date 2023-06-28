@@ -1,0 +1,18 @@
+type: entities
+entities:
+  - entity: input_select.preference_selector
+    name: Select a Preference...
+    tap_action: none
+    card_mod:
+      style: |
+        ha-select {
+          margin-bottom: 6px !important;
+        }
+  - entity: input_select.preference_value
+    name: Select a Value...
+    tap_action: none
+    card_mod:
+      style: |
+        ha-select {
+          margin-bottom: 6px !important;
+        }

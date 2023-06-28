@@ -21,8 +21,9 @@ def read(file_name, key_list=None, default_value=None):
 
 @pyscript_executor
 def write(file_name, key_list=None, value=None):
-    if os.path.exists(f"{constants.BASE_FILE_PATH}{file_name}.yaml"):
-        with open(f"{constants.BASE_FILE_PATH}{file_name}.yaml") as file:
+    path = f"{constants.BASE_FILE_PATH}{file_name}.yaml"
+    if os.path.exists(path):
+        with open(path) as file:
             contents = yaml.safe_load(file)
             if contents is None:
                 contents = {}
@@ -37,14 +38,15 @@ def write(file_name, key_list=None, value=None):
 
     contents_edit[key_list[-1]] = value
 
-    with open(file_name, "w") as file:
+    with open(path, "w") as file:
         yaml.safe_dump(contents, file)
 
 
 @pyscript_executor
 def append(file_name, value=None):
-    if os.path.exists(f"{constants.BASE_FILE_PATH}{file_name}.yaml"):
-        with open(f"{constants.BASE_FILE_PATH}{file_name}.yaml") as file:
+    path = f"{constants.BASE_FILE_PATH}{file_name}.yaml"
+    if os.path.exists(path):
+        with open(path) as file:
             contents = yaml.safe_load(file)
             if contents is None:
                 contents = []
@@ -56,5 +58,11 @@ def append(file_name, value=None):
     else:
         contents.append(value)
 
-    with open(file_name, "w") as file:
+    with open(path, "w") as file:
+        yaml.safe_dump(contents, file)
+
+
+@pyscript_executor
+def overwrite(file_name, contents):
+    with open(f"{constants.BASE_FILE_PATH}{file_name}.yaml", "w") as file:
         yaml.safe_dump(contents, file)
