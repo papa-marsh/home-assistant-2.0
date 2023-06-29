@@ -62,7 +62,7 @@ def set_pref(pref, value):
 
 def require_ios_action_unlock(func):
     def inner(*args, **kwargs):
-        if pyscript.flags.ios_actions_unlocked:
+        if pyscript.vars.ios_actions_unlocked:
             func(*args, **kwargs)
         else:
             noti = push.Notification(

@@ -10,6 +10,7 @@ import util
 
 @event_trigger("sleepy_time")
 def ios_shortcut_sleepy_time():
+    pyscript.vars.sleepy_time_timestamp = datetime.now()
     if person.emily != state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]:
         turn_on_sound_machines()
         media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
@@ -29,9 +30,10 @@ def ios_shortcut_wakeup_time():
     if 6 <= datetime.now().hour < 17:
         turn_off_sound_machines()
     if person.marshall != person.emily:
+        elapsed = util.format_duration(pyscript.vars.sleepy_time_timestamp)
         noti = push.Notification(
             title="Wakeup Time",
-            message=f"Emily triggered wakeup time at {dates.parse_timestamp(output_format='time')}",
+            message=f"Emily triggered wakeup time at {dates.parse_timestamp(output_format='time')} after {elapsed}",
             tag="sleepy_wake_time",
             group="sleepy_wake_time",
             target="marshall",

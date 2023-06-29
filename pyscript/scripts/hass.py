@@ -29,7 +29,7 @@ def populate_preferences():
 @state_trigger("input_select.preference_selector")
 def populate_preference_options(**kwargs):
     pref = util.get_pref(kwargs["value"], value_only=False)
-    pyscript.flags.preference_value_mutex = True
+    pyscript.vars.preference_value_mutex = True
     input_select.set_options(
         entity_id="input_select.preference_value",
         options=pref["options"],
@@ -38,12 +38,12 @@ def populate_preference_options(**kwargs):
     input_select.select_option(
         entity_id="input_select.preference_value", option=pref["value"], blocking=True
     )
-    pyscript.flags.preference_value_mutex = False
+    pyscript.vars.preference_value_mutex = False
 
 
 @state_trigger("input_select.preference_value")
 def set_preference_value(**kwargs):
-    if not pyscript.flags.preference_value_mutex:
+    if not pyscript.vars.preference_value_mutex:
         util.set_pref(
             input_select.preference_selector,
             str(kwargs["value"]),
@@ -51,21 +51,21 @@ def set_preference_value(**kwargs):
 
 
 @time_trigger("startup")
-def persist_flags():
+def persist_vars():
     state.persist(
-        "pyscript.flags",
+        "pyscript.vars",
         default_value="",
-        default_attributes={},
+        default_attributes={"pyscript.vars.sleepy_time_timestamp": ""},
     )
-    pyscript.flags.ios_actions_unlocked = False
-    pyscript.flags.preference_value_mutex = False
+    pyscript.vars.ios_actions_unlocked = False
+    pyscript.vars.preference_value_mutex = False
 
 
 @event_trigger("ios.action_fired", "actionName=='Unlock Actions'")
 def ios_unlock_actions(**kwargs):
-    state.setattr(f"pyscript.flags.ios_actions_unlocked", True)
+    state.setattr(f"pyscript.vars.ios_actions_unlocked", True)
     task.sleep(10)
-    state.setattr(f"pyscript.flags.ios_actions_unlocked", False)
+    state.setattr(f"pyscript.vars.ios_actions_unlocked", False)
 
 
 @time_trigger("cron(*/10 * * * *)")
