@@ -1,6 +1,7 @@
 import os
 import constants
 import files
+import push
 import util
 
 
@@ -17,7 +18,7 @@ def backup_files():
 def populate_preferences():
     input_select.set_options(
         entity_id="input_select.preference_selector",
-        options=[option for option in files.read(file_name="preferences")],
+        options=[pref for pref in files.read(file_name="preferences")],
         blocking=True,
     )
     input_select.select_first(
@@ -48,6 +49,28 @@ def set_preference_value(**kwargs):
             input_select.preference_selector,
             str(kwargs["value"]),
         )
+
+
+@time_trigger("cron(0 5 * * *)")
+def reset_preferences():
+    reset = ""
+    prefs = files.read(file_name="preferences")
+    log.warning(prefs)
+    for pref in prefs:
+        if "default" in prefs[pref] and prefs[pref]["value"] != prefs[pref]["default"]:
+            log.warning("here")
+            util.set_pref(pref, prefs[pref]["default"])
+            reset += f", {pref}"
+    if reset:
+        noti = push.Notification(
+            title="Preferences Reset",
+            message=f"The following preferences were reset to default: {reset[2:]}",
+            tag="prefs_reset",
+            group="prefs_reset",
+            target="marshall",
+        )
+        noti.send()
+        populate_preferences()
 
 
 @time_trigger("startup")

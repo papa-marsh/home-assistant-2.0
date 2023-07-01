@@ -76,3 +76,14 @@ def require_ios_action_unlock(func):
             noti.send()
 
     return inner
+
+
+def require_pref_check(pref, value):
+    def decorator(func):
+        def inner(*args, **kwargs):
+            if get_pref(pref) == value:
+                func(*args, **kwargs)
+
+        return inner
+
+    return decorator

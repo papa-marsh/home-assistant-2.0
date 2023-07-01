@@ -84,7 +84,6 @@ def entity_card_tap():
 def entity_card_hold():
     pyscript.entity_card_office.staging["last_timecard"] = date.today()
     pyscript.entity_card_office.blink = False
-    entity_card_update_row_3()
 
 
 @service("lovelace.office_dtap")
@@ -106,12 +105,10 @@ def entity_card_update_row_2():
     )
 
 
-@time_trigger("startup", "cron(0 3 * * *)")
+@time_trigger("cron(0 9 * * 1-5)")
 def entity_card_update_row_3():
-    next_timecard = get_next_timecard()
-    if next_timecard == date.today():
-        pyscript.entity_card_office.blink = True
-    pyscript.entity_card_office.row_3_value = dates.date_countdown(next_timecard)
+    pyscript.entity_card_office.blink = True
+    pyscript.entity_card_office.row_3_value = dates.date_countdown(get_next_timecard())
 
 
 def get_next_timecard():

@@ -18,13 +18,12 @@ def door_open_notification(**kwargs):
     if kwargs["value"] in ["open", "on"] and kwargs["old_value"] in ["closed", "off"]:
         id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
         name = state.getattr(kwargs["var_name"])["friendly_name"].replace(" Sensor", "")
-        now = datetime.now()
         task.unique(f"{id}_left_open")
         task.sleep(10 * 60)
         door_open_notification_loop(
             id=id,
             name=name,
-            open_time=now,
+            open_time=datetime.now(),
             silent=False,
         )
 
@@ -57,6 +56,7 @@ def door_open_notification_loop(id, name, open_time, silent):
             destructive=True,
         )
     while True:
+        log.warning(f"MTW open_time is {open_time} with type {type(open_time)}")
         noti.message = f"{name} has been open for {(datetime.now() - open_time).seconds // 60} minutes"
         noti.send()
         task.sleep(10 * 60)
@@ -272,12 +272,23 @@ def entity_card_update_row_2():
 
 
 @time_trigger("startup", "cron(0 0,19 * * *)")
+@state_trigger("binary_sensor.emily_s_iphone_focus")
 def entity_card_update_row_3():
-    now = datetime.today()
-    next_bin_day = get_next_bin_day()
-    if next_bin_day == now.date() and now.hour >= 18:
-        pyscript.entity_card_home.blink = True
-    pyscript.entity_card_home.row_3_value = dates.date_countdown(next_bin_day)
+    task.unique("entity_card_update_row_3")
+    if binary_sensor.emily_s_iphone_focus == "on" and 9 <= datetime.now().hour < 18:
+        pyscript.entity_card_home.row_3_value = dates.format_duration(
+            binary_sensor.emily_s_iphone_focus.last_changed
+        )
+        pyscript.entity_card_home.row_3_icon = "mdi:bed-clock"
+        task.sleep(60)
+        entity_card_update_row_3()
+    else:
+        now = datetime.now()
+        next_bin_day = get_next_bin_day()
+        if next_bin_day == now.date() and now.hour >= 18:
+            pyscript.entity_card_home.blink = True
+        pyscript.entity_card_home.row_3_value = dates.date_countdown(next_bin_day)
+        pyscript.entity_card_home.row_3_icon = "mdi:delete"
 
 
 def get_next_bin_day():
