@@ -1,8 +1,19 @@
 import os
 import constants
+import dates
 import files
 import push
 import util
+
+
+@time_trigger("cron(*/15 * * * *)")
+def pref_event_handler():
+    log.warning("here")
+    pref_list = files.read(file_name="preferences")
+    now = dates.parse_timestamp(output_format="time")
+    for pref in pref_list:
+        if pref_list[pref]["value"] == now and "service" in pref_list[pref]:
+            service.call("pyscript", pref_list[pref]["service"])
 
 
 @time_trigger("cron(0 0 * * *)")

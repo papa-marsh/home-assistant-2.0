@@ -23,19 +23,22 @@ def get_pref(pref, value_only=True):
         if pref_object["options"] == "boolean":
             pref_object["options"] = ["On", "Off"]
         elif pref_object["options"] == "time_15":
-            pref_object["options"] = [
-                "{:02d}:{:02d}".format(h, m)
+            pref_object["options"] = ["Off"] + [
+                "{}:{:02d} {}".format((h % 12) if (h % 12) != 0 else 12, m, "AM" if h < 12 else "PM")
                 for h in range(24)
                 for m in range(0, 60, 15)
             ]
         elif pref_object["options"] == "time_30":
-            pref_object["options"] = [
-                "{:02d}:{:02d}".format(h, m)
+            pref_object["options"] = ["Off"] + [
+                "{}:{:02d} {}".format((h % 12) if (h % 12) != 0 else 12, m, "AM" if h < 12 else "PM")
                 for h in range(24)
                 for m in range(0, 60, 30)
             ]
         elif pref_object["options"] == "time_60":
-            pref_object["options"] = ["{:02d}:00".format(h) for h in range(24)]
+            pref_object["options"] = ["Off"] + [
+                "{}:00 {}".format((h % 12) if (h % 12) != 0 else 12, "AM" if h < 12 else "PM")
+                for h in range(24)
+            ]
         else:
             log.error("Couldn't match preference option string to keyword")
     return pref_object["value"] if value_only else pref_object

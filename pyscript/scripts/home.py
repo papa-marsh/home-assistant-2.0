@@ -108,7 +108,7 @@ def close_garage_from_notification(**kwargs):
     "binary_sensor.slider_door_sensor=='off'",
 )
 def clear_door_open_notification(**kwargs):
-    if kwargs["value"] in ["open", "on"] and kwargs["old_value"] in ["closed", "off"]:
+    if kwargs["value"] in ["closed", "off"] and kwargs["old_value"] in ["open", "on"]:
         id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
         task.unique(f"{id}_left_open")
         noti = push.Notification(tag=f"{id}_left_open")
