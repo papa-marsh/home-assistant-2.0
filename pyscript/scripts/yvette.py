@@ -1,6 +1,7 @@
 from datetime import datetime
 from dateutil import tz
 import secrets
+import constants
 import dates
 import push
 import util
@@ -10,6 +11,18 @@ import util
 
 
 # def reset_charge_to_max(start_hour=None):
+
+
+@state_trigger("binary_sensor.yvette_charger=='on'")
+def charge_if_low():
+    task.unique("yvette_charge_if_low")
+    if int(sensor.yvette_battery) < constants.YVETTE_LOW_THRESHOLD:
+        switch.turn_on(entity_id="switch.yvette_charger")
+        while int(sensor.yvette_battery) < constants.YVETTE_LOW_THRESHOLD:
+            if datetime.now().hour >= 23:
+                return
+            task.sleep(60)
+        switch.turn_off(entity_id="switch.yvette_charger")
 
 
 @time_trigger("cron(30 22 * * *)")
@@ -98,10 +111,19 @@ def complication_leading():
 
 
 @time_trigger("startup")
-@state_trigger("sensor.yvette_battery")
+@state_trigger("sensor.yvette_battery", "climate.yvette_hvac_climate_system")
 def complication_outer():
     if sensor.yvette_battery != "unavailable":
-        pyscript.complication_yvette.outer = f"{sensor.yvette_battery}%"
+        pyscript.complication_yvette.outer = f"{sensor.yvette_battery}"
+    if climate.yvette_hvac_climate_system == "heat_cool":
+        pyscript.complication_yvette.outer += (
+            "❄️"
+            if climate.yvette_hvac_climate_system.current_temperature
+            >= climate.yvette_hvac_climate_system.temperature
+            else "♨️"
+        )
+    else:
+        pyscript.complication_yvette.outer += "%"
 
 
 @time_trigger("startup")

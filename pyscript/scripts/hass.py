@@ -18,7 +18,7 @@ def pref_event_handler():
 
 @time_trigger("cron(0 0 * * *)")
 def backup_files():
-    for file in [f for f in os.listdir(constants.BASE_FILE_PATH)]:
+    for file in os.listdir(constants.BASE_FILE_PATH):
         if ".yaml" in file:
             file_name = file.split(".yaml")[0]
             files.overwrite(f"backups/{file_name}", files.read(file_name))
