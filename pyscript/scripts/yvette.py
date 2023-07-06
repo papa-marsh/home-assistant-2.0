@@ -17,7 +17,7 @@ import util
 def reset_charge_limit():
     task.unique("yvette_charge_if_low")
     if number.yvette_charge_limit != constants.YVETTE_CHARGE_LIMIT:
-        input_number.set_value(
+        number.set_value(
             entity_id="number.yvette_charge_limit", value=constants.YVETTE_CHARGE_LIMIT
         )
         noti = push.Notification(
@@ -33,16 +33,16 @@ def reset_charge_limit():
 @service("pyscript.yvette_charge_to_max")
 def charge_to_max():
     if binary_sensor.yvette_charger == "on":
-        input_number.set_value(entity_id="number.yvette_charge_limit", value=100)
+        number.set_value(entity_id="number.yvette_charge_limit", value=100)
         task.sleep(60)
         switch.turn_on(entity_id="switch.yvette_charger")
     else:
         noti = push.Notification(
             title="Command Failed",
-            message=f"Couldn't charge to max since Yvette is unplugged",
-            target="marsahll",
-            tag="couldnt_charge_to_max",
-            group="couldnt_charge_to_max",
+            message=f"Can't charge to max because Yvette is not plugged in",
+            target="marshall",
+            tag="charge_to_max_failed",
+            group="charge_to_max_failed",
         )
         noti.send()
 
