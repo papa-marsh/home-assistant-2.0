@@ -56,7 +56,6 @@ def door_open_notification_loop(id, name, open_time, silent):
             destructive=True,
         )
     while True:
-        log.warning(f"MTW open_time is {open_time} with type {type(open_time)}")
         noti.message = f"{name} has been open for {(datetime.now() - open_time).seconds // 60} minutes"
         noti.send()
         task.sleep(10 * 60)
@@ -274,7 +273,7 @@ def entity_card_update_row_2():
 @time_trigger("startup", "cron(0 0,19 * * *)")
 @state_trigger("binary_sensor.emily_s_iphone_focus")
 def entity_card_update_row_3():
-    task.unique("entity_card_update_row_3")
+    task.unique("home_entity_card_update_row_3")
     if binary_sensor.emily_s_iphone_focus == "on" and 9 <= datetime.now().hour < 18:
         pyscript.entity_card_home.row_3_value = dates.format_duration(
             binary_sensor.emily_s_iphone_focus.last_changed

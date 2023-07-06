@@ -8,7 +8,6 @@ import util
 
 @time_trigger("cron(*/15 * * * *)")
 def pref_event_handler():
-    log.warning("here")
     pref_list = files.read(file_name="preferences")
     now = dates.parse_timestamp(output_format="time")
     for pref in pref_list:
@@ -66,7 +65,6 @@ def set_preference_value(**kwargs):
 def reset_preferences():
     reset = ""
     prefs = files.read(file_name="preferences")
-    log.warning(prefs)
     for pref in prefs:
         if "default" in prefs[pref] and prefs[pref]["value"] != prefs[pref]["default"]:
             log.warning("here")

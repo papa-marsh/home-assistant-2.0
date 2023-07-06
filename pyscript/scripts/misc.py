@@ -30,7 +30,7 @@ def ios_shortcut_wakeup_time():
     if 6 <= datetime.now().hour < 17:
         turn_off_sound_machines()
     if person.marshall != person.emily:
-        elapsed = util.format_duration(pyscript.vars.sleepy_time_timestamp)
+        elapsed = dates.format_duration(pyscript.vars.sleepy_time_timestamp)
         noti = push.Notification(
             title="Wakeup Time",
             message=f"Emily triggered wakeup time at {dates.parse_timestamp(output_format='time')} after {elapsed}",
