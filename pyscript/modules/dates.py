@@ -26,7 +26,9 @@ def format_duration(timestamp, comparison=None, include_seconds=False):
     elif comparison:
         interval = timestamp - comparison
     else:
-        interval = timestamp - datetime.now().astimezone(tz.tzlocal())
+        interval = timestamp.astimezone(tz.tzlocal()) - datetime.now().astimezone(
+            tz.tzlocal()
+        )
     hours, minutes, seconds = str(abs(interval)).split(".")[0].split(":")
     duration = ""
 
