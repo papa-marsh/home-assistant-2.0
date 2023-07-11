@@ -18,12 +18,13 @@ def door_open_notification(**kwargs):
     if kwargs["value"] in ["open", "on"] and kwargs["old_value"] in ["closed", "off"]:
         id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
         name = state.getattr(kwargs["var_name"])["friendly_name"].replace(" Sensor", "")
+        open_time = datetime.now()
         task.unique(f"{id}_left_open")
         task.sleep(10 * 60)
         door_open_notification_loop(
             id=id,
             name=name,
-            open_time=datetime.now(),
+            open_time=open_time,
             silent=False,
         )
 
