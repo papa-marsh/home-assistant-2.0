@@ -120,16 +120,15 @@ def clear_door_open_notification(**kwargs):
 )
 def garage_auto_open(**kwargs):
     now = datetime.now().astimezone(tz.tzlocal())
+    location = device_tracker.yvette_location_tracker
     if (
         kwargs["value"] == "home"
         and kwargs["old_value"] != "home"
         and cover.east_stall == "closed"
         and 6 <= now.hour < 23
         and (now - cover.east_stall.last_changed).seconds > 300
-        and (
-            device_tracker.yvette_location_tracker != "home"
-            or (now - device_tracker.yvette_location_tracker.last_changed).seconds < 300
-        )
+        and (location != "home" or (now - location.last_changed).seconds < 300)
+        and files.read("zones", [location, "garage_auto_open"], False)
     ):
         cover.open_cover(entity_id="cover.east_stall")
 

@@ -10,11 +10,11 @@ import util
 def populate_zones_file():
     file_zones = files.read("zones")
     hass_zones = [
-        state.get_attr(zone)["friendly_name"] for zone in state.names(domain="zone")
+        state.getattr(zone)["friendly_name"] for zone in state.names(domain="zone")
     ]
 
     for zone in hass_zones:
-        if zone not in file_zones and zone != "Home":
+        if zone not in file_zones:
             file_zones[zone] = {"needs_disposition": "New Zone"}
     for zone in file_zones:
         if zone not in hass_zones and zone != "not_home":
