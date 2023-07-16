@@ -7,7 +7,7 @@ import util
 
 
 @time_trigger("cron(0 3 * * *)")
-def populate_zones_file():
+def sync_zones():
     file_zones = files.read("zones")
     hass_zones = [
         state.getattr(zone)["friendly_name"] for zone in state.names(domain="zone")
