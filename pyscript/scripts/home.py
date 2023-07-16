@@ -83,13 +83,19 @@ def silence_door_open_notification(**kwargs):
 
 @event_trigger(
     "mobile_app_notification_action",
-    "action in ['dismiss_slider_door']",
+    "action == 'dismiss_slider_door'",
 )
 def silence_door_open_notification(**kwargs):
     id = kwargs["action_data"]["id"]
-    task.unique(f"{id}_left_open")
-    noti = push.Notification(tag=f"{id}_left_open")
-    noti.clear()
+    task.unique(f"slider_door_left_open")
+    noti = push.Notification(
+        title="Air Off",
+        message="The thermostat has been turned off and slider door notification dismissed",
+        tag="slider_door_left_open",
+        group="slider_door_left_open",
+        target="all",
+        priority="time-sensitive",
+    )
 
 
 @event_trigger(
