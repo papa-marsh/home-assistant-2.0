@@ -72,7 +72,7 @@ def silence_door_open_notification(**kwargs):
     door_open_notification_loop(
         id=kwargs["action_data"]["id"],
         name=kwargs["action_data"]["name"],
-        open_time=kwargs["action_data"]["open_time"],
+        open_time=dates.parse_timestamp(kwargs["action_data"]["open_time"]),
         silent=True,
     )
 

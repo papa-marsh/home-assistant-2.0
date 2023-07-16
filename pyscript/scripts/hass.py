@@ -6,6 +6,22 @@ import push
 import util
 
 
+@time_trigger("cron(0 3 * * *)")
+def populate_zones_file():
+    file_zones = files.read("zones")
+    hass_zones = [
+        state.get_attr(zone)["friendly_name"] for zone in state.names(domain="zone")
+    ]
+
+    for zone in hass_zones:
+        if zone not in file_zones and zone != "Home":
+            file_zones[zone] = {"needs_disposition": "New Zone"}
+    for zone in file_zones:
+        if zone not in hass_zones and zone != "not_home":
+            file_zones[zone]["needs_disposition"] = "Stale zone"
+    files.overwrite("zones", dict(sorted(file_zones.items())))
+
+
 @time_trigger("cron(*/15 * * * *)")
 def pref_event_handler():
     pref_list = files.read(file_name="preferences")
@@ -15,7 +31,7 @@ def pref_event_handler():
             service.call("pyscript", pref_list[pref]["service"])
 
 
-@time_trigger("cron(0 0 * * *)")
+@time_trigger("cron(0 1 * * *)")
 def backup_files():
     for file in os.listdir(constants.BASE_FILE_PATH):
         if ".yaml" in file:

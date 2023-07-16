@@ -72,6 +72,17 @@ def set_pref(pref, value):
     files.write("preferences", [pref, "value"], new_value)
 
 
+def require_pref_check(pref, value):
+    def decorator(func):
+        def inner(*args, **kwargs):
+            if get_pref(pref) == value:
+                func(*args, **kwargs)
+
+        return inner
+
+    return decorator
+
+
 def require_ios_action_unlock(func):
     def inner(*args, **kwargs):
         if pyscript.vars.ios_actions_unlocked:
@@ -88,14 +99,3 @@ def require_ios_action_unlock(func):
             noti.send()
 
     return inner
-
-
-def require_pref_check(pref, value):
-    def decorator(func):
-        def inner(*args, **kwargs):
-            if get_pref(pref) == value:
-                func(*args, **kwargs)
-
-        return inner
-
-    return decorator

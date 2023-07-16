@@ -49,10 +49,6 @@ shell_command:
   cast_to_living_room_display: python3 -m pip install catt && catt -d 'Living Room Display' cast_site 'http://192.168.0.2:8123/lovelace-cast/overview'
   cast_to_kitchen_display: python3 -m pip install catt && catt -d 'Kitchen Display' cast_site 'http://192.168.0.2:8123/lovelace-cast/overview'
 
-spotcast:
-  sp_dc: !secret spotcast_dc_cookie
-  sp_key: !secret spotcast_key_cookie
-
 tts:
   - platform: google_translate
 
