@@ -40,7 +40,6 @@ def door_open_notification_loop(id, name, open_time, silent):
         priority="active" if silent else "time-sensitive",
         action_data={"id": id, "name": name, "open_time": open_time},
     )
-
     noti.add_action(
         id=f"ignore_{id}",
         title="Ignore",
@@ -49,6 +48,11 @@ def door_open_notification_loop(id, name, open_time, silent):
         noti.add_action(
             id=f"silence_{id}",
             title="Silence",
+        )
+    if id == "slider_door":
+        noti.add_action(
+            id=f"dismiss_{id}",
+            title="Dismiss",
         )
     if "stall" in id:
         noti.add_action(
@@ -75,6 +79,17 @@ def silence_door_open_notification(**kwargs):
         open_time=dates.parse_timestamp(kwargs["action_data"]["open_time"]),
         silent=True,
     )
+
+
+@event_trigger(
+    "mobile_app_notification_action",
+    "action in ['dismiss_slider_door']",
+)
+def silence_door_open_notification(**kwargs):
+    id = kwargs["action_data"]["id"]
+    task.unique(f"{id}_left_open")
+    noti = push.Notification(tag=f"{id}_left_open")
+    noti.clear()
 
 
 @event_trigger(
