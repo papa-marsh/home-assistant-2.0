@@ -68,7 +68,7 @@ views:
                 - !include lovelace/home/devices.yaml
             - type: vertical-stack
               cards:
-                - !include lovelace/home/thermostat.yaml
+                - !include lovelace/home/climate.yaml
   - theme: Backend-selected
     title: Soccer
     type: panel

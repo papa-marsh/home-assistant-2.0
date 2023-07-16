@@ -1,0 +1,37 @@
+type: vertical-stack
+cards:
+  - type: custom:mushroom-climate-card
+    entity: climate.thermostat
+    name: Thermostat
+    icon: mdi:home-thermometer
+    layout: horizontal
+    fill_container: false
+    hvac_modes:
+      - "off"
+      - cool
+      - heat
+    show_temperature_control: true
+    collapsible_controls: false
+    tap_action:
+      action: none
+    hold_action:
+      action: none
+    double_tap_action:
+      action: none
+  - type: custom:mushroom-climate-card
+    entity: climate.bathroom_floor_thermostat
+    layout: horizontal
+    icon: mdi:heating-coil
+    fill_container: false
+    show_temperature_control: true
+    collapsible_controls: false
+    tap_action:
+      action: none
+    hold_action:
+      action: none
+    double_tap_action:
+      action: none
+    name: Bathroom Floor
+    hvac_modes:
+      - auto
+      - heat
