@@ -16,6 +16,6 @@ showProgressBar: false
 hideDuplicates: true
 style: |
   ha-card {
-    height: 552px !important;
+    height: 584px !important;
     overflow: hidden !important;
   }
