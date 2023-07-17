@@ -13,7 +13,7 @@ def send_critical_on_drive():
     noti = push.Notification(
         title="Yvette In Drive",
         message=f"Parking brake is off and Yvette is in drive",
-        target="marsahll",
+        target="marshall",
         priority="critical",
         tag="yvette_drive_critical",
         group="yvette_drive_critical",
@@ -32,7 +32,7 @@ def reset_charge_limit():
         noti = push.Notification(
             title="Charge Limit Reset",
             message=f"Yvette charge limit has been reset to {constants.YVETTE_CHARGE_LIMIT}%",
-            target="marsahll",
+            target="marshall",
             tag="yvette_charge_limit_reset",
             group="yvette_charge_limit_reset",
         )
