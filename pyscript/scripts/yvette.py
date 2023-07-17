@@ -7,10 +7,19 @@ import push
 import util
 
 
-# def charge_to_max(start_hour=None):
-
-
-# def reset_charge_to_max(start_hour=None):
+@util.require_pref_check("Yvette Drive Critical", "On")
+@state_trigger("binary_sensor.yvette_parking_brake=='off'")
+def send_critical_on_drive():
+    noti = push.Notification(
+        title="Yvette In Drive",
+        message=f"Parking brake is off and Yvette is in drive",
+        target="marsahll",
+        priority="critical",
+        tag="yvette_drive_critical",
+        group="yvette_drive_critical",
+    )
+    noti.send()
+    util.set_pref("Yvette Drive Critical", "Off")
 
 
 @state_trigger("binary_sensor.yvette_charger=='off'")

@@ -90,7 +90,7 @@ def space_heater_auto_off():
 @state_trigger("person.marshall", "person.emily")
 def notify_on_zone_change(**kwargs):
     name = state.getattr(kwargs["var_name"])["friendly_name"]
-    if util.get_pref(f"{name} Zone Notis") == "On":
+    if util.get_pref(f"{name} Zone Notifications") == "On":
         new_prefix = files.read("zones", [kwargs["value"], "prefix"], "")
         old_prefix = files.read("zones", [kwargs["old_value"], "prefix"], "")
 
