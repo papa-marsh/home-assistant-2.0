@@ -83,7 +83,6 @@ def reset_preferences():
     prefs = files.read(file_name="preferences")
     for pref in prefs:
         if "default" in prefs[pref] and prefs[pref]["value"] != prefs[pref]["default"]:
-            log.warning("here")
             util.set_pref(pref, prefs[pref]["default"])
             reset += f", {pref}"
     if reset:
