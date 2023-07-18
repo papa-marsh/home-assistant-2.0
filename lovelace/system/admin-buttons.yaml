@@ -12,3 +12,9 @@ cards:
     tap_action:
       action: call-service
       service: pyscript.reset_displays
+  - type: custom:button-card
+    name: Reset Prefs
+    icon: mdi:tune-vertical
+    tap_action:
+      action: call-service
+      service: lovelace.populate_preferences

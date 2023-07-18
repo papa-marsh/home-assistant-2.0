@@ -36,7 +36,8 @@ def write(file_name, key_list=None, value=None):
             contents_edit[key] = {}
         contents_edit = contents_edit[key]
 
-    contents_edit[key_list[-1]] = value
+    if key_list:
+        contents_edit[key_list[-1]] = value
 
     with open(path, "w") as file:
         yaml.safe_dump(contents, file)

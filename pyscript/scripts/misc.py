@@ -4,12 +4,14 @@ import constants
 import dates
 import files
 import push
+import secrets
 import util
 
 
 @event_trigger("sleepy_time")
 def ios_shortcut_sleepy_time():
-    if person.emily != "The DePrees":
+    pyscript.vars.sleepy_time_timestamp = datetime.now()
+    if person.emily != state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]:
         turn_on_sound_machines()
         media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
     if person.marshall != person.emily:
@@ -18,21 +20,23 @@ def ios_shortcut_sleepy_time():
             message=f"Emily triggered sleepy time at {dates.parse_timestamp(output_format='time')}",
             tag="sleepy_wake_time",
             group="sleepy_wake_time",
-            target="marshall"
+            target="marshall",
         )
         noti.send()
+
 
 @event_trigger("wakeup_time")
 def ios_shortcut_wakeup_time():
     if 6 <= datetime.now().hour < 17:
         turn_off_sound_machines()
     if person.marshall != person.emily:
+        elapsed = dates.format_duration(pyscript.vars.sleepy_time_timestamp)
         noti = push.Notification(
             title="Wakeup Time",
-            message=f"Emily triggered wakeup time at {dates.parse_timestamp(output_format='time')}",
+            message=f"Emily triggered wakeup time at {dates.parse_timestamp(output_format='time')} after {elapsed}",
             tag="sleepy_wake_time",
             group="sleepy_wake_time",
-            target="marshall"
+            target="marshall",
         )
         noti.send()
 
@@ -62,7 +66,10 @@ def feed_chelsea_notification():
             tag="feed_chelsea",
             group="feed_chelsea",
             priority="time-sensitive",
-            target="marshall" if person.marshall == "home" and person.emily == "The DePrees" else "all",
+            target="marshall"
+            if person.marshall == "home"
+            and person.emily == state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]
+            else "all",
         )
         noti.send()
 
@@ -83,26 +90,27 @@ def space_heater_auto_off():
 @state_trigger("person.marshall", "person.emily")
 def notify_on_zone_change(**kwargs):
     name = state.getattr(kwargs["var_name"])["friendly_name"]
-    new_prefix = files.read("zones", [kwargs["value"], "prefix"], "")
-    old_prefix = files.read("zones", [kwargs["old_value"], "prefix"], "")
+    if util.get_pref(f"{name} Zone Notifications") == "On":
+        new_prefix = files.read("zones", [kwargs["value"], "prefix"], "")
+        old_prefix = files.read("zones", [kwargs["old_value"], "prefix"], "")
 
-    if not files.read("zones", [kwargs["value"], "is_region"], False):
-        message = f"{name} arrived at {new_prefix}{kwargs['value']}"
-    elif not files.read("zones", [kwargs["old_value"], "is_region"], False):
-        message = f"{name} left {old_prefix}{kwargs['old_value']}"
-    elif kwargs["value"] != "not_home":
-        message = f"{name} is in {new_prefix}{kwargs['value']}"
-    else:
-        message = f"{name} left {old_prefix}{kwargs['old_value']}"
+        if not files.read("zones", [kwargs["value"], "is_region"], False):
+            message = f"{name} arrived at {new_prefix}{kwargs['value']}"
+        elif not files.read("zones", [kwargs["old_value"], "is_region"], False):
+            message = f"{name} left {old_prefix}{kwargs['old_value']}"
+        elif kwargs["value"] != "not_home":
+            message = f"{name} is in {new_prefix}{kwargs['value']}"
+        else:
+            message = f"{name} left {old_prefix}{kwargs['old_value']}"
 
-    noti = push.Notification(
-        message=message,
-        group="notify_on_zone_change",
-        tag="notify_on_zone_change",
-        target="emily" if name == "Marshall" else "marshall",
-    )
+        noti = push.Notification(
+            message=message,
+            group="notify_on_zone_change",
+            tag="notify_on_zone_change",
+            target="emily" if name == "Marshall" else "marshall",
+        )
 
-    noti.send()
+        noti.send()
 
 
 @time_trigger("cron(0 5 * * *)")

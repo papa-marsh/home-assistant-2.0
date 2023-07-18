@@ -18,13 +18,13 @@ def door_open_notification(**kwargs):
     if kwargs["value"] in ["open", "on"] and kwargs["old_value"] in ["closed", "off"]:
         id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
         name = state.getattr(kwargs["var_name"])["friendly_name"].replace(" Sensor", "")
-        now = datetime.now()
+        open_time = datetime.now()
         task.unique(f"{id}_left_open")
         task.sleep(10 * 60)
         door_open_notification_loop(
             id=id,
             name=name,
-            open_time=now,
+            open_time=open_time,
             silent=False,
         )
 
@@ -40,7 +40,6 @@ def door_open_notification_loop(id, name, open_time, silent):
         priority="active" if silent else "time-sensitive",
         action_data={"id": id, "name": name, "open_time": open_time},
     )
-
     noti.add_action(
         id=f"ignore_{id}",
         title="Ignore",
@@ -49,6 +48,11 @@ def door_open_notification_loop(id, name, open_time, silent):
         noti.add_action(
             id=f"silence_{id}",
             title="Silence",
+        )
+    if id == "slider_door":
+        noti.add_action(
+            id=f"dismiss_{id}",
+            title="Dismiss",
         )
     if "stall" in id:
         noti.add_action(
@@ -72,8 +76,25 @@ def silence_door_open_notification(**kwargs):
     door_open_notification_loop(
         id=kwargs["action_data"]["id"],
         name=kwargs["action_data"]["name"],
-        open_time=kwargs["action_data"]["open_time"],
+        open_time=dates.parse_timestamp(kwargs["action_data"]["open_time"]),
         silent=True,
+    )
+
+
+@event_trigger(
+    "mobile_app_notification_action",
+    "action == 'dismiss_slider_door'",
+)
+def silence_door_open_notification(**kwargs):
+    id = kwargs["action_data"]["id"]
+    task.unique(f"slider_door_left_open")
+    noti = push.Notification(
+        title="Air Off",
+        message="The thermostat has been turned off and slider door notification dismissed",
+        tag="slider_door_left_open",
+        group="slider_door_left_open",
+        target="all",
+        priority="time-sensitive",
     )
 
 
@@ -108,7 +129,7 @@ def close_garage_from_notification(**kwargs):
     "binary_sensor.slider_door_sensor=='off'",
 )
 def clear_door_open_notification(**kwargs):
-    if kwargs["value"] in ["open", "on"] and kwargs["old_value"] in ["closed", "off"]:
+    if kwargs["value"] in ["closed", "off"] and kwargs["old_value"] in ["open", "on"]:
         id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
         task.unique(f"{id}_left_open")
         noti = push.Notification(tag=f"{id}_left_open")
@@ -120,16 +141,15 @@ def clear_door_open_notification(**kwargs):
 )
 def garage_auto_open(**kwargs):
     now = datetime.now().astimezone(tz.tzlocal())
+    location = device_tracker.yvette_location_tracker
     if (
         kwargs["value"] == "home"
         and kwargs["old_value"] != "home"
         and cover.east_stall == "closed"
         and 6 <= now.hour < 23
         and (now - cover.east_stall.last_changed).seconds > 300
-        and (
-            device_tracker.yvette_location_tracker != "home"
-            or (now - device_tracker.yvette_location_tracker.last_changed).seconds < 300
-        )
+        and (location != "home" or (now - location.last_changed).seconds < 300)
+        and files.read("zones", [location, "garage_auto_open"], False)
     ):
         cover.open_cover(entity_id="cover.east_stall")
 
@@ -272,12 +292,23 @@ def entity_card_update_row_2():
 
 
 @time_trigger("startup", "cron(0 0,19 * * *)")
+@state_trigger("binary_sensor.emily_s_iphone_focus")
 def entity_card_update_row_3():
-    now = datetime.today()
-    next_bin_day = get_next_bin_day()
-    if next_bin_day == now.date() and now.hour >= 18:
-        pyscript.entity_card_home.blink = True
-    pyscript.entity_card_home.row_3_value = dates.date_countdown(next_bin_day)
+    task.unique("home_entity_card_update_row_3")
+    if binary_sensor.emily_s_iphone_focus == "on" and 9 <= datetime.now().hour < 18:
+        pyscript.entity_card_home.row_3_value = dates.format_duration(
+            binary_sensor.emily_s_iphone_focus.last_changed
+        )
+        pyscript.entity_card_home.row_3_icon = "mdi:bed-clock"
+        task.sleep(60)
+        entity_card_update_row_3()
+    else:
+        now = datetime.now()
+        next_bin_day = get_next_bin_day()
+        if next_bin_day == now.date() and now.hour >= 18:
+            pyscript.entity_card_home.blink = True
+        pyscript.entity_card_home.row_3_value = dates.date_countdown(next_bin_day)
+        pyscript.entity_card_home.row_3_icon = "mdi:delete"
 
 
 def get_next_bin_day():

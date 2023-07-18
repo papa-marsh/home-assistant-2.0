@@ -1,12 +1,39 @@
 import os
 import constants
+import dates
 import files
+import push
 import util
 
 
-@time_trigger("cron(0 0 * * *)")
+@time_trigger("cron(0 3 * * *)")
+def sync_zones():
+    file_zones = files.read("zones")
+    hass_zones = [
+        state.getattr(zone)["friendly_name"] for zone in state.names(domain="zone")
+    ]
+
+    for zone in hass_zones:
+        if zone not in file_zones:
+            file_zones[zone] = {"needs_disposition": "New Zone"}
+    for zone in file_zones:
+        if zone not in hass_zones and zone != "not_home":
+            file_zones[zone]["needs_disposition"] = "Stale zone"
+    files.overwrite("zones", dict(sorted(file_zones.items())))
+
+
+@time_trigger("cron(*/15 * * * *)")
+def pref_event_handler():
+    pref_list = files.read(file_name="preferences")
+    now = dates.parse_timestamp(output_format="time")
+    for pref in pref_list:
+        if pref_list[pref]["value"] == now and "service" in pref_list[pref]:
+            service.call("pyscript", pref_list[pref]["service"])
+
+
+@time_trigger("cron(0 1 * * *)")
 def backup_files():
-    for file in [f for f in os.listdir(constants.BASE_FILE_PATH)]:
+    for file in os.listdir(constants.BASE_FILE_PATH):
         if ".yaml" in file:
             file_name = file.split(".yaml")[0]
             files.overwrite(f"backups/{file_name}", files.read(file_name))
@@ -17,7 +44,11 @@ def backup_files():
 def populate_preferences():
     input_select.set_options(
         entity_id="input_select.preference_selector",
-        options=[option for option in files.read(file_name="preferences")],
+        options=[pref for pref in files.read(file_name="preferences")],
+        blocking=True,
+    )
+    input_select.select_first(
+        entity_id="input_select.preference_selector",
         blocking=True,
     )
 
@@ -25,7 +56,7 @@ def populate_preferences():
 @state_trigger("input_select.preference_selector")
 def populate_preference_options(**kwargs):
     pref = util.get_pref(kwargs["value"], value_only=False)
-    pyscript.flags.preference_value_mutex = True
+    pyscript.vars.preference_value_mutex = True
     input_select.set_options(
         entity_id="input_select.preference_value",
         options=pref["options"],
@@ -34,31 +65,54 @@ def populate_preference_options(**kwargs):
     input_select.select_option(
         entity_id="input_select.preference_value", option=pref["value"], blocking=True
     )
-    pyscript.flags.preference_value_mutex = False
+    pyscript.vars.preference_value_mutex = False
 
 
 @state_trigger("input_select.preference_value")
 def set_preference_value(**kwargs):
-    if not pyscript.flags.preference_value_mutex:
-        util.set_pref(input_select.preference_selector, str(kwargs["value"]))
+    if not pyscript.vars.preference_value_mutex:
+        util.set_pref(
+            input_select.preference_selector,
+            str(kwargs["value"]),
+        )
+
+
+@time_trigger("cron(0 5 * * *)")
+def reset_preferences():
+    reset = ""
+    prefs = files.read(file_name="preferences")
+    for pref in prefs:
+        if "default" in prefs[pref] and prefs[pref]["value"] != prefs[pref]["default"]:
+            util.set_pref(pref, prefs[pref]["default"])
+            reset += f", {pref}"
+    if reset:
+        noti = push.Notification(
+            title="Preferences Reset",
+            message=f"The following preferences were reset to default: {reset[2:]}",
+            tag="prefs_reset",
+            group="prefs_reset",
+            target="marshall",
+        )
+        noti.send()
+        populate_preferences()
 
 
 @time_trigger("startup")
-def persist_flags():
+def persist_vars():
     state.persist(
-        "pyscript.flags",
+        "pyscript.vars",
         default_value="",
-        default_attributes={},
+        default_attributes={"pyscript.vars.sleepy_time_timestamp": ""},
     )
-    pyscript.flags.ios_actions_unlocked = False
-    pyscript.flags.preference_value_mutex = False
+    pyscript.vars.ios_actions_unlocked = False
+    pyscript.vars.preference_value_mutex = False
 
 
 @event_trigger("ios.action_fired", "actionName=='Unlock Actions'")
 def ios_unlock_actions(**kwargs):
-    state.setattr(f"pyscript.flags.ios_actions_unlocked", True)
+    state.setattr(f"pyscript.vars.ios_actions_unlocked", True)
     task.sleep(10)
-    state.setattr(f"pyscript.flags.ios_actions_unlocked", False)
+    state.setattr(f"pyscript.vars.ios_actions_unlocked", False)
 
 
 @time_trigger("cron(*/10 * * * *)")

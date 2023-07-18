@@ -20,6 +20,31 @@ def parse_timestamp(timestamp=None, output_format="iso"):
     return timestamp
 
 
+def format_duration(timestamp, comparison=None, include_seconds=False):
+    if isinstance(timestamp, timedelta):
+        interval = timestamp
+    elif comparison:
+        interval = timestamp - comparison
+    else:
+        interval = timestamp.astimezone(tz.tzlocal()) - datetime.now().astimezone(
+            tz.tzlocal()
+        )
+    hours, minutes, seconds = str(abs(interval)).split(".")[0].split(":")
+    duration = ""
+
+    if "days" in hours:
+        days, hours = hours.split(" days, ")
+        duration += f"{days}d"
+    if hours != "0":
+        duration += f"{hours}h"
+    if minutes != "00" or hours != "0" or not include_seconds:
+        duration += f"{int(minutes)}m"
+    if include_seconds:
+        duration += f"{int(seconds)}s"
+
+    return duration
+
+
 def get_next_weekday(day):
     today = date.today()
     day_map = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}

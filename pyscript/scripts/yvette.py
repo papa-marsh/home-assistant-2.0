@@ -1,15 +1,71 @@
 from datetime import datetime
 from dateutil import tz
 import secrets
+import constants
 import dates
 import push
 import util
 
 
-# def charge_to_max(start_hour=None):
+@util.require_pref_check("Yvette Drive Critical", "On")
+@state_trigger("binary_sensor.yvette_parking_brake=='off'")
+def send_critical_on_drive():
+    noti = push.Notification(
+        title="Yvette In Drive",
+        message=f"Parking brake is off and Yvette is in drive",
+        target="marshall",
+        priority="critical",
+        tag="yvette_drive_critical",
+        group="yvette_drive_critical",
+    )
+    noti.send()
+    util.set_pref("Yvette Drive Critical", "Off")
 
 
-# def reset_charge_to_max(start_hour=None):
+@state_trigger("binary_sensor.yvette_charger=='off'")
+def reset_charge_limit():
+    task.unique("yvette_charge_if_low")
+    if number.yvette_charge_limit != constants.YVETTE_CHARGE_LIMIT:
+        number.set_value(
+            entity_id="number.yvette_charge_limit", value=constants.YVETTE_CHARGE_LIMIT
+        )
+        noti = push.Notification(
+            title="Charge Limit Reset",
+            message=f"Yvette charge limit has been reset to {constants.YVETTE_CHARGE_LIMIT}%",
+            target="marshall",
+            tag="yvette_charge_limit_reset",
+            group="yvette_charge_limit_reset",
+        )
+        noti.send()
+
+
+@service("pyscript.yvette_charge_to_max")
+def charge_to_max():
+    if binary_sensor.yvette_charger == "on":
+        number.set_value(entity_id="number.yvette_charge_limit", value=100)
+        task.sleep(60)
+        switch.turn_on(entity_id="switch.yvette_charger")
+    else:
+        noti = push.Notification(
+            title="Command Failed",
+            message=f"Can't charge to max because Yvette is not plugged in",
+            target="marshall",
+            tag="charge_to_max_failed",
+            group="charge_to_max_failed",
+        )
+        noti.send()
+
+
+@state_trigger("binary_sensor.yvette_charger=='on'")
+def charge_if_low():
+    task.unique("yvette_charge_if_low")
+    if int(sensor.yvette_battery) < constants.YVETTE_LOW_THRESHOLD:
+        switch.turn_on(entity_id="switch.yvette_charger")
+        while int(sensor.yvette_battery) < constants.YVETTE_LOW_THRESHOLD:
+            if datetime.now().hour >= 23:
+                return
+            task.sleep(60)
+        switch.turn_off(entity_id="switch.yvette_charger")
 
 
 @time_trigger("cron(30 22 * * *)")
@@ -98,10 +154,19 @@ def complication_leading():
 
 
 @time_trigger("startup")
-@state_trigger("sensor.yvette_battery")
+@state_trigger("sensor.yvette_battery", "climate.yvette_hvac_climate_system")
 def complication_outer():
     if sensor.yvette_battery != "unavailable":
-        pyscript.complication_yvette.outer = f"{sensor.yvette_battery}%"
+        pyscript.complication_yvette.outer = f"{sensor.yvette_battery}"
+    if climate.yvette_hvac_climate_system == "heat_cool":
+        pyscript.complication_yvette.outer += (
+            "❄️"
+            if climate.yvette_hvac_climate_system.current_temperature
+            >= climate.yvette_hvac_climate_system.temperature
+            else "♨️"
+        )
+    else:
+        pyscript.complication_yvette.outer += "%"
 
 
 @time_trigger("startup")
