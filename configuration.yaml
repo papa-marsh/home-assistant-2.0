@@ -19,6 +19,9 @@ logger:
   default: warn
   logs:
     led_ble.led_ble: error
+    somecomfort: fatal
+    custom_components.tesla_custom: fatal
+    pychromecast.socket_client: fatal
 
 lovelace:
   mode: storage
