@@ -54,8 +54,8 @@ def get_pref(pref, value_only=True):
 
 
 def set_pref(pref, value):
+    pref_object = get_pref(pref, value_only=False)
     if value in ["next", "prev"]:
-        pref_object = get_pref(pref, value_only=False)
         try:
             index = pref_object["options"].index(pref_object["value"])
             new_index = (index + 1) if value == "next" else (index - 1)
@@ -66,17 +66,21 @@ def set_pref(pref, value):
             new_value = pref_object["options"][new_index]
         except:
             new_value = pref_object["options"][0]
+    elif value == "default" and "default" in pref_object:
+        new_value = pref_object["default"]
     else:
         new_value = value
 
     files.write("preferences", [pref, "value"], new_value)
 
 
-def require_pref_check(pref, value):
+def require_pref_check(pref, value, reset=False):
     def decorator(func):
         def inner(*args, **kwargs):
             if get_pref(pref) == value:
                 func(*args, **kwargs)
+                if reset:
+                    set_pref(pref, "default")
 
         return inner
 

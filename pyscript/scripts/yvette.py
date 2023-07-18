@@ -7,7 +7,7 @@ import push
 import util
 
 
-@util.require_pref_check("Yvette Drive Critical", "On")
+@util.require_pref_check("Yvette Drive Critical", "On", reset=True)
 @state_trigger("binary_sensor.yvette_parking_brake=='off'")
 def send_critical_on_drive():
     noti = push.Notification(
@@ -19,7 +19,6 @@ def send_critical_on_drive():
         group="yvette_drive_critical",
     )
     noti.send()
-    util.set_pref("Yvette Drive Critical", "Off")
 
 
 @state_trigger("binary_sensor.yvette_charger=='off'")
