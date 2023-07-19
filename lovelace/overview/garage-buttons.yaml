@@ -2,7 +2,6 @@ type: horizontal-stack
 cards:
   - type: custom:button-card
     entity: cover.east_stall
-    name: Marshall's Stall
     styles:
       card:
         - height: 116px
@@ -18,7 +17,6 @@ cards:
         entity_id: cover.east_stall
   - type: custom:button-card
     entity: cover.west_stall
-    name: Emily's Stall
     styles:
       card:
         - height: 116px
