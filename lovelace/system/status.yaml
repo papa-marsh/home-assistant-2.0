@@ -30,13 +30,3 @@ style:
       margin-top: -6px !important;
       margin-bottom: -5px !important;
     }
-  # hui-sensor-entity-row:
-  #   $: |
-  #     hui-generic-entity-row {
-  #       margin-top: -5px !important;
-  #       margin-bottom: -5px !important;
-  #     }
-  #     hui-simple-entity-row {
-  #       margin-top: -5px !important;
-  #       margin-bottom: -5px !important;
-  #     }
