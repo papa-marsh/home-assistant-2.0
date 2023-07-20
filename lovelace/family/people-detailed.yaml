@@ -11,8 +11,7 @@ entities:
   - entity: sensor.emily_s_iphone_battery_level
   - entity: sensor.emily_s_iphone_connection_type
 style:
-  .entity:
-    $: |
-      div {
-        overflow: visible !important;
-      }
+  .entity $: |
+    div {
+      overflow: visible !important;
+    }

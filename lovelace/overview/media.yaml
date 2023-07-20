@@ -139,18 +139,17 @@ entities:
         ha-card {
           margin-top: 9px !important;
         }
-      mmp-powerstrip:
-        $:
-          mmp-media-controls:
-            .: |
-              mmp-media-controls {
-                max-width: 95% !important;
-                margin-right: -5px !important;
-              }
-            $: |
-              ha-icon-button {
-                margin: 0 -10px !important;
-              }
+      mmp-powerstrip $:
+        mmp-media-controls:
+          .: |
+            mmp-media-controls {
+              max-width: 95% !important;
+              margin-right: -5px !important;
+            }
+          $: |
+            ha-icon-button {
+              margin: 0 -10px !important;
+            }
     entity: media_player.living_room
     group: true
     name: Living Room
@@ -198,18 +197,17 @@ entities:
             ha-card {
               margin-top: -21px !important;
             }
-          mmp-powerstrip:
-            $:
-              mmp-media-controls:
-                .: |
-                  mmp-media-controls {
-                    max-width: 95% !important;
-                    margin-right: -5px !important;
-                  }
-                $: |
-                  ha-icon-button {
-                    margin: 0 -10px 0 6px !important;
-                  }
+          mmp-powerstrip $:
+            mmp-media-controls:
+              .: |
+                mmp-media-controls {
+                  max-width: 95% !important;
+                  margin-right: -5px !important;
+                }
+              $: |
+                ha-icon-button {
+                  margin: 0 -10px 0 6px !important;
+                }
   - type: custom:state-switch
     entity: pyscript.media_card
     default: hidden
@@ -239,18 +237,17 @@ entities:
             ha-card {
               margin-top: -20px !important;
             }
-          mmp-powerstrip:
-            $:
-              mmp-media-controls:
-                .: |
-                  mmp-media-controls {
-                    max-width: 95% !important;
-                    margin-right: -5px !important;
-                  }
-                $: |
-                  ha-icon-button {
-                    margin: 0 -10px 0 -4px !important;
-                  }
+          mmp-powerstrip $:
+            mmp-media-controls:
+              .: |
+                mmp-media-controls {
+                  max-width: 95% !important;
+                  margin-right: -5px !important;
+                }
+              $: |
+                ha-icon-button {
+                  margin: 0 -10px 0 -4px !important;
+                }
   - type: custom:state-switch
     entity: pyscript.media_card
     default: hidden
@@ -280,18 +277,17 @@ entities:
             ha-card {
               margin-top: -25px !important;
             }
-          mmp-powerstrip:
-            $:
-              mmp-media-controls:
-                .: |
-                  mmp-media-controls {
-                    max-width: 95% !important;
-                    margin-right: -5px !important;
-                  }
-                $: |
-                  ha-icon-button {
-                    margin: 0 -10px 0 -6px !important;
-                  }
+          mmp-powerstrip $:
+            mmp-media-controls:
+              .: |
+                mmp-media-controls {
+                  max-width: 95% !important;
+                  margin-right: -5px !important;
+                }
+              $: |
+                ha-icon-button {
+                  margin: 0 -10px 0 -6px !important;
+                }
   - type: custom:state-switch
     entity: pyscript.media_card
     default: hidden
@@ -321,18 +317,17 @@ entities:
             ha-card {
               margin-top: -25px !important;
             }
-          mmp-powerstrip:
-            $:
-              mmp-media-controls:
-                .: |
-                  mmp-media-controls {
-                    max-width: 95% !important;
-                    margin-right: -5px !important;
-                  }
-                $: |
-                  ha-icon-button {
-                    margin: 0 -10px 0 4px !important;
-                  }
+          mmp-powerstrip $:
+            mmp-media-controls:
+              .: |
+                mmp-media-controls {
+                  max-width: 95% !important;
+                  margin-right: -5px !important;
+                }
+              $: |
+                ha-icon-button {
+                  margin: 0 -10px 0 4px !important;
+                }
 style: |
   ha-card {
     height: 319px !important;

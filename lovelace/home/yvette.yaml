@@ -1,0 +1,36 @@
+type: entities
+entities:
+  - entity: update.yvette_software_update
+    name: Software Version
+  - entity: binary_sensor.yvette_asleep
+    name: Sleep Mode
+  - entity: binary_sensor.yvette_charger
+    name: Charger
+  - entity: sensor.yvette_battery
+    name: Battery Level
+  - entity: binary_sensor.yvette_doors
+    name: Doors
+  - entity: device_tracker.yvette_location_tracker
+    name: Location
+  - entity: number.yvette_charge_limit
+    name: Charge Limit
+  - entity: select.yvette_heated_seat_left
+    name: Driver Seat Heater
+  - entity: switch.yvette_heated_steering
+    name: Steering Wheel Heater
+  - entity: lock.yvette_doors
+    name: Door Locks
+  - entity: switch.yvette_sentry_mode
+    name: Sentry Mode
+  - entity: cover.yvette_trunk
+    name: Trunk
+  - entity: cover.yvette_frunk
+    name: Frunk
+  - entity: cover.yvette_windows
+    name: Windows
+style:
+  "#states": |
+    div {
+      margin-top: -2px !important;
+      margin-bottom: -3px !important;
+    }

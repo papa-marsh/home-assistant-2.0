@@ -1,7 +1,27 @@
 type: entities
 entities:
+  - type: custom:fold-entity-row
+    head:
+      entity: sensor.printer_status
+      name: Printer
+    entities:
+      - entity: sensor.printer_page_counter
+        name: Page Counter
+      - entity: sensor.printer_black_ink_remaining
+        name: Black Remaining
+      - entity: sensor.printer_magenta_ink_remaining
+        name: Magenta Remaining
+      - entity: sensor.printer_cyan_ink_remaining
+        name: Cyan Remaining
+      - entity: sensor.printer_yellow_ink_remaining
+        name: Yellow Remaining
   - entity: switch.master_sound_machine
   - entity: switch.ellies_sound_machine
+  - entity: switch.playstation_fans
+    name: Office Media Fans
   - entity: switch.space_heater
-title: Devices
-show_header_toggle: false
+style:
+  fold-entity-row $: |
+    ha-icon {
+      margin-left: 10px !important;
+    }
