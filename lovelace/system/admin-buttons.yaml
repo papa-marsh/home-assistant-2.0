@@ -1,20 +1,39 @@
-type: horizontal-stack
+type: vertical-stack
 cards:
-  - type: custom:button-card
-    name: Restart HASS
-    icon: mdi:home-assistant
-    tap_action:
-      action: call-service
-      service: homeassistant.restart
-  - type: custom:button-card
-    name: Reset Displays
-    icon: mdi:cast
-    tap_action:
-      action: call-service
-      service: pyscript.reset_displays
-  - type: custom:button-card
-    name: Reset Prefs
-    icon: mdi:tune-vertical
-    tap_action:
-      action: call-service
-      service: lovelace.populate_preferences
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        name: Restart HASS
+        icon: mdi:home-assistant
+        tap_action:
+          action: call-service
+          service: homeassistant.restart
+        styles:
+          card:
+            - height: 104px
+      - type: custom:button-card
+        name: Reset Displays
+        icon: mdi:cast
+        tap_action:
+          action: call-service
+          service: pyscript.reset_displays
+        styles:
+          card:
+            - height: 104px
+  - type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        name: Reload Preferences
+        icon: mdi:tune-vertical
+        tap_action:
+          action: call-service
+          service: lovelace.populate_preferences
+        styles:
+          card:
+            - height: 104px
+      - type: custom:button-card
+        name: " "
+        icon:
+        styles:
+          card:
+            - height: 104px

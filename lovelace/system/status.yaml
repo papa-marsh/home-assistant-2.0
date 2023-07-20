@@ -1,0 +1,42 @@
+type: entities
+entities:
+  - entity: sensor.home_assistant_uptime
+    name: Last Restart
+  - entity: sensor.last_boot
+    name: Last Boot
+  - entity: binary_sensor.remote_ui
+    name: Cloud Remote UI
+  - entity: binary_sensor.z_wave_js_running
+    name: Z-Wave JS
+  - entity: sensor.backup_state
+    name: Cloud Backup
+  - entity: binary_sensor.rpi_power_status
+    name: Host Power Status
+  - entity: sensor.cpu_temperature
+    name: CPU Temperature
+  - entity: sensor.processor_use
+    name: Processor Use
+  - entity: sensor.disk_use_percent_home
+    name: Disk Use
+  - entity: sensor.memory_use_percent
+    name: Memory Use
+  - entity: sensor.swap_use
+    name: Swap Use
+  - entity: sensor.swap_free
+    name: Swap Free
+style:
+  "#states": |
+    div {
+      margin-top: -6px !important;
+      margin-bottom: -5px !important;
+    }
+  # hui-sensor-entity-row:
+  #   $: |
+  #     hui-generic-entity-row {
+  #       margin-top: -5px !important;
+  #       margin-bottom: -5px !important;
+  #     }
+  #     hui-simple-entity-row {
+  #       margin-top: -5px !important;
+  #       margin-bottom: -5px !important;
+  #     }

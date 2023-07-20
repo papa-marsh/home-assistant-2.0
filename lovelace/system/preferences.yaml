@@ -4,15 +4,27 @@ entities:
     name: Select a Preference...
     tap_action: none
     card_mod:
-      style: |
-        ha-select {
-          margin-bottom: 6px !important;
-        }
+      style:
+        .: |
+          ha-select {
+            margin-top: -10px !important;
+            margin-bottom: 2px !important;
+          }
+        hui-generic-entity-row $: |
+          state-badge {
+            display: none;
+          }
   - entity: input_select.preference_value
     name: Select a Value...
     tap_action: none
     card_mod:
-      style: |
-        ha-select {
-          margin-bottom: 6px !important;
-        }
+      style:
+        .: |
+          ha-select {
+            margin-top: 2px !important;
+            margin-bottom: 6px !important;
+          }
+        hui-generic-entity-row $: |
+          state-badge {
+            display: none;
+          }

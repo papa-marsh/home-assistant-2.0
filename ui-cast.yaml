@@ -103,7 +103,8 @@ views:
             - type: vertical-stack
               cards:
                 - !include lovelace/system/admin-buttons.yaml
+                - !include lovelace/system/updates.yaml
             - type: vertical-stack
               cards:
                 - !include lovelace/system/preferences.yaml
-                - !include lovelace/system/updates.yaml
+                - !include lovelace/system/status.yaml
