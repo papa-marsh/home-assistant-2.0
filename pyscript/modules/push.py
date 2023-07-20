@@ -86,3 +86,8 @@ def update_location(target="all"):
 def update_complications(target="all"):
     payload = {"message": "update_complications"}
     call_notify_service(target=target, payload=payload)
+
+
+def debug(message="Placeholder message"):
+    payload = {"title": "Debug", "message": message, "group": "debug"}
+    call_notify_service(target="marshall", payload=payload)

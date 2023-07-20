@@ -163,6 +163,7 @@ def ios_garage_stall(**kwargs):
     cover.toggle(entity_id=f"cover.{stall}_stall")
 
 
+@util.require_pref_check("Door Open Critical Notifications", "On")
 @state_trigger(
     "binary_sensor.front_door_sensor",
     "binary_sensor.garage_door_sensor",

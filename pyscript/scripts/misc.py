@@ -90,8 +90,14 @@ def space_heater_auto_off():
 @state_trigger("person.marshall", "person.emily")
 def notify_on_zone_change(**kwargs):
     name = state.getattr(kwargs["var_name"])["friendly_name"]
+    task.unique(f"{name.lower()}_zone_notify")
     if util.get_pref(f"{name} Zone Notifications") == "On":
-        new_prefix = files.read("zones", [kwargs["value"], "prefix"], "")
+        new_zone = files.read("zones", [kwargs["value"]])
+        if "debounce" in new_zone:
+            task.sleep(new_zone["debounce"])
+            push.debug("zone change debounce reached")
+
+        new_prefix = new_zone["prefix"] if "prefix" in new_zone else ""
         old_prefix = files.read("zones", [kwargs["old_value"], "prefix"], "")
 
         if not files.read("zones", [kwargs["value"], "is_region"], False):
