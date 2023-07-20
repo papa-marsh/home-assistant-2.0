@@ -10,8 +10,6 @@ entities:
     name: Battery Level
   - entity: binary_sensor.yvette_doors
     name: Doors
-  - entity: device_tracker.yvette_location_tracker
-    name: Location
   - entity: number.yvette_charge_limit
     name: Charge Limit
   - entity: select.yvette_heated_seat_left
@@ -28,9 +26,11 @@ entities:
     name: Frunk
   - entity: cover.yvette_windows
     name: Windows
-style:
-  "#states": |
-    div {
-      margin-top: -2px !important;
-      margin-bottom: -3px !important;
-    }
+style: |
+  ha-card {
+    height: 584px !important;
+  }
+  #states div {
+    margin-top: 2px !important;
+    margin-bottom: -2px !important;
+  }

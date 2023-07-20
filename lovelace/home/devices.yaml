@@ -20,7 +20,18 @@ entities:
   - entity: switch.playstation_fans
     name: Office Media Fans
   - entity: switch.space_heater
+  - entity: binary_sensor.chelsea_cabinet_sensor
+  - entity: light.outside_lights
+  - entity: light.office_door_led
 style:
+  .: |
+    ha-card {
+      height: 436px !important;
+    }
+    #states div {
+      margin-top: -2px !important;
+      margin-bottom: 14px !important;
+    }
   fold-entity-row $: |
     ha-icon {
       margin-left: 10px !important;
