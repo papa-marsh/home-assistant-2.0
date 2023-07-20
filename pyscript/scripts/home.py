@@ -2,6 +2,7 @@ from datetime import date, datetime, timedelta
 from dateutil import tz
 import constants
 import dates
+import files
 import push
 import util
 
@@ -85,7 +86,7 @@ def silence_door_open_notification(**kwargs):
     "mobile_app_notification_action",
     "action == 'dismiss_slider_door'",
 )
-def silence_door_open_notification(**kwargs):
+def dismiss_slider_open_notification(**kwargs):
     id = kwargs["action_data"]["id"]
     task.unique(f"slider_door_left_open")
     noti = push.Notification(
