@@ -1,9 +1,9 @@
 type: entities
 entities:
   - entity: sensor.home_assistant_uptime
-    name: Last Restart
+    name: Last OS Restart
   - entity: sensor.last_boot
-    name: Last Boot
+    name: Last Host Reboot
   - entity: binary_sensor.remote_ui
     name: Cloud Remote UI
   - entity: binary_sensor.z_wave_js_running

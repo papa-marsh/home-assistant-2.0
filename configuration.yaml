@@ -18,10 +18,14 @@ homeassistant:
 logger:
   default: warn
   logs:
-    led_ble.led_ble: error
-    somecomfort: fatal
     custom_components.tesla_custom: fatal
+    homeassistant.core: fatal
+    homeassistant.components.input_select: fatal
+    homeassistant.components.led_ble: fatal
+    led_ble.led_ble: fatal
+    pychromecast.controllers: fatal
     pychromecast.socket_client: fatal
+    somecomfort: fatal
 
 lovelace:
   mode: storage

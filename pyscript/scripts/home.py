@@ -97,6 +97,7 @@ def dismiss_slider_open_notification(**kwargs):
         target="all",
         priority="time-sensitive",
     )
+    noti.send()
 
 
 @event_trigger(

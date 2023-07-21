@@ -91,6 +91,7 @@ def space_heater_auto_off():
 def notify_on_zone_change(**kwargs):
     name = state.getattr(kwargs["var_name"])["friendly_name"]
     task.unique(f"{name.lower()}_zone_notify")
+
     if util.get_pref(f"{name} Zone Notifications") == "On":
         new_zone = files.read("zones", [kwargs["value"]])
         if "debounce" in new_zone:
