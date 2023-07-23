@@ -14,6 +14,7 @@ import util
     "binary_sensor.garage_door_sensor",
     "binary_sensor.service_door_sensor",
     "binary_sensor.slider_door_sensor",
+    "binary_sensor.refrigerator_door_sensor",
 )
 def door_open_notification(**kwargs):
     if kwargs["value"] in ["open", "on"] and kwargs["old_value"] in ["closed", "off"]:
@@ -30,6 +31,7 @@ def door_open_notification(**kwargs):
         )
 
 
+@util.require_pref_check("Door Open Reminder Notifications", "On")
 def door_open_notification_loop(id, name, open_time, silent):
     task.unique(f"{id}_left_open")
     noti = push.Notification(
@@ -70,7 +72,7 @@ def door_open_notification_loop(id, name, open_time, silent):
 
 @event_trigger(
     "mobile_app_notification_action",
-    "action in ['silence_east_stall', 'silence_wast_stall', 'silence_front_door', 'silence_garage_door', 'silence_service_door', 'silence_slider_door']",
+    "action in ['silence_east_stall', 'silence_wast_stall', 'silence_front_door', 'silence_garage_door', 'silence_service_door', 'silence_slider_door', 'silence_refrigerator_door]",
 )
 def silence_door_open_notification(**kwargs):
     task.unique(f"{kwargs['action_data']['id']}_left_open")
@@ -130,6 +132,7 @@ def close_garage_from_notification(**kwargs):
     "binary_sensor.garage_door_sensor=='off'",
     "binary_sensor.service_door_sensor=='off'",
     "binary_sensor.slider_door_sensor=='off'",
+    "binary_sensor.refrigerator_door_sensor=='off'",
 )
 def clear_door_open_notification(**kwargs):
     if kwargs["value"] in ["closed", "off"] and kwargs["old_value"] in ["open", "on"]:
