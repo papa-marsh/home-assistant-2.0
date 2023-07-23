@@ -106,6 +106,7 @@ def persist_vars():
     )
     pyscript.vars.ios_actions_unlocked = False
     pyscript.vars.preference_value_mutex = False
+    pyscript.vars.suppress_zone_noti = {"Marshall": False, "Emily": False}
 
 
 @event_trigger("ios.action_fired", "actionName=='Unlock Actions'")

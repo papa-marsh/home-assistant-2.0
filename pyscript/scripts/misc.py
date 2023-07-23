@@ -62,7 +62,7 @@ def feed_chelsea_notification():
     ) < datetime.now().astimezone(tz.tzlocal()) - timedelta(hours=2):
         noti = push.Notification(
             title="Feed Beth",
-            message="Don't forget to feed Chelsea",
+            message=f"Don't forget Chelsea's {'breakfast' if datetime.now().hour < 12 else 'dinner'}",
             tag="feed_chelsea",
             group="feed_chelsea",
             priority="time-sensitive",
@@ -92,10 +92,15 @@ def notify_on_zone_change(**kwargs):
     name = state.getattr(kwargs["var_name"])["friendly_name"]
     task.unique(f"{name.lower()}_zone_notify")
 
-    if util.get_pref(f"{name} Zone Notifications") == "On":
+    if pyscript.vars.suppress_zone_noti[name]:
+        pyscript.vars.suppress_zone_noti[name] = False
+
+    elif util.get_pref(f"{name} Zone Notifications") == "On":
         new_zone = files.read("zones", [kwargs["value"]])
         if "debounce" in new_zone:
+            pyscript.vars.suppress_zone_noti[name] = True
             task.sleep(new_zone["debounce"])
+            pyscript.vars.suppress_zone_noti[name] = False
             push.debug("zone change debounce reached")
 
         new_prefix = new_zone["prefix"] if "prefix" in new_zone else ""
@@ -116,7 +121,6 @@ def notify_on_zone_change(**kwargs):
             tag="notify_on_zone_change",
             target="emily" if name == "Marshall" else "marshall",
         )
-
         noti.send()
 
 
