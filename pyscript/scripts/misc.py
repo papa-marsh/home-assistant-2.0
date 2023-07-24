@@ -27,18 +27,17 @@ def ios_shortcut_sleepy_time():
 
 @event_trigger("wakeup_time")
 def ios_shortcut_wakeup_time():
-    if 6 <= datetime.now().hour < 17:
+    if 6 <= datetime.now().hour < 17 and person.emily != secrets.IN_LAWS_ZONE:
         turn_off_sound_machines()
-    if person.marshall != person.emily:
-        elapsed = dates.format_duration(pyscript.vars.sleepy_time_timestamp)
-        noti = push.Notification(
-            title="Wakeup Time",
-            message=f"Emily triggered wakeup time at {dates.parse_timestamp(output_format='time')} after {elapsed}",
-            tag="sleepy_wake_time",
-            group="sleepy_wake_time",
-            target="marshall",
-        )
-        noti.send()
+    elapsed = dates.format_duration(pyscript.vars.sleepy_time_timestamp)
+    noti = push.Notification(
+        title="Wakeup Time",
+        message=f"Emily triggered wakeup time at {dates.parse_timestamp(output_format='time')} after {elapsed}",
+        tag="sleepy_wake_time",
+        group="sleepy_wake_time",
+        target="marshall",
+    )
+    noti.send()
 
 
 @event_trigger("ios.action_fired", "actionName=='Sound On'")
