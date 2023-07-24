@@ -72,7 +72,7 @@ def door_open_notification_loop(id, name, open_time, silent):
 
 @event_trigger(
     "mobile_app_notification_action",
-    "action in ['silence_east_stall', 'silence_wast_stall', 'silence_front_door', 'silence_garage_door', 'silence_service_door', 'silence_slider_door', 'silence_refrigerator_door]",
+    "action in ['silence_east_stall', 'silence_wast_stall', 'silence_front_door', 'silence_garage_door', 'silence_service_door', 'silence_slider_door', 'silence_refrigerator_door']",
 )
 def silence_door_open_notification(**kwargs):
     task.unique(f"{kwargs['action_data']['id']}_left_open")
