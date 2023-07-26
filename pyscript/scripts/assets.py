@@ -177,21 +177,25 @@ def stocks_stage_and_populate():
 
 
 def stocks_stage_entity():
-    staging = {
-        "balance": secrets.STOCKS_BALANCE,
-        "spy_week": api.get_stock_week_change(symbol="SPY"),
-        "total": secrets.STOCKS_BALANCE,
-    }
-
-    for symbol in secrets.STOCKS_QTY:
-        quote = api.get_stock_quote(symbol=symbol)
-        staging[symbol.lower()] = {
-            "price": quote["current"],
-            "change": quote["change"],
+    try:
+        staging = {
+            "balance": secrets.STOCKS_BALANCE,
+            "spy_week": api.get_stock_week_change(symbol="SPY"),
+            "total": secrets.STOCKS_BALANCE,
         }
-        staging["total"] += quote["current"] * secrets.STOCKS_QTY[symbol]
 
-    pyscript.entity_card_stocks.staging = staging
+        for symbol in secrets.STOCKS_QTY:
+            quote = api.get_stock_quote(symbol=symbol)
+            staging[symbol.lower()] = {
+                "price": quote["current"],
+                "change": quote["change"],
+            }
+            staging["total"] += quote["current"] * secrets.STOCKS_QTY[symbol]
+
+        pyscript.entity_card_stocks.staging = staging
+
+    except:
+        log.error("Exception caught while staging stocks entity")
 
 
 def stocks_populate_card(private=False):

@@ -89,5 +89,7 @@ def update_complications(target="all"):
 
 
 def debug(message="Placeholder message"):
-    payload = {"title": "Debug", "message": message, "group": "debug"}
-    call_notify_service(target="marshall", payload=payload)
+    noti = Notification(
+        title="Debug", message=message, group="debug", target="marshall"
+    )
+    noti.send()

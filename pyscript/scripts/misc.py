@@ -100,7 +100,6 @@ def notify_on_zone_change(**kwargs):
             pyscript.vars.suppress_zone_noti[name] = True
             task.sleep(new_zone["debounce"])
             pyscript.vars.suppress_zone_noti[name] = False
-            push.debug("zone change debounce reached")
 
         new_prefix = new_zone["prefix"] if "prefix" in new_zone else ""
         old_prefix = files.read("zones", [kwargs["old_value"], "prefix"], "")

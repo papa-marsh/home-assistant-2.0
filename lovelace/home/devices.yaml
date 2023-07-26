@@ -21,6 +21,7 @@ entities:
     name: Office Media Fans
   - entity: switch.space_heater
   - entity: binary_sensor.chelsea_cabinet_sensor
+    secondary_info: last-changed
   - entity: light.outside_lights
   - entity: light.office_door_led
 style:

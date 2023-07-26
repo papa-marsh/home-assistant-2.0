@@ -10,7 +10,8 @@ import util
 def sync_zones():
     file_zones = files.read("zones")
     hass_zones = [
-        state.getattr(zone)["friendly_name"] for zone in state.names(domain="zone")
+        state.getattr(zone)["friendly_name"] if zone != "zone.home" else "home"
+        for zone in state.names(domain="zone")
     ]
 
     for zone in hass_zones:
@@ -18,7 +19,8 @@ def sync_zones():
             file_zones[zone] = {"needs_disposition": "New Zone"}
     for zone in file_zones:
         if zone not in hass_zones and zone != "not_home":
-            file_zones[zone]["needs_disposition"] = "Stale zone"
+            file_zones[zone]["needs_disposition"] = "Stale Zone"
+
     files.overwrite("zones", dict(sorted(file_zones.items())))
 
 
