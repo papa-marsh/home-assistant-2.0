@@ -64,7 +64,9 @@ def door_open_notification_loop(id, name, open_time, silent):
             destructive=True,
         )
     while True:
-        duration = (datetime.now().astimezone(tz.tzlocal()) - open_time).seconds // 60
+        duration = (
+            datetime.now().astimezone(tz.tzlocal()) - open_time.astimezone(tz.tzlocal())
+        ).seconds // 60
         noti.message = f"{name} has been open for {duration} minutes"
         noti.send()
         task.sleep(10 * 60)

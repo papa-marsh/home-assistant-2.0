@@ -108,6 +108,10 @@ def notify_on_zone_change(**kwargs):
             message = f"{name} arrived at {new_prefix}{kwargs['value']}"
         elif not files.read("zones", [kwargs["old_value"], "is_region"], False):
             message = f"{name} left {old_prefix}{kwargs['old_value']}"
+            if kwargs["old_value"].last_changed.day == datetime.now().day:
+                message += (
+                    f" after {dates.format_duration(kwargs['old_value'].last_changed)}"
+                )
         elif kwargs["value"] != "not_home":
             message = f"{name} is in {new_prefix}{kwargs['value']}"
         else:
