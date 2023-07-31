@@ -24,13 +24,12 @@ def send_critical_on_drive():
 @state_trigger("binary_sensor.yvette_charger=='off'")
 def reset_charge_limit():
     task.unique("yvette_charge_if_low")
-    if int(number.yvette_charge_limit) != constants.YVETTE_CHARGE_LIMIT:
-        number.set_value(
-            entity_id="number.yvette_charge_limit", value=constants.YVETTE_CHARGE_LIMIT
-        )
+    default_limit = util.get_pref("Yvette Charge Limit", value_only=True)
+    if int(number.yvette_charge_limit) != default_limit:
+        number.set_value(entity_id="number.yvette_charge_limit", value=default_limit)
         noti = push.Notification(
             title="Charge Limit Reset",
-            message=f"Yvette charge limit has been reset to {constants.YVETTE_CHARGE_LIMIT}%",
+            message=f"Yvette charge limit has been reset to {default_limit}%",
             target="marshall",
             tag="yvette_charge_limit_reset",
             group="yvette_charge_limit_reset",

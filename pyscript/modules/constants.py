@@ -3,7 +3,6 @@ NOTI_CRIT_SOUND = "3rd_party_critical.caf"
 
 BASE_FILE_PATH = "/config/pyscript/files/"
 
-YVETTE_CHARGE_LIMIT = 85
 YVETTE_LOW_THRESHOLD = 30
 
 NEST_DISPLAYS = [
