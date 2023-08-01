@@ -218,7 +218,7 @@ def persist_entity_card_home():
             "row_2_icon": "mdi:water",
             "row_2_value": "",
             "row_2_color": "default",
-            "row_3_icon": "mdi:delete",
+            "row_3_icon": "mdi:bed-clock",
             "row_3_value": "",
             "row_3_color": "default",
             "staging": {},
@@ -233,9 +233,7 @@ def entity_card_tap():
 
 @service("lovelace.home_hold")
 def entity_card_hold():
-    pyscript.entity_card_home.staging["last_bin_day"] = date.today()
     pyscript.entity_card_home.blink = False
-    entity_card_update_row_3()
 
 
 @service("lovelace.home_dtap")
@@ -300,37 +298,18 @@ def entity_card_update_row_2():
         )
 
 
-@time_trigger("startup", "cron(0 0,19 * * *)")
-@state_trigger("binary_sensor.emily_s_iphone_focus")
+@state_trigger("switch.ellies_sound_machine")
 def entity_card_update_row_3():
     task.unique("home_entity_card_update_row_3")
-    if binary_sensor.emily_s_iphone_focus == "on" and 9 <= datetime.now().hour < 18:
-        pyscript.entity_card_home.row_3_value = dates.format_duration(
-            binary_sensor.emily_s_iphone_focus.last_changed
-        )
+    if switch.ellies_sound_machine == "on":
         pyscript.entity_card_home.row_3_icon = "mdi:bed-clock"
-        task.sleep(60)
-        entity_card_update_row_3()
-    else:
-        now = datetime.now()
-        next_bin_day = get_next_bin_day()
-        if next_bin_day == now.date() and now.hour >= 18:
-            pyscript.entity_card_home.blink = True
-        pyscript.entity_card_home.row_3_value = dates.date_countdown(next_bin_day)
-        pyscript.entity_card_home.row_3_icon = "mdi:delete"
+        while True:
+            pyscript.entity_card_home.row_3_value = dates.format_duration(
+                switch.ellies_sound_machine.last_changed
+            )
+            task.sleep(60)
 
 
-def get_next_bin_day():
-    next_bin_day = dates.get_next_weekday("mon")
-    if "last_bin_day" not in pyscript.entity_card_home.staging:
-        pyscript.entity_card_home.staging["last_bin_day"] = date.today() - timedelta(
-            days=7
-        )
-    if isinstance(pyscript.entity_card_home.staging["last_bin_day"], str):
-        pyscript.entity_card_home.staging["last_bin_day"] = datetime.strptime(
-            pyscript.entity_card_home.staging["last_bin_day"], "%Y-%m-%d"
-        ).date()
-    if next_bin_day <= pyscript.entity_card_home.staging["last_bin_day"]:
-        next_bin_day += timedelta(days=7)
-
-    return next_bin_day
+@time_trigger("cron(0 19 * * 1)")
+def entity_card_blink():
+    pyscript.entity_card_home.blink = True
