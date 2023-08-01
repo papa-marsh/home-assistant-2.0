@@ -53,6 +53,14 @@ def send_sleep_notification():
     noti.send()
 
 
+@state_trigger("sensor.marshall_s_iphone_battery_state")
+def set_master_sound_machine(**kwargs):
+    if kwargs["value"] == "charging":
+        switch.turn_on(entity_id="switch.master_sound_machine")
+    else:
+        switch.turn_off(entity_id="switch.master_sound_machine")
+
+
 @time_trigger("cron(0 9,19 * * *)")
 def feed_chelsea_notification():
     if binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(
