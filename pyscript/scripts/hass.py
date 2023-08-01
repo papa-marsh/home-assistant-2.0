@@ -104,7 +104,7 @@ def persist_vars():
     state.persist(
         "pyscript.vars",
         default_value="",
-        default_attributes={"pyscript.vars.sleepy_time_timestamp": ""},
+        default_attributes={"sleepy_time_timestamp": "", "clear_charge_to_max": False},
     )
     pyscript.vars.ios_actions_unlocked = False
     pyscript.vars.preference_value_mutex = False

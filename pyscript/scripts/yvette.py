@@ -24,6 +24,10 @@ def send_critical_on_drive():
 @state_trigger("binary_sensor.yvette_charger=='off'")
 def reset_charge_limit():
     task.unique("yvette_charge_if_low")
+    if pyscript.vars.clear_charge_to_max:
+        util.set_pref("Yvette Charge To Max", "Off")
+        pyscript.vars.clear_charge_to_max = False
+
     default_limit = util.get_pref("Yvette Charge Limit", value_only=True)
     if int(number.yvette_charge_limit) != default_limit:
         number.set_value(entity_id="number.yvette_charge_limit", value=default_limit)
@@ -43,6 +47,7 @@ def charge_to_max():
         number.set_value(entity_id="number.yvette_charge_limit", value=100)
         task.sleep(60)
         switch.turn_on(entity_id="switch.yvette_charger")
+        pyscript.vars.clear_charge_to_max = True
     else:
         noti = push.Notification(
             title="Command Failed",
