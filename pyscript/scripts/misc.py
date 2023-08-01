@@ -10,48 +10,47 @@ import util
 
 @event_trigger("sleepy_time")
 def ios_shortcut_sleepy_time():
-    pyscript.vars.sleepy_time_timestamp = datetime.now()
-    if person.emily != state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]:
-        turn_on_sound_machines()
-        media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
-    if person.marshall != person.emily:
-        noti = push.Notification(
-            title="Sleepy Time",
-            message=f"Emily triggered sleepy time at {dates.parse_timestamp(output_format='time')}",
-            tag="sleepy_wake_time",
-            group="sleepy_wake_time",
-            target="marshall",
-        )
-        noti.send()
+    if files.read("zones", [person.emily, "near_home"], False):
+        turn_on_sound_machine()
 
 
 @event_trigger("wakeup_time")
 def ios_shortcut_wakeup_time():
-    if 6 <= datetime.now().hour < 17 and person.emily != secrets.IN_LAWS_ZONE:
-        turn_off_sound_machines()
-    elapsed = dates.format_duration(pyscript.vars.sleepy_time_timestamp)
+    if 6 <= datetime.now().hour < 17:
+        turn_off_sound_machine()
+
+
+@event_trigger("ios.action_fired", "actionName=='Sound On'")
+def turn_on_sound_machine(**kwargs):
+    switch.turn_on(entity_id="switch.ellies_sound_machine")
+
+
+@event_trigger("ios.action_fired", "actionName=='Sound Off'")
+def turn_off_sound_machine(**kwargs):
+    switch.turn_off(entity_id="switch.ellies_sound_machine")
+
+
+@state_trigger("switch.ellies_sound_machine=='on'")
+def sleep_time():
+    pyscript.vars.sleepy_time_timestamp = datetime.now()
+    media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
+
+
+@state_trigger("switch.ellies_sound_machine")
+def send_sleep_notification():
+    wakeup = switch.ellies_sound_machine == "off"
     noti = push.Notification(
-        title="Wakeup Time",
-        message=f"Emily triggered wakeup time at {dates.parse_timestamp(output_format='time')} after {elapsed}",
+        title="Wakeup Time" if wakeup else "Sleep Time",
+        message=f"Ellie {'got up' if wakeup else 'went down'} at {dates.parse_timestamp(output_format='time')}",
         tag="sleepy_wake_time",
         group="sleepy_wake_time",
         target="marshall",
     )
+    if wakeup:
+        noti.message += (
+            f" after {dates.format_duration(pyscript.vars.sleepy_time_timestamp)}"
+        )
     noti.send()
-
-
-@event_trigger("ios.action_fired", "actionName=='Sound On'")
-def turn_on_sound_machines(**kwargs):
-    switch.turn_on(
-        entity_id=["switch.ellies_sound_machine", "switch.master_sound_machine"]
-    )
-
-
-@event_trigger("ios.action_fired", "actionName=='Sound Off'")
-def turn_off_sound_machines(**kwargs):
-    switch.turn_off(
-        entity_id=["switch.ellies_sound_machine", "switch.master_sound_machine"]
-    )
 
 
 @time_trigger("cron(0 9,19 * * *)")

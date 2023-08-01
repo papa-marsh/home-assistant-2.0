@@ -157,7 +157,7 @@ def garage_auto_open(**kwargs):
         and 6 <= now.hour < 23
         and (now - cover.east_stall.last_changed).seconds > 300
         and (location != "home" or (now - location.last_changed).seconds < 300)
-        and files.read("zones", [location, "garage_auto_open"], False)
+        and files.read("zones", [location, "near_home"], False)
     ):
         cover.open_cover(entity_id="cover.east_stall")
 
@@ -298,7 +298,7 @@ def entity_card_update_row_2():
         )
 
 
-@state_trigger("switch.ellies_sound_machine")
+@state_trigger("startup", "switch.ellies_sound_machine")
 def entity_card_update_row_3():
     task.unique("home_entity_card_update_row_3")
     if switch.ellies_sound_machine == "on":
