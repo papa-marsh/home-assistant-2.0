@@ -6,6 +6,19 @@ import push
 import util
 
 
+@time_trigger("cron(0 8 * * *)")
+def check_cloud_backup_state():
+    if sensor.backup_state != "backed_up":
+        noti = push.Notification(
+            title="Cloud Backup Failed",
+            message=f"Google Drive backup appears to have failed - Check add-on",
+            tag="cloud_backup_failed",
+            group="cloud_backup_failed",
+            target="marshall",
+        )
+        noti.send()
+
+
 @time_trigger("cron(0 3 * * *)")
 def sync_zones():
     file_zones = files.read("zones")
