@@ -296,16 +296,19 @@ def entity_card_update_row_2():
         )
 
 
-@state_trigger("startup", "switch.ellies_sound_machine")
+@time_trigger("startup")
+@state_trigger("switch.ellies_sound_machine")
 def entity_card_update_row_3():
     task.unique("home_entity_card_update_row_3")
     if switch.ellies_sound_machine == "on":
-        pyscript.entity_card_home.row_3_icon = "mdi:bed-clock"
+        pyscript.entity_card_home.row_3_icon = "mdi:sleep"
         while True:
             pyscript.entity_card_home.row_3_value = dates.format_duration(
                 switch.ellies_sound_machine.last_changed
             )
             task.sleep(60)
+    else:
+        pyscript.entity_card_home.row_3_icon = "mdi:bed-clock"
 
 
 @time_trigger("cron(0 19 * * 1)")
