@@ -43,20 +43,16 @@ def door_open_notification_loop(id, name, open_time, silent):
         priority="active" if silent else "time-sensitive",
         action_data={"id": id, "name": name, "open_time": open_time},
     )
-    noti.add_action(
-        id=f"ignore_{id}",
-        title="Ignore",
-    )
     if not silent:
         noti.add_action(
             id=f"silence_{id}",
             title="Silence",
         )
-    if id == "slider_door":
-        noti.add_action(
-            id=f"dismiss_{id}",
-            title="Dismiss",
-        )
+    noti.add_action(
+        id=f"suppress_{id}",
+        title="Suppress",
+        destructive=True,
+    )
     if "stall" in id:
         noti.add_action(
             id=f"close_{id}",
@@ -89,20 +85,22 @@ def silence_door_open_notification(**kwargs):
 
 @event_trigger(
     "mobile_app_notification_action",
-    "action == 'dismiss_slider_door'",
+    "action in ['suppress_east_stall', 'suppress_wast_stall', 'suppress_front_door', 'suppress_garage_door', 'suppress_service_door', 'suppress_slider_door', 'suppress_refrigerator_door']",
 )
-def dismiss_slider_open_notification(**kwargs):
+def suppress_door_open_notification(**kwargs):
     id = kwargs["action_data"]["id"]
-    task.unique(f"slider_door_left_open")
-    noti = push.Notification(
-        title="Air Off",
-        message="The thermostat has been turned off and slider door notification dismissed",
-        tag="slider_door_left_open",
-        group="slider_door_left_open",
-        target="all",
-        priority="time-sensitive",
-    )
-    noti.send()
+    task.unique(f"{id}_left_open")
+    if id == "slider" and climate.thermostat != "off":
+        climate.turn_off(entity_id="climate.thermostat")
+        noti = push.Notification(
+            title="Air Off",
+            message="The thermostat has been turned off and slider door notification dismissed",
+            tag="slider_door_left_open",
+            group="slider_door_left_open",
+            target="all",
+            priority="time-sensitive",
+        )
+        noti.send()
 
 
 @event_trigger(
