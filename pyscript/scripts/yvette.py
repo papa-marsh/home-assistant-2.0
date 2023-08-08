@@ -29,7 +29,7 @@ def reset_charge_limit():
         pyscript.vars.clear_charge_to_max = False
 
     default_limit = util.get_pref("Yvette Charge Limit", value_only=True)
-    if int(number.yvette_charge_limit) != default_limit:
+    if int(number.yvette_charge_limit) != int(default_limit):
         number.set_value(entity_id="number.yvette_charge_limit", value=default_limit)
         noti = push.Notification(
             title="Charge Limit Reset",
