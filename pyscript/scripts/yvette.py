@@ -164,7 +164,7 @@ def complication_outer():
     if climate.yvette_hvac_climate_system == "heat_cool":
         pyscript.complication_yvette.outer += (
             "❄️"
-            if int(sensor.yvette_temperature_outside)
+            if float(sensor.yvette_temperature_outside)
             >= climate.yvette_hvac_climate_system.temperature
             else "♨️"
         )
