@@ -90,7 +90,7 @@ def silence_door_open_notification(**kwargs):
 def suppress_door_open_notification(**kwargs):
     id = kwargs["action_data"]["id"]
     task.unique(f"{id}_left_open")
-    if id == "slider" and climate.thermostat != "off":
+    if id == "slider_door" and climate.thermostat != "off":
         climate.turn_off(entity_id="climate.thermostat")
         noti = push.Notification(
             title="Air Off",
