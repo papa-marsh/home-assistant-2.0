@@ -43,20 +43,23 @@ def reset_charge_limit():
 
 @service("pyscript.yvette_charge_to_max")
 def charge_to_max():
+    noti = push.Notification(
+        title="Charging to Max",
+        message=f"Yvette has started charging to 100%",
+        target="all",
+        tag="charge_to_max",
+        group="charge_to_max",
+    )
     if binary_sensor.yvette_charger == "on":
         number.set_value(entity_id="number.yvette_charge_limit", value=100)
         task.sleep(60)
         switch.turn_on(entity_id="switch.yvette_charger")
         pyscript.vars.clear_charge_to_max = True
     else:
-        noti = push.Notification(
-            title="Command Failed",
-            message=f"Can't charge to max because Yvette is not plugged in",
-            target="marshall",
-            tag="charge_to_max_failed",
-            group="charge_to_max_failed",
-        )
-        noti.send()
+        noti.title = ("Command Failed",)
+        noti.message = (f"Can't charge to max because Yvette is not plugged in",)
+
+    noti.send()
 
 
 @state_trigger("binary_sensor.yvette_charger=='on'")
