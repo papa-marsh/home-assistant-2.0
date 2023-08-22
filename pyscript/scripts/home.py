@@ -49,9 +49,8 @@ def door_open_notification_loop(id, name, open_time, silent):
             title="Silence",
         )
     noti.add_action(
-        id=f"suppress_{id}",
-        title="Suppress",
-        destructive=True,
+        id=f"turn_off_{id}",
+        title="Turn Off",
     )
     if "stall" in id:
         noti.add_action(
@@ -85,16 +84,16 @@ def silence_door_open_notification(**kwargs):
 
 @event_trigger(
     "mobile_app_notification_action",
-    "action in ['suppress_east_stall', 'suppress_wast_stall', 'suppress_front_door', 'suppress_garage_door', 'suppress_service_door', 'suppress_slider_door', 'suppress_refrigerator_door']",
+    "action in ['turn_off_east_stall', 'turn_off_wast_stall', 'turn_off_front_door', 'turn_off_garage_door', 'turn_off_service_door', 'turn_off_slider_door', 'turn_off_refrigerator_door']",
 )
-def suppress_door_open_notification(**kwargs):
+def turn_off_door_open_notification(**kwargs):
     id = kwargs["action_data"]["id"]
     task.unique(f"{id}_left_open")
     if id == "slider_door" and climate.thermostat != "off":
         climate.turn_off(entity_id="climate.thermostat")
         noti = push.Notification(
             title="Air Off",
-            message="The thermostat has been turned off and slider door notification dismissed",
+            message="The thermostat and reminder notification have been turned off",
             tag="slider_door_left_open",
             group="slider_door_left_open",
             target="all",
