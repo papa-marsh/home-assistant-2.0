@@ -36,7 +36,7 @@ def sleep_time():
     media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
 
 
-@state_trigger("switch.ellies_sound_machine")
+@state_trigger("switch.ellies_sound_machine in ['on', 'off']")
 def send_sleep_notification():
     wakeup = switch.ellies_sound_machine == "off"
     noti = push.Notification(
