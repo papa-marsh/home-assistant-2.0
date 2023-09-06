@@ -14,7 +14,7 @@ import util
     "binary_sensor.garage_door_sensor",
     "binary_sensor.service_door_sensor",
     "binary_sensor.slider_door_sensor",
-    "binary_sensor.refrigerator_door_sensor",
+    # "binary_sensor.refrigerator_door_sensor",
 )
 def door_open_notification(**kwargs):
     if kwargs["value"] in ["open", "on"] and kwargs["old_value"] in ["closed", "off"]:
