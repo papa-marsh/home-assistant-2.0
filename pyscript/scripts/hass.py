@@ -19,8 +19,8 @@ def check_cloud_backup_state():
         noti.send()
 
 
-@time_trigger("cron(0 3 * * *)")
 @service("pyscript.sync_zones")
+@time_trigger("cron(0 3 * * *)")
 def sync_zones():
     file_zones = files.read("zones")
     hass_zones = [
