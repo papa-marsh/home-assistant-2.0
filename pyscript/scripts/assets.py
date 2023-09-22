@@ -28,19 +28,19 @@ def persist_entity_card_crypto():
     )
 
 
-@service("lovelace.crypto_tap")
+@service("pyscript.crypto_tap")
 def crypto_entity_card_tap():
     crypto_populate_card(not pyscript.entity_card_crypto.private)
     task.sleep(5)
     crypto_populate_card(private=False)
 
 
-@service("lovelace.crypto_hold")
+@service("pyscript.crypto_hold")
 def crypto_entity_card_hold():
     return
 
 
-@service("lovelace.crypto_dtap")
+@service("pyscript.crypto_dtap")
 def crypto_entity_card_dtap():
     service.call("lovelace", "stocks_tap")
     service.call("lovelace", "crypto_tap")
@@ -151,19 +151,19 @@ def persist_entity_card_stocks():
     )
 
 
-@service("lovelace.stocks_tap")
+@service("pyscript.stocks_tap")
 def stocks_entity_card_tap():
     stocks_populate_card(not pyscript.entity_card_stocks.private)
     task.sleep(5)
     stocks_populate_card(private=False)
 
 
-@service("lovelace.stocks_hold")
+@service("pyscript.stocks_hold")
 def stocks_entity_card_hold():
     return
 
 
-@service("lovelace.stocks_dtap")
+@service("pyscript.stocks_dtap")
 def stocks_entity_card_dtap():
     service.call("lovelace", "stocks_tap")
     service.call("lovelace", "crypto_tap")

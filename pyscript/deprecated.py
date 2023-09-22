@@ -37,7 +37,7 @@
 
 
 # home.py 2023-08-01
-# @service("lovelace.home_hold")
+# @service("pyscript.home_hold")
 # def entity_card_hold():
 #     pyscript.entity_card_home.staging["last_bin_day"] = date.today()
 #     pyscript.entity_card_home.blink = False

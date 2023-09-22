@@ -223,17 +223,17 @@ def persist_entity_card_home():
     )
 
 
-@service("lovelace.home_tap")
+@service("pyscript.home_tap")
 def entity_card_tap():
     return
 
 
-@service("lovelace.home_hold")
+@service("pyscript.home_hold")
 def entity_card_hold():
     pyscript.entity_card_home.blink = False
 
 
-@service("lovelace.home_dtap")
+@service("pyscript.home_dtap")
 def entity_card_dtap():
     pass
 

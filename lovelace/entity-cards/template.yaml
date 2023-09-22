@@ -1,22 +1,22 @@
 entity: empty
 type: custom:button-card
-name: '[[[ return entity.attributes.name ]]]'
-icon: '[[[ return entity.attributes.state_icon ]]]'
+name: "[[[ return entity.attributes.name ]]]"
+icon: "[[[ return entity.attributes.state_icon ]]]"
 tap_action:
   action: call-service
-  service: '[[[ return "lovelace." + entity.attributes.name + "_tap"]]]'
+  service: '[[[ return "pyscript." + entity.attributes.name + "_tap"]]]'
 hold_action:
   action: call-service
-  service: '[[[ return "lovelace." + entity.attributes.name + "_hold"]]]'
+  service: '[[[ return "pyscript." + entity.attributes.name + "_hold"]]]'
 double_tap_action:
   action: call-service
-  service: '[[[ return "lovelace." + entity.attributes.name + "_dtap"]]]'
+  service: '[[[ return "pyscript." + entity.attributes.name + "_dtap"]]]'
 custom_fields:
   custom1: '[[[ return `<ha-icon icon=${entity.attributes.row_1_icon} style="width: 20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_1_value}</span>` ]]]'
   custom2: '[[[ return `<ha-icon icon=${entity.attributes.row_2_icon} style="width: 20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_2_value}</span>` ]]]'
   custom3: '[[[ return `<ha-icon icon=${entity.attributes.row_3_icon} style="width: 20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_3_value}</span>` ]]]'
-  state: '[[[ return entity.state ]]]'
-extra_styles: '[[[ if ( entity.attributes.blink ) return `@keyframes fade { from { opacity: 1.0; } 50% { opacity: 0.2; } to { opacity: 1.0; } }` ]]]'
+  state: "[[[ return entity.state ]]]"
+extra_styles: "[[[ if ( entity.attributes.blink ) return `@keyframes fade { from { opacity: 1.0; } 50% { opacity: 0.2; } to { opacity: 1.0; } }` ]]]"
 styles:
   card:
     - animation: fade 2s linear infinite
@@ -40,7 +40,7 @@ styles:
       - justify-self: start
       - color: '[[[ if ( entity.attributes.row_3_color == "red" ) return "var(--custom-warning-text-color)"; else if (entity.attributes.row_3_color == "green" ) return "var(--custom-favorable-text-color)"; else return "var(--primary-text-color)"; ]]]'
     state:
-      - margin-top: '-2px'
+      - margin-top: "-2px"
       - font-weight: bold
       - align-self: start
       - justify-self: start
@@ -51,7 +51,7 @@ styles:
     - grid-template-rows: 1fr 1fr min-content min-content min-content
   icon:
     - width: 100%
-    - margin-top: '-8px'
+    - margin-top: "-8px"
   img_cell:
     - justify-content: start
     - align-items: start

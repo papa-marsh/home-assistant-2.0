@@ -92,17 +92,17 @@ def play_media_card_playlist():
         )
 
 
-@service("lovelace.media_card_group")
+@service("pyscript.media_card_group")
 def media_card_group():
     pyscript.media_card.group = not pyscript.media_card.group
 
 
-@service("lovelace.media_card_sync")
+@service("pyscript.media_card_sync")
 def media_card_sync():
     pyscript.media_card.sync = not pyscript.media_card.sync
 
 
-@service("lovelace.media_card_more")
+@service("pyscript.media_card_more")
 def media_card_more():
     pyscript.media_card = "volume" if pyscript.media_card == "controls" else "controls"
 

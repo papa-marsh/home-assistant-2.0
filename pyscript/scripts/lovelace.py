@@ -76,7 +76,7 @@ def set_chelsea_fixture_card():
     )
 
 
-@service("lovelace.chelsea_fixture_tap")
+@service("pyscript.chelsea_fixture_tap")
 def chelsea_fixture_tap():
     task.unique("chelsea_fixture_tap")
     pyscript.chelsea_next_fixture.top_row = (

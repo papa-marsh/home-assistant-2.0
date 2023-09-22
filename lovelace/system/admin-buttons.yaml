@@ -27,13 +27,16 @@ cards:
         icon: mdi:tune-vertical
         tap_action:
           action: call-service
-          service: lovelace.populate_preferences
+          service: pyscript.populate_preferences
         styles:
           card:
             - height: 104px
       - type: custom:button-card
-        name: " "
-        icon:
+        name: Sync Zones
+        icon: mdi:map-marker-multiple
+        tap_action:
+          action: call-service
+          service: pyscript.sync_zones
         styles:
           card:
             - height: 104px

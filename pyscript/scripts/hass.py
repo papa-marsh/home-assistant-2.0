@@ -20,6 +20,7 @@ def check_cloud_backup_state():
 
 
 @time_trigger("cron(0 3 * * *)")
+@service("pyscript.sync_zones")
 def sync_zones():
     file_zones = files.read("zones")
     hass_zones = [
@@ -54,7 +55,7 @@ def backup_files():
             files.overwrite(f"backups/{file_name}", files.read(file_name))
 
 
-@service("lovelace.populate_preferences")
+@service("pyscript.populate_preferences")
 @time_trigger("startup")
 def populate_preferences():
     input_select.set_options(
@@ -177,17 +178,17 @@ def persist_entity_card_hass():
     )
 
 
-@service("lovelace.hass_tap")
+@service("pyscript.hass_tap")
 def entity_card_tap():
     return
 
 
-@service("lovelace.hass_hold")
+@service("pyscript.hass_hold")
 def entity_card_hold():
     return
 
 
-@service("lovelace.hass_dtap")
+@service("pyscript.hass_dtap")
 def entity_card_dtap():
     return
 

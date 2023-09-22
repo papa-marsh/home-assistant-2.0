@@ -60,7 +60,7 @@ def persist_entity_card_office():
     )
 
 
-@service("lovelace.office_tap")
+@service("pyscript.office_tap")
 def entity_card_tap():
     if pyscript.entity_card_office.active:
         state.set(
@@ -80,13 +80,13 @@ def entity_card_tap():
         light.turn_on(entity_id="light.office_door_led")
 
 
-@service("lovelace.office_hold")
+@service("pyscript.office_hold")
 def entity_card_hold():
     pyscript.entity_card_office.staging["last_timecard"] = date.today()
     pyscript.entity_card_office.blink = False
 
 
-@service("lovelace.office_dtap")
+@service("pyscript.office_dtap")
 def entity_card_dtap():
     media_player.media_play_pause(entity_id="media_player.office")
 

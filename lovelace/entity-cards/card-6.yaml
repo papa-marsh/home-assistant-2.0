@@ -1,81 +1,90 @@
 custom_fields:
-  custom1: '[[[ return `<ha-icon icon=${entity.attributes.row_1_icon} style="width:
+  custom1:
+    '[[[ return `<ha-icon icon=${entity.attributes.row_1_icon} style="width:
     20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_1_value}</span>`
     ]]]'
-  custom2: '[[[ return `<ha-icon icon=${entity.attributes.row_2_icon} style="width:
+  custom2:
+    '[[[ return `<ha-icon icon=${entity.attributes.row_2_icon} style="width:
     20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_2_value}</span>`
     ]]]'
-  custom3: '[[[ return `<ha-icon icon=${entity.attributes.row_3_icon} style="width:
+  custom3:
+    '[[[ return `<ha-icon icon=${entity.attributes.row_3_icon} style="width:
     20px; height: 20px;"></ha-icon> <span>${entity.attributes.row_3_value}</span>`
     ]]]'
-  state: '[[[ return entity.state ]]]'
+  state: "[[[ return entity.state ]]]"
 double_tap_action:
   action: call-service
-  service: '[[[ return "lovelace." + entity.attributes.name + "_dtap"]]]'
+  service: '[[[ return "pyscript." + entity.attributes.name + "_dtap"]]]'
 entity: pyscript.entity_card_hass
-extra_styles: '[[[ if ( entity.attributes.blink ) return `@keyframes fade { from {
-  opacity: 1.0; } 50% { opacity: 0.2; } to { opacity: 1.0; } }` ]]]'
+extra_styles:
+  "[[[ if ( entity.attributes.blink ) return `@keyframes fade { from {
+  opacity: 1.0; } 50% { opacity: 0.2; } to { opacity: 1.0; } }` ]]]"
 hold_action:
   action: call-service
-  service: '[[[ return "lovelace." + entity.attributes.name + "_hold"]]]'
-icon: '[[[ return entity.attributes.state_icon ]]]'
-name: '[[[ return entity.attributes.name ]]]'
+  service: '[[[ return "pyscript." + entity.attributes.name + "_hold"]]]'
+icon: "[[[ return entity.attributes.state_icon ]]]"
+name: "[[[ return entity.attributes.name ]]]"
 styles:
   card:
-  - animation: fade 2s linear infinite
-  - padding: 10%
-  - font-size: 13px
-  - text-transform: capitalize
-  - background: '[[[ if ( entity.attributes.active ) return "var(--custom-card-active-background-color)";
-      else return "var( --ha-card-background, var(--card-background-color, white)
-      )"; ]]]'
+    - animation: fade 2s linear infinite
+    - padding: 10%
+    - font-size: 13px
+    - text-transform: capitalize
+    - background:
+        '[[[ if ( entity.attributes.active ) return "var(--custom-card-active-background-color)";
+        else return "var( --ha-card-background, var(--card-background-color, white)
+        )"; ]]]'
   custom_fields:
     custom1:
-    - padding-bottom: 4px
-    - align-self: middle
-    - justify-self: start
-    - color: '[[[ if ( entity.attributes.row_1_color == "red" ) return "var(--custom-warning-text-color)";
-        else if (entity.attributes.row_1_color == "green" ) return "var(--custom-favorable-text-color)";
-        else return "var(--primary-text-color)"; ]]]'
+      - padding-bottom: 4px
+      - align-self: middle
+      - justify-self: start
+      - color:
+          '[[[ if ( entity.attributes.row_1_color == "red" ) return "var(--custom-warning-text-color)";
+          else if (entity.attributes.row_1_color == "green" ) return "var(--custom-favorable-text-color)";
+          else return "var(--primary-text-color)"; ]]]'
     custom2:
-    - padding-bottom: 4px
-    - align-self: middle
-    - justify-self: start
-    - color: '[[[ if ( entity.attributes.row_2_color == "red" ) return "var(--custom-warning-text-color)";
-        else if (entity.attributes.row_2_color == "green" ) return "var(--custom-favorable-text-color)";
-        else return "var(--primary-text-color)"; ]]]'
+      - padding-bottom: 4px
+      - align-self: middle
+      - justify-self: start
+      - color:
+          '[[[ if ( entity.attributes.row_2_color == "red" ) return "var(--custom-warning-text-color)";
+          else if (entity.attributes.row_2_color == "green" ) return "var(--custom-favorable-text-color)";
+          else return "var(--primary-text-color)"; ]]]'
     custom3:
+      - align-self: middle
+      - justify-self: start
+      - color:
+          '[[[ if ( entity.attributes.row_3_color == "red" ) return "var(--custom-warning-text-color)";
+          else if (entity.attributes.row_3_color == "green" ) return "var(--custom-favorable-text-color)";
+          else return "var(--primary-text-color)"; ]]]'
+    state:
+      - margin-top: -2px
+      - font-weight: bold
+      - align-self: start
+      - justify-self: start
+      - overflow: unset
+  grid:
+    - grid-template-areas:
+        '"n n i" "state state i" "custom1 custom1 custom1" "custom2
+        custom2 custom2" "custom3 custom3 custom3"'
+    - grid-template-columns: 2fr 2fr 3fr
+    - grid-template-rows: 1fr 1fr min-content min-content min-content
+  icon:
+    - width: 100%
+    - margin-top: -8px
+  img_cell:
+    - justify-content: start
+    - align-items: start
+    - margin: none
+  name:
+    - font-weight: bold
+    - font-size: 18px
     - align-self: middle
     - justify-self: start
-    - color: '[[[ if ( entity.attributes.row_3_color == "red" ) return "var(--custom-warning-text-color)";
-        else if (entity.attributes.row_3_color == "green" ) return "var(--custom-favorable-text-color)";
-        else return "var(--primary-text-color)"; ]]]'
-    state:
-    - margin-top: -2px
-    - font-weight: bold
-    - align-self: start
-    - justify-self: start
+    - padding-bottom: 5px
     - overflow: unset
-  grid:
-  - grid-template-areas: '"n n i" "state state i" "custom1 custom1 custom1" "custom2
-      custom2 custom2" "custom3 custom3 custom3"'
-  - grid-template-columns: 2fr 2fr 3fr
-  - grid-template-rows: 1fr 1fr min-content min-content min-content
-  icon:
-  - width: 100%
-  - margin-top: -8px
-  img_cell:
-  - justify-content: start
-  - align-items: start
-  - margin: none
-  name:
-  - font-weight: bold
-  - font-size: 18px
-  - align-self: middle
-  - justify-self: start
-  - padding-bottom: 5px
-  - overflow: unset
 tap_action:
   action: call-service
-  service: '[[[ return "lovelace." + entity.attributes.name + "_tap"]]]'
+  service: '[[[ return "pyscript." + entity.attributes.name + "_tap"]]]'
 type: custom:button-card

@@ -46,7 +46,7 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: lovelace.media_card_group
+          service: pyscript.media_card_group
       - name: '{{ state_attr("pyscript.media_card", "sync_text") }}'
         icon: '{{ state_attr("pyscript.media_card", "sync_icon") }}'
         style:
@@ -59,7 +59,7 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: lovelace.media_card_sync
+          service: pyscript.media_card_sync
       - icon: "mdi:dots-horizontal"
         style:
           button:
@@ -71,7 +71,7 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: lovelace.media_card_more
+          service: pyscript.media_card_more
   - type: custom:state-switch
     entity: pyscript.media_card
     default: hidden

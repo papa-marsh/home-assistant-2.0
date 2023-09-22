@@ -208,7 +208,7 @@ def persist_entity_card_yvette():
     )
 
 
-@service("lovelace.yvette_tap")
+@service("pyscript.yvette_tap")
 def entity_card_tap():
     if pyscript.entity_card_yvette.active:
         climate.turn_off(entity_id="climate.yvette_hvac_climate_system")
@@ -225,12 +225,12 @@ def entity_card_tap():
         pyscript.entity_card_yvette.active = not pyscript.entity_card_yvette.active
 
 
-@service("lovelace.yvette_hold")
+@service("pyscript.yvette_hold")
 def entity_card_hold():
     return
 
 
-@service("lovelace.yvette_dtap")
+@service("pyscript.yvette_dtap")
 def entity_card_dtap():
     return
 
