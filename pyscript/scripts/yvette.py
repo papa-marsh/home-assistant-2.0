@@ -74,12 +74,12 @@ def charge_if_low():
         switch.turn_off(entity_id="switch.yvette_charger")
 
 
-@time_trigger("cron(30 22 * * *)")
+@time_trigger("cron(0 21 * * *)")
 def charge_reminder():
     if (
         device_tracker.yvette_location_tracker == "home"
         and binary_sensor.yvette_charger == "off"
-        and int(sensor.yvette_battery) < 80
+        and int(sensor.yvette_battery) < number.yvette_charge_limit - 10
     ):
         noti = push.Notification(
             title="Yvette is Unplugged",
