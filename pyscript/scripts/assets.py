@@ -42,8 +42,8 @@ def crypto_entity_card_hold():
 
 @service("pyscript.crypto_dtap")
 def crypto_entity_card_dtap():
-    service.call("lovelace", "stocks_tap")
-    service.call("lovelace", "crypto_tap")
+    service.call("pyscript", "stocks_tap")
+    service.call("pyscript", "crypto_tap")
 
 
 @time_trigger("startup", "cron(0,30 * * * *)")
@@ -165,8 +165,8 @@ def stocks_entity_card_hold():
 
 @service("pyscript.stocks_dtap")
 def stocks_entity_card_dtap():
-    service.call("lovelace", "stocks_tap")
-    service.call("lovelace", "crypto_tap")
+    service.call("pyscript", "stocks_tap")
+    service.call("pyscript", "crypto_tap")
 
 
 @time_trigger("startup", "cron(*/5 9-17 * * 1-5)")
