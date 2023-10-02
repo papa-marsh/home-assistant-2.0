@@ -79,7 +79,7 @@ def charge_reminder():
     if (
         device_tracker.yvette_location_tracker == "home"
         and binary_sensor.yvette_charger == "off"
-        and int(sensor.yvette_battery) < number.yvette_charge_limit - 10
+        and int(sensor.yvette_battery) < int(number.yvette_charge_limit) - 10
     ):
         noti = push.Notification(
             title="Yvette is Unplugged",
@@ -344,7 +344,7 @@ def entity_card_update_row_3():
             pyscript.entity_card_yvette.row_3_icon = "mdi:thermometer"
             pyscript.entity_card_yvette.row_3_color = (
                 "red"
-                if climate.yvette_hvac_climate_system.current_temperature >= 100
+                if climate.yvette_hvac_climate_system.current_temperature >= 105
                 else "default"
             )
         else:
