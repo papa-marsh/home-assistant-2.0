@@ -10,6 +10,8 @@ cards:
               if (entity.state == "open") return "var(--custom-card-active-background-color)";
               else return "var( --ha-card-background, var(--card-background-color, white) )";
             ]]]
+      icon:
+        - color: '[[[ return "var(--primary-text-color)"; ]]]'
     tap_action:
       action: call-service
       service: cover.toggle
@@ -25,6 +27,8 @@ cards:
               if (entity.state == "open") return "var(--custom-card-active-background-color)";
               else return "var( --ha-card-background, var(--card-background-color, white) )";
             ]]]
+      icon:
+        - color: '[[[ return "var(--primary-text-color)"; ]]]'
     tap_action:
       action: call-service
       service: cover.toggle
