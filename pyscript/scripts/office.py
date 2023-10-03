@@ -2,8 +2,6 @@ from datetime import date, datetime, timedelta
 import dates
 import push
 
-# import secrets
-
 
 @event_trigger("wakeup_time")
 @state_trigger("person.emily == 'home'")

@@ -53,14 +53,6 @@ def send_sleep_notification():
     noti.send()
 
 
-@state_trigger("sensor.marshall_s_iphone_battery_state")
-def set_master_sound_machine(**kwargs):
-    if kwargs["value"] == "Not Charging":
-        switch.turn_off(entity_id="switch.master_sound_machine")
-    else:
-        switch.turn_on(entity_id="switch.master_sound_machine")
-
-
 @time_trigger("cron(0 9,19 * * *)")
 def feed_chelsea_notification():
     if binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(
@@ -113,6 +105,8 @@ def notify_on_zone_change(**kwargs):
 
         if not files.read("zones", [kwargs["value"], "is_region"], False):
             message = f"{name} arrived at {new_prefix}{kwargs['value']}"
+            if new_zone == "home" and pyscript.vars.left_home_timestamp[name]:
+                message += f" after {dates.format_duration(pyscript.vars.left_home_timestamp[name])}"
         elif not files.read("zones", [kwargs["old_value"], "is_region"], False):
             message = f"{name} left {old_prefix}{kwargs['old_value']}"
             if (
@@ -122,6 +116,8 @@ def notify_on_zone_change(**kwargs):
                 message += (
                     f" after {dates.format_duration(kwargs['old_value'].last_changed)}"
                 )
+            if kwargs["old_value"] == "home":
+                pyscript.vars.left_home_timestamp[name] = datetime.now()
         elif kwargs["value"] != "not_home":
             message = f"{name} is in {new_prefix}{kwargs['value']}"
         else:

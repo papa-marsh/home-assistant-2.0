@@ -42,3 +42,11 @@
 #     pyscript.entity_card_home.staging["last_bin_day"] = date.today()
 #     pyscript.entity_card_home.blink = False
 #     entity_card_update_row_3()
+
+
+# @state_trigger("sensor.marshall_s_iphone_battery_state")
+# def set_master_sound_machine(**kwargs):
+#     if kwargs["value"] == "Not Charging":
+#         switch.turn_off(entity_id="switch.master_sound_machine")
+#     else:
+#         switch.turn_on(entity_id="switch.master_sound_machine")
