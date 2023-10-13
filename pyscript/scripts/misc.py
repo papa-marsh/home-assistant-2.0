@@ -4,7 +4,6 @@ import constants
 import dates
 import files
 import push
-import secrets
 import util
 
 
@@ -53,7 +52,7 @@ def send_sleep_notification():
     noti.send()
 
 
-@time_trigger("cron(0 9,19 * * *)")
+@time_trigger("cron(30 8,19 * * *)")
 def feed_chelsea_notification():
     if binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(
         tz.tzlocal()
@@ -65,8 +64,7 @@ def feed_chelsea_notification():
             group="feed_chelsea",
             priority="time-sensitive",
             target="marshall"
-            if person.marshall == "home"
-            and person.emily == state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]
+            if person.marshall == "home" and person.emily != "home"
             else "all",
         )
         noti.send()
@@ -105,7 +103,10 @@ def notify_on_zone_change(**kwargs):
 
         if not files.read("zones", [kwargs["value"], "is_region"], False):
             message = f"{name} arrived at {new_prefix}{kwargs['value']}"
-            if new_zone == "home" and pyscript.vars.left_home_timestamp[name]:
+            if (
+                new_zone == "home"
+                and pyscript.vars.left_home_timestamp[name].day == datetime.now().day
+            ):
                 message += f" after {dates.format_duration(pyscript.vars.left_home_timestamp[name])}"
         elif not files.read("zones", [kwargs["old_value"], "is_region"], False):
             message = f"{name} left {old_prefix}{kwargs['old_value']}"
