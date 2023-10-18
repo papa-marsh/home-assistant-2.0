@@ -50,3 +50,20 @@
 #         switch.turn_off(entity_id="switch.master_sound_machine")
 #     else:
 #         switch.turn_on(entity_id="switch.master_sound_machine")
+
+
+# @state_trigger("switch.ellies_sound_machine in ['on', 'off']")
+# def send_sleep_notification():
+#     wakeup = switch.ellies_sound_machine == "off"
+#     noti = push.Notification(
+#         title="Wakeup Time" if wakeup else "Sleep Time",
+#         message=f"Ellie {'got up' if wakeup else 'went down'} at {dates.parse_timestamp(output_format='time')}",
+#         tag="sleepy_wake_time",
+#         group="sleepy_wake_time",
+#         target="marshall",
+#     )
+#     if wakeup:
+#         noti.message += (
+#             f" after {dates.format_duration(pyscript.vars.sleepy_time_timestamp)}"
+#         )
+#     noti.send()

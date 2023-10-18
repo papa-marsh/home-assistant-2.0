@@ -12,7 +12,6 @@ def persist_vars():
         "pyscript.vars",
         default_value="",
         default_attributes={
-            "sleepy_time_timestamp": "",
             "clear_charge_to_max": False,
             "left_home_timestamp": {"Marshall": None, "Emily": None},
         },

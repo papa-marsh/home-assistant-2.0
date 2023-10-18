@@ -31,25 +31,7 @@ def turn_off_sound_machine(**kwargs):
 
 @state_trigger("switch.ellies_sound_machine=='on'")
 def sleep_time():
-    pyscript.vars.sleepy_time_timestamp = datetime.now()
     media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
-
-
-@state_trigger("switch.ellies_sound_machine in ['on', 'off']")
-def send_sleep_notification():
-    wakeup = switch.ellies_sound_machine == "off"
-    noti = push.Notification(
-        title="Wakeup Time" if wakeup else "Sleep Time",
-        message=f"Ellie {'got up' if wakeup else 'went down'} at {dates.parse_timestamp(output_format='time')}",
-        tag="sleepy_wake_time",
-        group="sleepy_wake_time",
-        target="marshall",
-    )
-    if wakeup:
-        noti.message += (
-            f" after {dates.format_duration(pyscript.vars.sleepy_time_timestamp)}"
-        )
-    noti.send()
 
 
 @time_trigger("cron(30 8,19 * * *)")
