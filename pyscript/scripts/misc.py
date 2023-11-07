@@ -7,6 +7,14 @@ import push
 import util
 
 
+@time_trigger("cron(0 7,18 * * *)")
+def toggle_butterfly_night_light():
+    if datetime.now().hour < 12:
+        switch.turn_on(entity_id="switch.butterfly_night_light")
+    else:
+        switch.turn_off(entity_id="switch.butterfly_night_light")
+
+
 @event_trigger("sleepy_time")
 def ios_shortcut_sleepy_time():
     if files.read("zones", [person.emily, "near_home"], False):
@@ -85,22 +93,18 @@ def notify_on_zone_change(**kwargs):
 
         if not files.read("zones", [kwargs["value"], "is_region"], False):
             message = f"{name} arrived at {new_prefix}{kwargs['value']}"
-            if (
-                new_zone == "home"
-                and pyscript.vars.left_home_timestamp[name].day == datetime.now().day
-            ):
+
+            if new_zone == "home" and pyscript.vars.left_home_timestamp[name].day == datetime.now().day:
                 message += f" after {dates.format_duration(pyscript.vars.left_home_timestamp[name])}"
+
         elif not files.read("zones", [kwargs["old_value"], "is_region"], False):
             message = f"{name} left {old_prefix}{kwargs['old_value']}"
-            if (
-                kwargs["old_value"].last_changed.astimezone(tz.tzlocal()).day
-                == datetime.now().day
-            ):
-                message += (
-                    f" after {dates.format_duration(kwargs['old_value'].last_changed)}"
-                )
+
+            if kwargs["old_value"].last_changed.astimezone(tz.tzlocal()).day == datetime.now().day:
+                message += f" after {dates.format_duration(kwargs['old_value'].last_changed)}"
             if kwargs["old_value"] == "home":
                 pyscript.vars.left_home_timestamp[name] = datetime.now()
+
         elif kwargs["value"] != "not_home":
             message = f"{name} is in {new_prefix}{kwargs['value']}"
         else:
