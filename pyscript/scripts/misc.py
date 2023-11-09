@@ -60,6 +60,26 @@ def feed_chelsea_notification():
         noti.send()
 
 
+@state_trigger("binary_sensor.chelsea_cabinet_sensor")
+def chelsea_double_meal_warning(**kwargs):
+    now = datetime.now().astimezone(tz.tzlocal())
+    last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
+    if (
+        kwargs["value"] == "on" and
+        datetime.now().hour in [6, 7, 8, 17, 18, 19] and
+        now - timedelta(hours=1) < last_opened < now - timedelta(minutes=5)
+    ):
+        noti = push.Notification(
+            title="Beth Already Ate!",
+            message=f"Don't let her trick you. Double check before feeding Beth {'breakfast' if datetime.now().hour < 12 else 'dinner'}",
+            tag="double_feed_warning",
+            group="double_feed_warning",
+            priority="time-sensitive",
+            target="marshall" if person.marshall == "home" and person.emily != "home" else "all",
+        )
+        noti.send()
+
+
 @time_trigger("startup")
 @state_trigger("binary_sensor.chelsea_cabinet_sensor")
 def clear_feed_chelsea_notification():

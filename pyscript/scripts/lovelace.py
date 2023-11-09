@@ -43,8 +43,8 @@ def persist_chelsea_next_fixture():
             "competition": "",
             "date": "Date",
             "time": "Time",
-            "home_path": f"/local/PL/Default.png",
-            "away_path": f"/local/PL/Default.png",
+            "home_path": "/local/PL/Default.png",
+            "away_path": "/local/PL/Default.png",
             "top_row": "",
         },
     )
