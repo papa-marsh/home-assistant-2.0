@@ -169,7 +169,7 @@ def stocks_entity_card_dtap():
     service.call("pyscript", "crypto_tap")
 
 
-@time_trigger("startup", "cron(0 10,14 * * 1-5)")
+@time_trigger("cron(0 10,14 * * 1-5)")
 def stocks_stage_and_populate():
     stocks_stage_entity()
     task.sleep(5)
@@ -185,12 +185,13 @@ def stocks_stage_entity():
         }
 
         for symbol in secrets.STOCKS_QTY:
+            quote = api.get_stock_quote(symbol=symbol)
+            staging[symbol.lower()] = {
+                "price": quote["current"],
+                "change": quote["change"],
+            }
+            
             if symbol != secrets.JOB_SYMBOL:
-                quote = api.get_stock_quote(symbol=symbol)
-                staging[symbol.lower()] = {
-                    "price": quote["current"],
-                    "change": quote["change"],
-                }
                 staging["total"] += quote["current"] * secrets.STOCKS_QTY[symbol]
 
         pyscript.entity_card_stocks.staging = staging
