@@ -169,7 +169,7 @@ def stocks_entity_card_dtap():
     service.call("pyscript", "crypto_tap")
 
 
-@time_trigger("startup", "cron(*/5 9-17 * * 1-5)")
+@time_trigger("startup", "cron(0 10,14 * * 1-5)")
 def stocks_stage_and_populate():
     stocks_stage_entity()
     task.sleep(5)
@@ -185,17 +185,18 @@ def stocks_stage_entity():
         }
 
         for symbol in secrets.STOCKS_QTY:
-            quote = api.get_stock_quote(symbol=symbol)
-            staging[symbol.lower()] = {
-                "price": quote["current"],
-                "change": quote["change"],
-            }
-            staging["total"] += quote["current"] * secrets.STOCKS_QTY[symbol]
+            if symbol != secrets.JOB_SYMBOL:
+                quote = api.get_stock_quote(symbol=symbol)
+                staging[symbol.lower()] = {
+                    "price": quote["current"],
+                    "change": quote["change"],
+                }
+                staging["total"] += quote["current"] * secrets.STOCKS_QTY[symbol]
 
         pyscript.entity_card_stocks.staging = staging
 
-    except:
-        log.error("Exception caught while staging stocks entity")
+    except Exception as e:
+        log.error(f"Exception caught while staging stocks entity: {e}")
 
 
 def stocks_populate_card(private=False):
@@ -220,27 +221,34 @@ def stocks_populate_card(private=False):
 
         if abs(staged["change"]) >= constants.ASSET_ACTIVE_THRESHOLD:
             active = True
+        
+        if visibility == "public":
+            if config["price"]:
+                value += format_price(
+                    staged["price"],
+                    precision=config["price_prec"],
+                    cents=config["cents"],
+                    k_suffix=config["k_suffix"],
+                )
 
-        if config["price"]:
-            value += format_price(
-                staged["price"],
-                precision=config["price_prec"],
-                cents=config["cents"],
-                k_suffix=config["k_suffix"],
-            )
+            if config["price"] and config["change"]:
+                value += " ("
 
-        if config["price"] and config["change"]:
-            value += " ("
+            if config["change"]:
+                value += format_change(
+                    staged["change"],
+                    precision=config["change_prec"],
+                    percent_formatted=True,
+                )
 
-        if config["change"]:
-            value += format_change(
-                staged["change"],
-                precision=config["change_prec"],
-                percent_formatted=True,
-            )
+            if config["price"] and config["change"]:
+                value += ")"
 
-        if config["price"] and config["change"]:
-            value += ")"
+        else:
+            amount = staged["price"] * secrets.STOCKS_QTY[symbol.upper()]
+            if symbol == "goog":
+                amount += pyscript.entity_card_stocks.staging["GOOGL"]["price"] * secrets.STOCKS_QTY["GOOGL"]
+            value = format_price(amount, precision=0)
 
         color = format_color(staged["change"], percent_formatted=True)
 
@@ -250,6 +258,18 @@ def stocks_populate_card(private=False):
 
     pyscript.entity_card_stocks.active = active
     pyscript.entity_card_stocks.private = private
+
+
+@time_trigger("cron(0 3 * * *)")
+def reset_stocks_card():
+    pyscript.entity_card_stocks = "0.00%"
+    pyscript.entity_card_stocks.active = False
+    pyscript.entity_card_stocks.blink = False
+    
+    for row in range(1, 4):
+        value = state.getattr("pyscript.entity_card_stocks")[f"row_{row}_value"]
+        state.setattr(f"pyscript.entity_card_stocks.row_{row}_value", value.split(" ")[0])
+        state.setattr(f"pyscript.entity_card_stocks.row_{row}_color", "default")
 
 
 def format_price(price, precision=2, cents=False, k_suffix=False):

@@ -49,15 +49,15 @@ ASSET_ACTIVE_THRESHOLD = 5.0
 
 STOCKS_CONFIG = {
     "row_1": {
-        "symbol": "spy",
-        "icon": "mdi:bank",
+        "symbol": "net",
+        "icon": "mdi:cloud",
         "public": {
-            "price": False,
-            "price_prec": 0,
+            "price": True,
+            "price_prec": 2,
             "cents": False,
             "k_suffix": False,
             "change": True,
-            "change_prec": 2,
+            "change_prec": 0,
         },
         "private": {
             "price": True,
