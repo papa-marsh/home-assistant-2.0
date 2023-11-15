@@ -263,7 +263,6 @@ def stocks_populate_card(private=False):
 
 @time_trigger("cron(0 3 * * *)")
 def reset_stocks_card():
-    pyscript.entity_card_stocks = "0.00%"
     pyscript.entity_card_stocks.active = False
     pyscript.entity_card_stocks.blink = False
     
