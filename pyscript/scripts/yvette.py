@@ -160,9 +160,8 @@ def complication_leading():
 @time_trigger("startup")
 @state_trigger("sensor.yvette_battery", "climate.yvette_hvac_climate_system")
 def complication_outer():
-    pyscript.complication_yvette.outer = f"{sensor.yvette_battery}%"
-    if climate.yvette_hvac_climate_system == "heat_cool":
-        pyscript.complication_yvette.outer += f" {climate.yvette_hvac_climate_system.temperature}°"
+    pyscript.complication_yvette.outer = f"{sensor.yvette_battery}"
+    pyscript.complication_yvette.outer += "❄️" if climate.yvette_hvac_climate_system == "heat_cool" else "%"
 
 
 @time_trigger("startup")
