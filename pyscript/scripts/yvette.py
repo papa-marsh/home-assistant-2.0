@@ -12,7 +12,7 @@ import util
 def send_critical_on_drive():
     noti = push.Notification(
         title="Yvette In Drive",
-        message=f"Parking brake is off and Yvette is in drive",
+        message="Parking brake is off and Yvette is in drive",
         target="marshall",
         priority="critical",
         tag="yvette_drive_critical",
@@ -45,7 +45,7 @@ def reset_charge_limit():
 def charge_to_max():
     noti = push.Notification(
         title="Charging to Max",
-        message=f"Yvette has started charging to 100%",
+        message="Yvette has started charging to 100%",
         target="all",
         tag="charge_to_max",
         group="charge_to_max",
@@ -57,7 +57,7 @@ def charge_to_max():
         pyscript.vars.clear_charge_to_max = True
     else:
         noti.title = ("Command Failed",)
-        noti.message = (f"Can't charge to max because Yvette is not plugged in",)
+        noti.message = ("Can't charge to max because Yvette is not plugged in",)
 
     noti.send()
 
@@ -129,7 +129,7 @@ def ios_seat_heat(**kwargs):
     else:
         noti = push.Notification(
             title="Command Failed",
-            message=f"Yvette climate must be on to turn on seat heater",
+            message="Yvette climate must be on to turn on seat heater",
             target="emily",
             tag="command_failed_seat_heater",
             group="command_failed_seat_heater",
@@ -297,10 +297,7 @@ def entity_card_update_row_1():
 def entity_card_update_row_2():
     if lock.yvette_doors in ["unknown", "unavailable"]:
         pyscript.entity_card_yvette.row_2_icon = "mdi:lock-question"
-    elif (
-        binary_sensor.yvette_parking_brake == "on"
-        or device_tracker.yvette_destination_location_tracker == "unknown"
-    ):
+    elif binary_sensor.yvette_parking_brake == "on" or device_tracker.yvette_destination_location_tracker == "unknown":
         pyscript.entity_card_yvette.row_2_value = lock.yvette_doors
         pyscript.entity_card_yvette.row_2_icon = (
             "mdi:lock" if lock.yvette_doors == "locked" else "mdi:lock-open-variant"
@@ -335,7 +332,7 @@ def entity_card_update_row_3():
                 sensor.yvette_arrival_time
             ) - datetime.now().astimezone(tz.tzlocal())
             eta = delta.days * 86400 + delta.seconds
-        except:
+        except Exception:
             eta = 0
         if binary_sensor.yvette_parking_brake == "on" or eta <= 0:
             pyscript.entity_card_yvette.row_3_value = (

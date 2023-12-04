@@ -14,7 +14,6 @@ import util
     "binary_sensor.garage_door_sensor",
     "binary_sensor.service_door_sensor",
     "binary_sensor.slider_door_sensor",
-    # "binary_sensor.refrigerator_door_sensor",
 )
 def door_open_notification(**kwargs):
     if kwargs["value"] in ["open", "on"] and kwargs["old_value"] in ["closed", "off"]:
@@ -114,7 +113,7 @@ def close_garage_from_notification(**kwargs):
     task.sleep(30)
     if state.get(f"cover.{id}") == "open":
         noti = push.Notification(
-            title=f"Command Failed",
+            title="Command Failed",
             tag=f"{id}_left_open",
             group=f"{id}_left_open",
             target="all",
@@ -215,7 +214,7 @@ def persist_entity_card_home():
             "row_2_icon": "mdi:water",
             "row_2_value": "",
             "row_2_color": "default",
-            "row_3_icon": "mdi:bed-clock",
+            "row_3_icon": "mdi:dog",
             "row_3_value": "",
             "row_3_color": "default",
             "staging": {},
@@ -295,21 +294,17 @@ def entity_card_update_row_2():
         )
 
 
-@time_trigger("startup")
-@state_trigger("switch.ellies_sound_machine")
-def entity_card_update_row_3():
-    task.unique("home_entity_card_update_row_3")
-    if switch.ellies_sound_machine == "on":
-        pyscript.entity_card_home.row_3_icon = "mdi:sleep"
-        while True:
-            pyscript.entity_card_home.row_3_value = dates.format_duration(
-                switch.ellies_sound_machine.last_changed
-            )
-            task.sleep(60)
-    else:
-        pyscript.entity_card_home.row_3_icon = "mdi:bed-clock"
-
-
 @time_trigger("cron(0 19 * * 1)")
 def entity_card_blink():
     pyscript.entity_card_home.blink = True
+
+
+@time_trigger("cron(0 7,18 * * *)")
+def entity_card_feed_chelsea():
+    if person.marshall == "home" or person.emily == "home":
+        pyscript.entity_card_home.row_3_color = "red"
+
+
+def entity_card_chelsea_fed():
+    pyscript.entity_card_home.row_3_color = "default"
+    pyscript.entity_card_home.row_3_value = dates.parse_timestamp(output_format="time")

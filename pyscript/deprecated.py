@@ -67,3 +67,18 @@
 #             f" after {dates.format_duration(pyscript.vars.sleepy_time_timestamp)}"
 #         )
 #     noti.send()
+
+
+# @time_trigger("startup")
+# @state_trigger("switch.ellies_sound_machine")
+# def entity_card_update_row_3():
+#     task.unique("home_entity_card_update_row_3")
+#     if switch.ellies_sound_machine == "on":
+#         pyscript.entity_card_home.row_3_icon = "mdi:sleep"
+#         while True:
+#             pyscript.entity_card_home.row_3_value = dates.format_duration(
+#                 switch.ellies_sound_machine.last_changed
+#             )
+#             task.sleep(60)
+#     else:
+#         pyscript.entity_card_home.row_3_icon = "mdi:bed-clock"
