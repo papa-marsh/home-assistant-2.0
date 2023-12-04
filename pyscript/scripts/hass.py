@@ -28,7 +28,7 @@ def check_cloud_backup_state():
     if sensor.backup_state != "backed_up":
         noti = push.Notification(
             title="Cloud Backup Failed",
-            message=f"Google Drive backup appears to have failed - Check add-on",
+            message="Google Drive backup appears to have failed - Check add-on",
             tag="cloud_backup_failed",
             group="cloud_backup_failed",
             target="marshall",
@@ -140,18 +140,14 @@ def entity_card_update_row_1():
 @time_trigger("startup")
 @state_trigger("binary_sensor.z_wave_js_running")
 def entity_card_update_row_2():
-    pyscript.entity_card_hass.row_2_value = (
-        "Running" if binary_sensor.z_wave_js_running == "on" else "Not Running"
-    )
+    pyscript.entity_card_hass.row_2_value = "Running" if binary_sensor.z_wave_js_running == "on" else "Not Running"
 
 
 @time_trigger("startup")
 @state_trigger("sensor.cpu_temperature")
 def entity_card_update_row_3():
     pyscript.entity_card_hass.row_3_value = f"{sensor.cpu_temperature} °F"
-    pyscript.entity_card_hass.row_3_color = (
-        "red" if float(sensor.cpu_temperature) >= 120 else "default"
-    )
+    pyscript.entity_card_hass.row_3_color = "red" if float(sensor.cpu_temperature) >= 120 else "default"
 
 
 @time_trigger("startup", "cron(* * * * *)")

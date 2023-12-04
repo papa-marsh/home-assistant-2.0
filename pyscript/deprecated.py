@@ -82,3 +82,12 @@
 #             task.sleep(60)
 #     else:
 #         pyscript.entity_card_home.row_3_icon = "mdi:bed-clock"
+
+
+# service: spotcast.start
+# data:
+#   spotify_device_id: 35f8cd3045279d156ec424531e7301e1fbc3d56f
+#   shuffle: true
+#   repeat: false
+#   random_song: true
+#   force_playback: true

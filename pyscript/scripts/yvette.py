@@ -106,8 +106,7 @@ def clear_charge_reminder():
 def sentry_off_at_in_laws():
     if (
         switch.yvette_sentry_mode == "on"
-        and device_tracker.yvette_location_tracker
-        == state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]
+        and device_tracker.yvette_location_tracker == state.getattr(secrets.IN_LAWS_ZONE)["friendly_name"]
     ):
         switch.turn_off(entity_id="switch.yvette_sentry_mode")
 
@@ -123,9 +122,7 @@ def ios_yvette_air(**kwargs):
 @event_trigger("ios.action_fired", "actionName=='Seat Heat'")
 def ios_seat_heat(**kwargs):
     if climate.yvette_hvac_climate_system == "heat_cool":
-        select.select_option(
-            entity_id="select.yvette_heated_seat_rear_left", option="High"
-        )
+        select.select_option(entity_id="select.yvette_heated_seat_rear_left", option="High")
     else:
         noti = push.Notification(
             title="Command Failed",
@@ -164,25 +161,19 @@ def complication_leading():
 def complication_outer():
     pyscript.complication_yvette.outer = f"{sensor.yvette_battery}%"
     if climate.yvette_hvac_climate_system == "heat_cool":
-        pyscript.complication_yvette.outer += (
-            f" {climate.yvette_hvac_climate_system.temperature}°"
-        )
+        pyscript.complication_yvette.outer += f" {climate.yvette_hvac_climate_system.temperature}°"
 
 
 @time_trigger("startup")
 @state_trigger("binary_sensor.yvette_charger")
 def complication_trailing():
-    pyscript.complication_yvette.trailing = (
-        "⚡️" if binary_sensor.yvette_charger == "on" else ""
-    )
+    pyscript.complication_yvette.trailing = "⚡️" if binary_sensor.yvette_charger == "on" else ""
 
 
 @time_trigger("startup")
 @state_trigger("sensor.yvette_battery", "number.yvette_charge_limit")
 def complication_gauge():
-    pyscript.complication_yvette.gauge = int(sensor.yvette_battery) / int(
-        number.yvette_charge_limit
-    )
+    pyscript.complication_yvette.gauge = int(sensor.yvette_battery) / int(number.yvette_charge_limit)
 
 
 @time_trigger("startup")
@@ -216,10 +207,9 @@ def entity_card_tap():
     else:
         climate.turn_on(entity_id="climate.yvette_hvac_climate_system")
         pyscript.entity_card_yvette.active = True
+
     pyscript.entity_card_yvette.blink = True
-    trigger_info = task.wait_until(
-        state_trigger="climate.yvette_hvac_climate_system", timeout=60
-    )
+    trigger_info = task.wait_until(state_trigger="climate.yvette_hvac_climate_system", timeout=60)
     if trigger_info["trigger_type"] == "timeout":
         pyscript.entity_card_yvette.blink = False
         pyscript.entity_card_yvette.active = not pyscript.entity_card_yvette.active
@@ -299,20 +289,10 @@ def entity_card_update_row_2():
         pyscript.entity_card_yvette.row_2_icon = "mdi:lock-question"
     elif binary_sensor.yvette_parking_brake == "on" or device_tracker.yvette_destination_location_tracker == "unknown":
         pyscript.entity_card_yvette.row_2_value = lock.yvette_doors
-        pyscript.entity_card_yvette.row_2_icon = (
-            "mdi:lock" if lock.yvette_doors == "locked" else "mdi:lock-open-variant"
-        )
-        pyscript.entity_card_yvette.row_2_color = (
-            "red"
-            if lock.yvette_doors != "locked"
-            and device_tracker.yvette_location_tracker != "home"
-            else "default"
-        )
+        pyscript.entity_card_yvette.row_2_icon = "mdi:lock" if lock.yvette_doors == "locked" else "mdi:lock-open-variant"
+        pyscript.entity_card_yvette.row_2_color = "red" if lock.yvette_doors != "locked" and device_tracker.yvette_location_tracker != "home" else "default"
     else:
-        pyscript.entity_card_yvette.row_2_value = util.zone_short_name(
-            device_tracker.yvette_destination_location_tracker
-        )
-
+        pyscript.entity_card_yvette.row_2_value = util.zone_short_name(device_tracker.yvette_destination_location_tracker)
         pyscript.entity_card_yvette.row_2_icon = "mdi:navigation"
         pyscript.entity_card_yvette.row_2_color = "default"
 
@@ -324,26 +304,20 @@ def entity_card_update_row_2():
     "sensor.yvette_arrival_time",
 )
 def entity_card_update_row_3():
+    current_temp = climate.yvette_hvac_climate_system.current_temperature
     if climate.yvette_hvac_climate_system in ["unknown", "unavailable"]:
         pyscript.entity_card_yvette.row_3_icon = "mdi:thermometer-off"
     else:
         try:
-            delta = dates.parse_timestamp(
-                sensor.yvette_arrival_time
-            ) - datetime.now().astimezone(tz.tzlocal())
+            delta = dates.parse_timestamp(sensor.yvette_arrival_time) - datetime.now().astimezone(tz.tzlocal())
             eta = delta.days * 86400 + delta.seconds
         except Exception:
             eta = 0
+
         if binary_sensor.yvette_parking_brake == "on" or eta <= 0:
-            pyscript.entity_card_yvette.row_3_value = (
-                f"{climate.yvette_hvac_climate_system.current_temperature}° F"
-            )
+            pyscript.entity_card_yvette.row_3_value = f"{current_temp}° F"
             pyscript.entity_card_yvette.row_3_icon = "mdi:thermometer"
-            pyscript.entity_card_yvette.row_3_color = (
-                "red"
-                if climate.yvette_hvac_climate_system.current_temperature >= 105
-                else "default"
-            )
+            pyscript.entity_card_yvette.row_3_color = "red" if current_temp and current_temp >= 105 else "default"
         else:
             pyscript.entity_card_yvette.row_3_value = f"{eta//60} minutes"
             pyscript.entity_card_yvette.row_3_icon = "mdi:map-clock"

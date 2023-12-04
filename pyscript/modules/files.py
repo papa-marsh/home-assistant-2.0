@@ -13,7 +13,7 @@ def read(file_name, key_list=None, default_value=None):
         if key_list and isinstance(result, dict):
             for key in key_list:
                 result = result[key]
-    except:
+    except Exception:
         result = default_value
 
     return result

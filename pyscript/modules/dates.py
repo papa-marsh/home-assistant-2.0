@@ -26,9 +26,7 @@ def format_duration(timestamp, comparison=None, include_seconds=False):
     elif comparison:
         interval = timestamp - comparison
     else:
-        interval = timestamp.astimezone(tz.tzlocal()) - datetime.now().astimezone(
-            tz.tzlocal()
-        )
+        interval = timestamp.astimezone(tz.tzlocal()) - datetime.now().astimezone(tz.tzlocal())
     hours, minutes, seconds = str(abs(interval)).split(".")[0].split(":")
     duration = ""
 
@@ -50,7 +48,7 @@ def get_next_weekday(day):
     day_map = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
     try:
         day = int(day)
-    except:
+    except Exception:
         day = day_map[day.lower()]
 
     return today + timedelta((day - today.weekday()) % 7)

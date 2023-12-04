@@ -44,9 +44,7 @@ def sleep_time():
 
 @time_trigger("cron(30 8,19 * * *)")
 def feed_chelsea_notification():
-    if binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(
-        tz.tzlocal()
-    ) < datetime.now().astimezone(tz.tzlocal()) - timedelta(hours=2):
+    if binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal()) < datetime.now().astimezone(tz.tzlocal()) - timedelta(hours=2):
         noti = push.Notification(
             title="Feed Beth",
             message=f"Don't forget Chelsea's {'breakfast' if datetime.now().hour < 12 else 'dinner'}",
@@ -151,6 +149,4 @@ def persist_complication_emily_location():
 @state_trigger("person.emily")
 def complication_emily_location_update():
     pyscript.complication_emily_location.inner = util.zone_short_name(person.emily)
-    pyscript.complication_emily_location.outer = dates.parse_timestamp(
-        output_format="time"
-    )
+    pyscript.complication_emily_location.outer = dates.parse_timestamp(output_format="time")

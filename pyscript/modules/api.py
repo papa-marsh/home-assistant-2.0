@@ -9,7 +9,6 @@ def get_stock_week_change(symbol="SPY"):
 
 def get_stock_quote(symbol="SPY"):
     url = f"https://finnhub.io/api/v1/quote?symbol={symbol.upper()}&token={secrets.FINNHUB_TOKEN}"
-
     r = task.executor(requests.get, url).json()
 
     return {"current": r["c"], "change": r["dp"], "prev_close": r["pc"]}
@@ -17,7 +16,6 @@ def get_stock_quote(symbol="SPY"):
 
 def get_stock_week(symbol="SPY"):
     url = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={symbol.upper()}&apikey={secrets.ALPHAVANTAGE_KEY}"
-
     r = task.executor(requests.get, url).json()
 
     latest_week = list(r["Weekly Time Series"].keys())[0]

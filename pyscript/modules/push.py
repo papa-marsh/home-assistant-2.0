@@ -90,6 +90,9 @@ def update_complications(target="all"):
 
 def debug(message="Placeholder message"):
     noti = Notification(
-        title="Debug", message=message, group="debug", target="marshall"
+        title="Debug",
+        message=message,
+        group="debug",
+        target="marshall",
     )
     noti.send()

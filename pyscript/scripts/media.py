@@ -1,15 +1,6 @@
 import constants
 
 
-# service: spotcast.start
-# data:
-#   spotify_device_id: 35f8cd3045279d156ec424531e7301e1fbc3d56f
-#   shuffle: true
-#   repeat: false
-#   random_song: true
-#   force_playback: true
-
-
 @time_trigger("cron(0 4 * * *)")
 def reset_media_controls():
     media_player.media_pause(
@@ -26,9 +17,7 @@ def reset_media_controls():
     pyscript.media_card.sync = True
     pyscript.media_card = "controls"
     media_player.volume_set(entity_id="media_player.living_room_tv", volume_level=0.1)
-    input_select.select_option(
-        entity_id="input_select.media_card_playlist", option="None Selected"
-    )
+    input_select.select_option(entity_id="input_select.media_card_playlist", option="None Selected")
     pyscript.media_card = "controls"
 
 
@@ -53,9 +42,7 @@ def persist_media_card():
 @state_trigger("media_player.living_room.media_playlist", "sensor.sonos_favorites")
 def set_media_card_playlists():
     task.unique("set_media_card_playlists")
-    options = [
-        sensor.sonos_favorites.items[source] for source in sensor.sonos_favorites.items
-    ]
+    options = [sensor.sonos_favorites.items[source] for source in sensor.sonos_favorites.items]
 
     if "media_playlist" not in state.getattr("media_player.living_room"):
         playlist = "None Selected"
@@ -70,21 +57,13 @@ def set_media_card_playlists():
     if options[0] == "None Selected":
         task.sleep(5)
 
-    input_select.set_options(
-        entity_id="input_select.media_card_playlist", options=options, blocking=True
-    )
-    input_select.select_option(
-        entity_id="input_select.media_card_playlist", option=playlist
-    )
+    input_select.set_options(entity_id="input_select.media_card_playlist", options=options, blocking=True)
+    input_select.select_option(entity_id="input_select.media_card_playlist", option=playlist)
 
 
 @state_trigger("input_select.media_card_playlist != 'None Selected'")
 def play_media_card_playlist():
-    current_playlist = (
-        media_player.living_room.media_playlist
-        if "media_playlist" in media_player.living_room
-        else None
-    )
+    current_playlist = media_player.living_room.media_playlist if "media_playlist" in media_player.living_room else None
     if current_playlist != input_select.media_card_playlist:
         media_player.select_source(
             entity_id="media_player.living_room",
@@ -130,9 +109,7 @@ def update_sync_button():
 
 @state_trigger("media_player.living_room.group_members", "pyscript.media_card.group")
 def join_to_group():
-    if pyscript.media_card.group and len(media_player.living_room.group_members) < len(
-        constants.SPEAKER_GROUP
-    ):
+    if pyscript.media_card.group and len(media_player.living_room.group_members) < len(constants.SPEAKER_GROUP):
         group_speakers()
 
 

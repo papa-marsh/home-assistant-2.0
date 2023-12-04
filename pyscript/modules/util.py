@@ -24,25 +24,19 @@ def get_pref(pref, value_only=True):
             pref_object["options"] = ["On", "Off"]
         elif pref_object["options"] == "time_15":
             pref_object["options"] = ["Off"] + [
-                "{}:{:02d} {}".format(
-                    (h % 12) if (h % 12) != 0 else 12, m, "AM" if h < 12 else "PM"
-                )
+                "{}:{:02d} {}".format((h % 12) if (h % 12) != 0 else 12, m, "AM" if h < 12 else "PM")
                 for h in range(24)
                 for m in range(0, 60, 15)
             ]
         elif pref_object["options"] == "time_30":
             pref_object["options"] = ["Off"] + [
-                "{}:{:02d} {}".format(
-                    (h % 12) if (h % 12) != 0 else 12, m, "AM" if h < 12 else "PM"
-                )
+                "{}:{:02d} {}".format((h % 12) if (h % 12) != 0 else 12, m, "AM" if h < 12 else "PM")
                 for h in range(24)
                 for m in range(0, 60, 30)
             ]
         elif pref_object["options"] == "time_60":
             pref_object["options"] = ["Off"] + [
-                "{}:00 {}".format(
-                    (h % 12) if (h % 12) != 0 else 12, "AM" if h < 12 else "PM"
-                )
+                "{}:00 {}".format((h % 12) if (h % 12) != 0 else 12, "AM" if h < 12 else "PM")
                 for h in range(24)
             ]
         elif "range(" in pref_object["options"]:
@@ -64,7 +58,7 @@ def set_pref(pref, value):
             elif new_index < 0:
                 new_index = len(pref_object["options"]) - 1
             new_value = pref_object["options"][new_index]
-        except:
+        except Exception:
             new_value = pref_object["options"][0]
     elif value == "default" and "default" in pref_object:
         new_value = pref_object["default"]
@@ -94,7 +88,7 @@ def require_ios_action_unlock(func):
         else:
             noti = push.Notification(
                 title="Command Failed",
-                message=f"iOS actions must be unlocked before using this command",
+                message="iOS actions must be unlocked before using this command",
                 target="all",
                 tag="command_failed_ios_action",
                 group="command_failed_ios_action",

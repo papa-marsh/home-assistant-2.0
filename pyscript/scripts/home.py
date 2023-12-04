@@ -58,9 +58,7 @@ def door_open_notification_loop(id, name, open_time, silent):
             destructive=True,
         )
     while True:
-        duration = (
-            datetime.now().astimezone(tz.tzlocal()) - open_time.astimezone(tz.tzlocal())
-        ).seconds // 60
+        duration = (datetime.now().astimezone(tz.tzlocal()) - open_time.astimezone(tz.tzlocal())).seconds // 60
         noti.message = f"{name} has been open for {duration} minutes"
         noti.send()
         task.sleep(10 * 60)
@@ -176,10 +174,7 @@ def ios_garage_stall(**kwargs):
 def door_open_critical_notification(**kwargs):
     if kwargs["value"] == "on" and kwargs["old_value"] == "off":
         target = None
-        if person.marshall not in [
-            "home",
-            "East Grand Rapids",
-        ] and person.emily not in ["home", "East Grand Rapids"]:
+        if person.marshall not in ["home", "East Grand Rapids"] and person.emily not in ["home", "East Grand Rapids"]:
             target = "all"
         elif 1 <= datetime.now().hour < 6:
             target = "marshall"
@@ -266,21 +261,13 @@ def entity_card_update_state():
 
 
 @time_trigger("startup")
-@state_trigger(
-    "climate.thermostat.current_temperature", "climate.thermostat.hvac_action"
-)
+@state_trigger("climate.thermostat.current_temperature", "climate.thermostat.hvac_action")
 def entity_card_update_row_1():
     if climate.thermostat == "unavailable":
         pyscript.entity_card_home.row_1_value = "Offline"
     else:
-        action = (
-            climate.thermostat.hvac_action
-            if "hvac_action" in climate.thermostat
-            else climate.thermostat
-        )
-        pyscript.entity_card_home.row_1_value = (
-            f"{action} - {climate.thermostat.current_temperature}°"
-        )
+        action = climate.thermostat.hvac_action if "hvac_action" in climate.thermostat else climate.thermostat
+        pyscript.entity_card_home.row_1_value = f"{action} - {climate.thermostat.current_temperature}°"
 
 
 @time_trigger("startup")
@@ -289,9 +276,7 @@ def entity_card_update_row_2():
     if climate.thermostat == "unavailable":
         pyscript.entity_card_home.row_2_value = "Offline"
     else:
-        pyscript.entity_card_home.row_2_value = (
-            f"{round(climate.thermostat.current_humidity)}%"
-        )
+        pyscript.entity_card_home.row_2_value = f"{round(climate.thermostat.current_humidity)}%"
 
 
 @time_trigger("cron(0 19 * * 1)")

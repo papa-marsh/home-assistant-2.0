@@ -62,7 +62,9 @@ def populate_preference_options(**kwargs):
         blocking=True,
     )
     input_select.select_option(
-        entity_id="input_select.preference_value", option=pref["value"], blocking=True
+        entity_id="input_select.preference_value",
+        option=pref["value"],
+        blocking=True,
     )
     pyscript.vars.preference_value_mutex = False
 
@@ -70,10 +72,7 @@ def populate_preference_options(**kwargs):
 @state_trigger("input_select.preference_value")
 def set_preference_value(**kwargs):
     if not pyscript.vars.preference_value_mutex:
-        util.set_pref(
-            input_select.preference_selector,
-            str(kwargs["value"]),
-        )
+        util.set_pref(input_select.preference_selector, str(kwargs["value"]))
 
 
 @time_trigger("cron(0 5 * * *)")
@@ -98,6 +97,6 @@ def reset_preferences():
 
 @event_trigger("ios.action_fired", "actionName=='Unlock Actions'")
 def ios_unlock_actions(**kwargs):
-    state.setattr(f"pyscript.vars.ios_actions_unlocked", True)
+    state.setattr("pyscript.vars.ios_actions_unlocked", True)
     task.sleep(10)
-    state.setattr(f"pyscript.vars.ios_actions_unlocked", False)
+    state.setattr("pyscript.vars.ios_actions_unlocked", False)

@@ -77,13 +77,9 @@ def crypto_populate_card(private=False):
     active = False
 
     if visibility == "public":
-        pyscript.entity_card_crypto = format_change(
-            pyscript.entity_card_crypto.staging["btc_week"], percent_formatted=True
-        )
+        pyscript.entity_card_crypto = format_change(pyscript.entity_card_crypto.staging["btc_week"], percent_formatted=True)
     else:
-        pyscript.entity_card_crypto = format_price(
-            pyscript.entity_card_crypto.staging["total"], precision=0
-        )
+        pyscript.entity_card_crypto = format_price(pyscript.entity_card_crypto.staging["total"], precision=0)
 
     for row in range(1, 4):
         config = constants.CRYPTO_CONFIG[f"row_{row}"][visibility]
@@ -190,7 +186,7 @@ def stocks_stage_entity():
                 "price": quote["current"],
                 "change": quote["change"],
             }
-            
+
             if symbol != secrets.JOB_SYMBOL:
                 staging["total"] += quote["current"] * secrets.STOCKS_QTY[symbol]
 
@@ -205,13 +201,9 @@ def stocks_populate_card(private=False):
     active = False
 
     if visibility == "public":
-        pyscript.entity_card_stocks = format_change(
-            pyscript.entity_card_stocks.staging["spy_week"], percent_formatted=False
-        )
+        pyscript.entity_card_stocks = format_change(pyscript.entity_card_stocks.staging["spy_week"], percent_formatted=False)
     else:
-        pyscript.entity_card_stocks = format_price(
-            pyscript.entity_card_stocks.staging["total"], precision=0
-        )
+        pyscript.entity_card_stocks = format_price(pyscript.entity_card_stocks.staging["total"], precision=0)
 
     for row in range(1, 4):
         config = constants.STOCKS_CONFIG[f"row_{row}"][visibility]
@@ -222,7 +214,7 @@ def stocks_populate_card(private=False):
 
         if abs(staged["change"]) >= constants.ASSET_ACTIVE_THRESHOLD:
             active = True
-        
+
         if visibility == "public":
             if config["price"]:
                 value += format_price(
@@ -265,7 +257,7 @@ def stocks_populate_card(private=False):
 def reset_stocks_card():
     pyscript.entity_card_stocks.active = False
     pyscript.entity_card_stocks.blink = False
-    
+
     for row in range(1, 4):
         value = state.getattr("pyscript.entity_card_stocks")[f"row_{row}_value"]
         state.setattr(f"pyscript.entity_card_stocks.row_{row}_value", value.split(" ")[0])

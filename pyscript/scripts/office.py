@@ -98,9 +98,7 @@ def entity_card_update_row_1():
 @time_trigger("startup")
 @state_trigger("media_player.office", "media_player.office.volume_level")
 def entity_card_update_row_2():
-    pyscript.entity_card_office.row_2_value = (
-        f"{round(media_player.office.volume_level * 100)}%"
-    )
+    pyscript.entity_card_office.row_2_value = f"{round(media_player.office.volume_level * 100)}%"
 
 
 @time_trigger("cron(0 9 * * 1-5)")
@@ -112,12 +110,11 @@ def entity_card_update_row_3():
 def get_next_timecard():
     next_timecard = dates.get_next_weekday("fri")
     if "last_timecard" not in pyscript.entity_card_office.staging:
-        pyscript.entity_card_office.staging["last_timecard"] = date.today() - timedelta(
-            days=7
-        )
+        pyscript.entity_card_office.staging["last_timecard"] = date.today() - timedelta(days=7)
     if isinstance(pyscript.entity_card_office.staging["last_timecard"], str):
         pyscript.entity_card_office.staging["last_timecard"] = datetime.strptime(
-            pyscript.entity_card_office.staging["last_timecard"], "%Y-%m-%d"
+            pyscript.entity_card_office.staging["last_timecard"],
+            "%Y-%m-%d"
         ).date()
     elif next_timecard <= pyscript.entity_card_office.staging["last_timecard"]:
         next_timecard += timedelta(days=7)
