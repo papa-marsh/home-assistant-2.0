@@ -130,9 +130,12 @@ def entity_card_update_state():
 @time_trigger("startup")
 @state_trigger("sensor.hacs")
 def entity_card_update_row_1():
-    value = f"{sensor.hacs} Update"
-    if sensor.hacs != "1":
-        value += "s"
+    if sensor.hacs == "0":
+        value = "Up To Date"
+    else:
+        value = f"{sensor.hacs} Update"
+        if sensor.hacs != "1":
+            value += "s"
 
     pyscript.entity_card_hass.row_1_value = value
 
