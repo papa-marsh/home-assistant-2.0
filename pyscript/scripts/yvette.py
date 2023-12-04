@@ -64,14 +64,15 @@ def charge_to_max():
 
 @state_trigger("binary_sensor.yvette_charger=='on'")
 def charge_if_low():
-    task.unique("yvette_charge_if_low")
-    if int(sensor.yvette_battery) < constants.YVETTE_LOW_THRESHOLD:
-        switch.turn_on(entity_id="switch.yvette_charger")
-        while int(sensor.yvette_battery) < constants.YVETTE_LOW_THRESHOLD:
-            if datetime.now().hour >= 23:
-                return
-            task.sleep(60)
-        switch.turn_off(entity_id="switch.yvette_charger")
+    if device_tracker.yvette_location_tracker == "home":
+        task.unique("yvette_charge_if_low")
+        if int(sensor.yvette_battery) < constants.YVETTE_LOW_THRESHOLD:
+            switch.turn_on(entity_id="switch.yvette_charger")
+            while int(sensor.yvette_battery) < constants.YVETTE_LOW_THRESHOLD:
+                if datetime.now().hour >= 23:
+                    return
+                task.sleep(60)
+            switch.turn_off(entity_id="switch.yvette_charger")
 
 
 @time_trigger("cron(0 21 * * *)")
