@@ -44,7 +44,8 @@ def sleep_time():
 
 @time_trigger("cron(30 8,19 * * *)")
 def feed_chelsea_notification():
-    if binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal()) < datetime.now().astimezone(tz.tzlocal()) - timedelta(hours=2):
+    last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
+    if last_opened < datetime.now().astimezone(tz.tzlocal()) - timedelta(hours=2):
         noti = push.Notification(
             title="Feed Beth",
             message=f"Don't forget Chelsea's {'breakfast' if datetime.now().hour < 12 else 'dinner'}",

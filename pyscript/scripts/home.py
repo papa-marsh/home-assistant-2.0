@@ -279,17 +279,23 @@ def entity_card_update_row_2():
         pyscript.entity_card_home.row_2_value = f"{round(climate.thermostat.current_humidity)}%"
 
 
+def entity_card_update_row_3():
+    pass
+
+
 @time_trigger("cron(0 19 * * 1)")
 def entity_card_blink():
     pyscript.entity_card_home.blink = True
 
 
-@time_trigger("cron(0 7,18 * * *)")
+@time_trigger("cron(50 6,17 * * *)")
 def entity_card_feed_chelsea():
-    if person.marshall == "home" or person.emily == "home":
+    last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
+    if last_opened < datetime.now().astimezone(tz.tzlocal()) - timedelta(minutes=20):
         pyscript.entity_card_home.row_3_color = "red"
 
 
+@state_trigger("binary_sensor.chelsea_cabinet_sensor=='on'")
 def entity_card_chelsea_fed():
     pyscript.entity_card_home.row_3_color = "default"
     pyscript.entity_card_home.row_3_value = dates.parse_timestamp(output_format="time")
