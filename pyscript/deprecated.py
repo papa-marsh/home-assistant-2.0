@@ -91,3 +91,24 @@
 #   repeat: false
 #   random_song: true
 #   force_playback: true
+
+
+# @time_trigger("cron(0 9 * * 1-5)")
+# def entity_card_update_row_3():
+#     pyscript.entity_card_office.blink = True
+#     pyscript.entity_card_office.row_3_value = dates.date_countdown(get_next_timecard())
+
+
+# def get_next_timecard():
+#     next_timecard = dates.get_next_weekday("fri")
+#     if "last_timecard" not in pyscript.entity_card_office.staging:
+#         pyscript.entity_card_office.staging["last_timecard"] = date.today() - timedelta(days=7)
+#     if isinstance(pyscript.entity_card_office.staging["last_timecard"], str):
+#         pyscript.entity_card_office.staging["last_timecard"] = datetime.strptime(
+#             pyscript.entity_card_office.staging["last_timecard"],
+#             "%Y-%m-%d"
+#         ).date()
+#     elif next_timecard <= pyscript.entity_card_office.staging["last_timecard"]:
+#         next_timecard += timedelta(days=7)
+
+#     return next_timecard

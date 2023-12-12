@@ -285,12 +285,17 @@ def entity_card_update_row_1():
     "device_tracker.yvette_destination_location_tracker",
 )
 def entity_card_update_row_2():
-    if lock.yvette_doors in ["unknown", "unavailable"]:
+    if device_tracker.yvette_location_tracker == "home":
+        pyscript.entity_card_yvette.row_2_value = "Home"
+        pyscript.entity_card_yvette.row_2_icon = "mdi:home"
+        pyscript.entity_card_yvette.row_2_color = "default"
+    elif lock.yvette_doors in ["unknown", "unavailable"]:
+        pyscript.entity_card_yvette.row_2_value = "Unknown"
         pyscript.entity_card_yvette.row_2_icon = "mdi:lock-question"
     elif binary_sensor.yvette_parking_brake == "on" or device_tracker.yvette_destination_location_tracker == "unknown":
         pyscript.entity_card_yvette.row_2_value = lock.yvette_doors
         pyscript.entity_card_yvette.row_2_icon = "mdi:lock" if lock.yvette_doors == "locked" else "mdi:lock-open-variant"
-        pyscript.entity_card_yvette.row_2_color = "red" if lock.yvette_doors != "locked" and device_tracker.yvette_location_tracker != "home" else "default"
+        pyscript.entity_card_yvette.row_2_color = "red" if lock.yvette_doors != "locked" else "default"
     else:
         pyscript.entity_card_yvette.row_2_value = util.zone_short_name(device_tracker.yvette_destination_location_tracker)
         pyscript.entity_card_yvette.row_2_icon = "mdi:navigation"

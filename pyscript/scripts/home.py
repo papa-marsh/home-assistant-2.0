@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import tz
 import constants
 import dates
@@ -229,7 +229,7 @@ def entity_card_hold():
 
 @service("pyscript.home_dtap")
 def entity_card_dtap():
-    pass
+    ...
 
 
 @time_trigger("startup")
@@ -280,7 +280,7 @@ def entity_card_update_row_2():
 
 
 def entity_card_update_row_3():
-    pass
+    ...
 
 
 @time_trigger("cron(0 19 * * 1)")
@@ -288,10 +288,10 @@ def entity_card_blink():
     pyscript.entity_card_home.blink = True
 
 
-@time_trigger("cron(50 6,17 * * *)")
+@time_trigger("cron(0 7,18 * * *)")
 def entity_card_feed_chelsea():
     last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
-    if last_opened < datetime.now().astimezone(tz.tzlocal()) - timedelta(minutes=20):
+    if last_opened < datetime.now().astimezone(tz.tzlocal()) - timedelta(minutes=30):
         pyscript.entity_card_home.row_3_color = "red"
 
 
