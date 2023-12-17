@@ -20,6 +20,7 @@ def persist_vars():
     pyscript.vars.preference_value_mutex = False
     pyscript.vars.suppress_zone_noti = {"Marshall": False, "Emily": False}
     pyscript.vars.bathroom_floor_push_target = None
+    pyscript.vars.bathroom_floor_end_time = None
 
 
 @time_trigger("cron(*/15 * * * *)")
