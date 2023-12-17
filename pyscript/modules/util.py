@@ -1,5 +1,23 @@
+from datetime import datetime
+from dateutil import tz
+import dates
 import files
 import push
+import secrets
+
+
+def get_calendar_events(days=14, next_only=False, ignore_ongoing=False):
+    results = calendar.get_events(entity_id=secrets.FAMILY_CALENDAR, duration={"hours": days * 24})
+    if ignore_ongoing:
+        events = []
+        now = datetime.now().astimezone(tz.tzlocal())
+        for event in results[secrets.FAMILY_CALENDAR]["events"]:
+            if dates.parse_timestamp(event["start"]) >= now:
+                events.append(event)
+    else:
+        events = results[secrets.FAMILY_CALENDAR]["events"]
+
+    return events[0] if next_only else events
 
 
 def battery_icon(battery, charging=False, upper_limit=100):

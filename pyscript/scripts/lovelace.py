@@ -1,6 +1,7 @@
 from datetime import date, datetime
 import constants
 import dates
+import util
 
 
 @time_trigger("startup")
@@ -8,17 +9,19 @@ def persist_sidebar_text():
     state.persist("pyscript.sidebar_text", default_value="")
 
 
-@time_trigger("startup", "cron(0 0 * * *)")
+@time_trigger("startup", "cron(*/10 * * * *)")
 @state_trigger("calendar.warnersfam_gmail_com.start_time", "sun.sun")
 def set_sidebar_text():
     sun_action = "sets" if sun.sun == "above_horizon" else "rises"
     sun_time = sun.sun.next_setting if sun.sun == "above_horizon" else sun.sun.next_rising
     sun_time = dates.parse_timestamp(sun_time, output_format="time")
 
-    start_time = datetime.strptime(calendar.warnersfam_gmail_com.start_time, "%Y-%m-%d %H:%M:%S")
-    next_up = f"Next up is {calendar.warnersfam_gmail_com.message}, {dates.colloquial_date(start_time.date())}"
-    if not calendar.warnersfam_gmail_com.all_day:
-        next_up += f" at {datetime.strftime(start_time, '%-I:%M %p')}"
+    event = util.get_calendar_events(days=7, next_only=True, ignore_ongoing=True)
+    start = dates.parse_timestamp(event["start"])
+
+    next_up = f"Next up is {event['summary']}, {dates.colloquial_date(start.date())}"
+    if "T" in event["start"]:
+        next_up += f" at {dates.parse_timestamp(start, output_format='time')}"
 
     pyscript.sidebar_text = f"""
         <li>Happy {date.today().strftime('%A')}!</li>
