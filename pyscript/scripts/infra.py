@@ -19,6 +19,7 @@ def persist_vars():
     pyscript.vars.ios_actions_unlocked = False
     pyscript.vars.preference_value_mutex = False
     pyscript.vars.suppress_zone_noti = {"Marshall": False, "Emily": False}
+    pyscript.vars.bathroom_floor_push_target = None
 
 
 @time_trigger("cron(*/15 * * * *)")

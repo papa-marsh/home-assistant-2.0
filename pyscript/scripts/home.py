@@ -202,8 +202,30 @@ def door_open_critical_notification(**kwargs):
                 priority="critical",
                 target=target,
             )
-
             noti.send()
+
+
+@event_trigger("ios.action_fired", "actionName=='Bathroom Floor'")
+def ios_bathroom_floor(**kwargs):
+    climate.set_temperature(entity_id="climate.bathroom_floor_thermostat", temperature=85)
+    pyscript.vars.bathroom_floor_push_target = "emily" if kwargs["sourceDeviceID"] == "emilys_iphone" else "marshall"
+    task.sleep(2 * 60 * 60)
+    climate.set_preset_mode(entity_id="climate.bathroom_floor_thermostat", preset_mode="auto")
+
+
+@state_trigger("int(climate.bathroom_floor_thermostat) >= 80")
+def ios_bathroom_floor_ready():
+    if pyscript.vars.bathroom_floor_push_target:
+        noti = push.Notification(
+            title="Bathroom Ready",
+            message="The floor is warmed up!",
+            tag="ios_bathroom_floor_ready",
+            group="ios_bathroom_floor_ready",
+            priority="time-sensitive",
+            target=pyscript.vars.bathroom_floor_push_target,
+        )
+        noti.send()
+        pyscript.vars.bathroom_floor_push_target = None
 
 
 @time_trigger("startup")
