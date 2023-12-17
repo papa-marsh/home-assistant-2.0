@@ -89,7 +89,7 @@ def require_ios_action_unlock(func):
             noti = push.Notification(
                 title="Command Failed",
                 message="iOS actions must be unlocked before using this command",
-                target="all",
+                target="emily" if kwargs["sourceDeviceID"] == "emilys_iphone" else "marshall",
                 tag="command_failed_ios_action",
                 group="command_failed_ios_action",
                 priority="time-sensitive",

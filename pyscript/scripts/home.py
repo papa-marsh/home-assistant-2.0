@@ -160,8 +160,21 @@ def garage_auto_open(**kwargs):
 @event_trigger("ios.action_fired", "actionName=='East Stall'")
 @event_trigger("ios.action_fired", "actionName=='West Stall'")
 def ios_garage_stall(**kwargs):
-    stall = kwargs["actionName"].split(" ")[0].lower()
-    cover.toggle(entity_id=f"cover.{stall}_stall")
+    triggered_by = "emily" if kwargs["sourceDeviceID"] == "emilys_iphone" else "marshall"
+    triggered_from = state.get(f"person.{triggered_by}")
+    if files.read("zones", [triggered_from, "near_home"], False):
+        stall = kwargs["actionName"].split(" ")[0].lower()
+        cover.toggle(entity_id=f"cover.{stall}_stall")
+    else:
+        noti = push.Notification(
+            title="Command Failed",
+            message="You must be closer to home to control the garage",
+            target=triggered_by,
+            tag="command_failed_ios_garage",
+            group="command_failed_ios_garage",
+            priority="time-sensitive",
+        )
+        noti.send()
 
 
 @util.require_pref_check("Door Open Critical Notifications", "On")
