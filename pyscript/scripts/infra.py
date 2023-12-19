@@ -14,13 +14,13 @@ def persist_vars():
         default_attributes={
             "clear_charge_to_max": False,
             "left_home_timestamp": {"Marshall": None, "Emily": None},
+            "bathroom_floor_push_target": None,
+            "bathroom_floor_end_time": None,
         },
     )
     pyscript.vars.ios_actions_unlocked = False
     pyscript.vars.preference_value_mutex = False
     pyscript.vars.suppress_zone_noti = {"Marshall": False, "Emily": False}
-    pyscript.vars.bathroom_floor_push_target = None
-    pyscript.vars.bathroom_floor_end_time = None
 
 
 @time_trigger("cron(*/15 * * * *)")
