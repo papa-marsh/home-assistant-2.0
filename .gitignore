@@ -26,3 +26,4 @@ secrets.py
 secrets.yaml
 lovelace/family/calendar-family.yaml
 pyscript/files
+pyscript/scripts/hidden.py
