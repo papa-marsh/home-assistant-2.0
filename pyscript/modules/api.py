@@ -1,6 +1,7 @@
-import requests
-import secrets
 from datetime import date, datetime
+import requests
+
+import secrets
 
 
 def get_stock_week_change(symbol="SPY"):

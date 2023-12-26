@@ -1,5 +1,6 @@
 from datetime import date, datetime, timedelta
-import constants
+import os
+
 import dates
 import push
 import util
@@ -58,6 +59,7 @@ def set_chelsea_fixture_card():
     home = description[0].split(" v ")[0]
     away = description[0].split(" v ")[1]
     start = datetime.strptime(calendar.chelsea_fixtures.start_time, "%Y-%m-%d %H:%M:%S")
+    crests = os.listdir("/config/www/PL")
 
     state.set(
         "pyscript.chelsea_next_fixture",
@@ -68,8 +70,8 @@ def set_chelsea_fixture_card():
         top_row=description[2],
         date=dates.colloquial_date(start.date()),
         time=start.time().strftime("%-I:%M %p"),
-        home_path=f"/local/PL/{home}.png" if home in constants.SOCCER_CRESTS else "/local/PL/Default.png",
-        away_path=f"/local/PL/{away}.png" if away in constants.SOCCER_CRESTS else "/local/PL/Default.png",
+        home_path=f"/local/PL/{home}.png" if f"{home}.png" in crests else "/local/PL/Default.png",
+        away_path=f"/local/PL/{away}.png" if f"{away}.png" in crests else "/local/PL/Default.png",
     )
 
 
