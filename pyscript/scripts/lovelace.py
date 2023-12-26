@@ -44,8 +44,8 @@ def persist_chelsea_next_fixture():
             "competition": "",
             "date": "Date",
             "time": "Time",
-            "home_path": "/local/PL/Default.png",
-            "away_path": "/local/PL/Default.png",
+            "home_path": "/local/soccer_badges/Default.png",
+            "away_path": "/local/soccer_badges/Default.png",
             "top_row": "",
             "blink": False,
         },
@@ -59,7 +59,7 @@ def set_chelsea_fixture_card():
     home = description[0].split(" v ")[0]
     away = description[0].split(" v ")[1]
     start = datetime.strptime(calendar.chelsea_fixtures.start_time, "%Y-%m-%d %H:%M:%S")
-    crests = os.listdir("/config/www/PL")
+    badge = os.listdir("/config/www/soccer_badges")
 
     state.set(
         "pyscript.chelsea_next_fixture",
@@ -70,8 +70,8 @@ def set_chelsea_fixture_card():
         top_row=description[2],
         date=dates.colloquial_date(start.date()),
         time=start.time().strftime("%-I:%M %p"),
-        home_path=f"/local/PL/{home}.png" if f"{home}.png" in crests else "/local/PL/Default.png",
-        away_path=f"/local/PL/{away}.png" if f"{away}.png" in crests else "/local/PL/Default.png",
+        home_path=f"/local/soccer_badges/{home}.png" if f"{home}.png" in badge else "/local/soccer_badges/Default.png",
+        away_path=f"/local/soccer_badges/{away}.png" if f"{away}.png" in badge else "/local/soccer_badges/Default.png",
     )
 
 
