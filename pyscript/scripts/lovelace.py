@@ -45,6 +45,7 @@ def persist_chelsea_next_fixture():
             "home_path": "/local/PL/Default.png",
             "away_path": "/local/PL/Default.png",
             "top_row": "",
+            "blink": False,
         },
     )
 
@@ -85,3 +86,7 @@ def chelsea_fixture_tap():
     )
     task.sleep(5)
     pyscript.chelsea_next_fixture.top_row = pyscript.chelsea_next_fixture.competition
+
+
+# @service("pyscript.chelsea_fixture_double_tap")
+# def chelsea_fixture_double_tap():

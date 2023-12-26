@@ -6,6 +6,27 @@ import push
 import util
 
 
+# @time_trigger("startup")
+# def persist_reminders():
+#     state.persist(
+#         "pyscript.reminders",
+#         default_attributes={
+#             "heap": []
+#         },
+#     )
+#     set_reminder_var_state()
+
+
+# @state_trigger("pyscript.reminders.heap")
+# def set_reminder_var_state():
+#     pyscript.reminders = len(pyscript.reminders.heap)
+    
+
+# @time_trigger("cron(*/15 * * * *)")
+# def reminder_trigger_handler():
+#     pyscript.reminders
+
+
 @time_trigger("startup")
 def persist_vars():
     state.persist(
@@ -24,7 +45,7 @@ def persist_vars():
 
 
 @time_trigger("cron(*/15 * * * *)")
-def pref_event_handler():
+def pref_trigger_handler():
     pref_list = files.read(file_name="preferences")
     now = dates.parse_timestamp(output_format="time")
     for pref in pref_list:

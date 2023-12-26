@@ -9,6 +9,7 @@ styles:
             if (entity.attributes.date == "Today") return "var(--custom-card-active-background-color)";
             else return "var( --ha-card-background, var(--card-background-color, white) )";
         ]]]
+    - animation: fade 2s linear infinite
   grid:
     - grid-template-areas: '"h_crest top_row a_crest" "h_crest date a_crest" "h_crest time a_crest"'
     - grid-template-columns: 1fr 1fr 1fr
@@ -42,3 +43,6 @@ custom_fields:
 tap_action:
   action: call-service
   service: pyscript.chelsea_fixture_tap
+extra_styles:
+  "[[[ if ( entity.attributes.blink ) return `@keyframes fade { from {
+  opacity: 1.0; } 50% { opacity: 0.2; } to { opacity: 1.0; } }` ]]]"
