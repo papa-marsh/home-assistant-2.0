@@ -20,7 +20,7 @@ import util
 # @state_trigger("pyscript.reminders.heap")
 # def set_reminder_var_state():
 #     pyscript.reminders = len(pyscript.reminders.heap)
-    
+
 
 # @time_trigger("cron(*/15 * * * *)")
 # def reminder_trigger_handler():

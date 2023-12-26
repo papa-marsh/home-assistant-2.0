@@ -1,6 +1,7 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import constants
 import dates
+import push
 import util
 
 
@@ -67,12 +68,8 @@ def set_chelsea_fixture_card():
         top_row=description[2],
         date=dates.colloquial_date(start.date()),
         time=start.time().strftime("%-I:%M %p"),
-        home_path=f"/local/PL/{home}.png"
-        if home in constants.SOCCER_CRESTS
-        else "/local/PL/Default.png",
-        away_path=f"/local/PL/{away}.png"
-        if away in constants.SOCCER_CRESTS
-        else "/local/PL/Default.png",
+        home_path=f"/local/PL/{home}.png" if home in constants.SOCCER_CRESTS else "/local/PL/Default.png",
+        away_path=f"/local/PL/{away}.png" if away in constants.SOCCER_CRESTS else "/local/PL/Default.png",
     )
 
 
@@ -88,5 +85,23 @@ def chelsea_fixture_tap():
     pyscript.chelsea_next_fixture.top_row = pyscript.chelsea_next_fixture.competition
 
 
-# @service("pyscript.chelsea_fixture_double_tap")
-# def chelsea_fixture_double_tap():
+@time_trigger("startup", "cron(*/5 * * * *)")
+def chelsea_fixture_blink():
+    start = datetime.strptime(calendar.chelsea_fixtures.start_time, "%Y-%m-%d %H:%M:%S")
+    if datetime.now() >= start - timedelta(minutes=10) and not pyscript.chelsea_next_fixture.blink:
+        pyscript.chelsea_next_fixture.blink = True
+        competition = pyscript.chelsea_next_fixture.competition
+        opponent = pyscript.chelsea_next_fixture.home_team if pyscript.chelsea_next_fixture.home_team != "Chelsea" else pyscript.chelsea_next_fixture.away_team
+        location = calendar.chelsea_fixtures.location
+        noti = push.Notification(
+            title="Chelsea Kickoff",
+            message=f"The {competition} match against {opponent} is about to kick off at {location}",
+            tag="chelsea_match",
+            group="chelsea_match",
+            priority="time-sensitive",
+            target="marshall",
+        )
+        noti.send()
+
+    else:
+        pyscript.chelsea_next_fixture.blink = False
