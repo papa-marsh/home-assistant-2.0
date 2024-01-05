@@ -110,5 +110,23 @@
 #         ).date()
 #     elif next_timecard <= pyscript.entity_card_office.staging["last_timecard"]:
 #         next_timecard += timedelta(days=7)
-
+# 
 #     return next_timecard
+
+
+# @state_trigger("binary_sensor.chelsea_cabinet_sensor=='on'")
+# def chelsea_double_meal_warning():
+#     task.unique("chelsea_double_meal", kill_me=True)
+#     now = datetime.now().astimezone(tz.tzlocal())
+#     last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
+#     if last_opened > now - timedelta(hours=2):
+#         noti = push.Notification(
+#             title="Beth Already Ate!",
+#             message=f"Don't let her trick you. Double check before feeding Beth {'breakfast' if datetime.now().hour < 12 else 'dinner'}",
+#             tag="double_feed_warning",
+#             group="double_feed_warning",
+#             priority="time-sensitive",
+#             target="marshall" if person.marshall == "home" and person.emily != "home" else "all",
+#         )
+#         noti.send()
+#     task.sleep(5 * 60)

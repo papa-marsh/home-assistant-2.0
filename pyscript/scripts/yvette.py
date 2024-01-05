@@ -76,7 +76,7 @@ def charge_if_low():
             switch.turn_off(entity_id="switch.yvette_charger")
 
 
-@time_trigger("cron(0 21 * * *)")
+@time_trigger("cron(0 20 * * *)")
 def charge_reminder():
     if (
         device_tracker.yvette_location_tracker == "home"

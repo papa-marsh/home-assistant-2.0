@@ -88,22 +88,23 @@ def chelsea_fixture_tap():
 
 
 @time_trigger("startup", "cron(*/5 * * * *)")
+@state_trigger("calendar.chelsea_fixtures.start_time")
 def chelsea_fixture_blink():
     start = datetime.strptime(calendar.chelsea_fixtures.start_time, "%Y-%m-%d %H:%M:%S")
-    if datetime.now() >= start - timedelta(minutes=10) and not pyscript.chelsea_next_fixture.blink:
-        pyscript.chelsea_next_fixture.blink = True
-        competition = pyscript.chelsea_next_fixture.competition
-        opponent = pyscript.chelsea_next_fixture.home_team if pyscript.chelsea_next_fixture.home_team != "Chelsea" else pyscript.chelsea_next_fixture.away_team
-        location = calendar.chelsea_fixtures.location
-        noti = push.Notification(
-            title="Chelsea Kickoff",
-            message=f"The {competition} match against {opponent} is about to kick off at {location}",
-            tag="chelsea_match",
-            group="chelsea_match",
-            priority="time-sensitive",
-            target="marshall",
-        )
-        noti.send()
-
+    if datetime.now() >= start - timedelta(minutes=10):
+        if not pyscript.chelsea_next_fixture.blink:
+            pyscript.chelsea_next_fixture.blink = True
+            competition = pyscript.chelsea_next_fixture.competition
+            opponent = pyscript.chelsea_next_fixture.home_team if pyscript.chelsea_next_fixture.home_team != "Chelsea" else pyscript.chelsea_next_fixture.away_team
+            location = calendar.chelsea_fixtures.location
+            noti = push.Notification(
+                title="Chelsea Kickoff",
+                message=f"The {competition} match against {opponent} is about to kick off at {location}",
+                tag="chelsea_match",
+                group="chelsea_match",
+                priority="time-sensitive",
+                target="marshall",
+            )
+            noti.send()
     else:
         pyscript.chelsea_next_fixture.blink = False

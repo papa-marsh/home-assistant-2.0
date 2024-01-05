@@ -67,7 +67,7 @@ def entity_card_tap():
             active=False,
             state_icon="mdi:rocket",
         )
-        light.turn_off(entity_id="light.office_door_led")
+        switch.turn_off(entity_id="switch.office_door_led")
     else:
         state.set(
             "pyscript.entity_card_office",
@@ -75,7 +75,7 @@ def entity_card_tap():
             active=True,
             state_icon="mdi:headset",
         )
-        light.turn_on(entity_id="light.office_door_led")
+        switch.turn_on(entity_id="switch.office_door_led")
 
 
 @service("pyscript.office_hold")
