@@ -322,12 +322,12 @@ def entity_card_update_row_3():
     ...
 
 
-@time_trigger("cron(0 19 * * 1)")
+@time_trigger("cron(0 18 * * 1)")
 def entity_card_blink():
     pyscript.entity_card_home.blink = True
 
 
-@time_trigger("cron(0 7,18 * * *)")
+@time_trigger("cron(0 7,19 * * *)")
 def entity_card_feed_chelsea():
     last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
     if last_opened < datetime.now().astimezone(tz.tzlocal()) - timedelta(minutes=30):

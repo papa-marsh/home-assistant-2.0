@@ -1,4 +1,5 @@
 import constants
+import secrets
 
 
 @time_trigger("cron(0 4 * * *)")
@@ -12,8 +13,14 @@ def reset_media_controls():
     input_select.select_option(entity_id="input_select.media_card_playlist", option="None Selected")
 
     media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
-    media_player.volume_set(entity_id="media_player.office", volume_level=0.35)
+    media_player.volume_set(entity_id="media_player.office", volume_level=0.40)
     media_player.volume_set(entity_id="media_player.living_room_tv", volume_level=0.1)
+
+
+@time_trigger("cron(0 19 * * *)")
+def lower_office_volume():
+    if person.emily != secrets.IN_LAWS_ZONE:
+        media_player.volume_set(entity_id="media_player.office", volume_level=0.25)
 
 
 @time_trigger("startup")

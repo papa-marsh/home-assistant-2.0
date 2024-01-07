@@ -43,7 +43,7 @@ def sleep_time():
     media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
 
 
-@time_trigger("cron(0 8,19 * * *)")
+@time_trigger("cron(0 8,20 * * *)")
 def feed_chelsea_notification():
     last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
     if last_opened < datetime.now().astimezone(tz.tzlocal()) - timedelta(hours=2):
