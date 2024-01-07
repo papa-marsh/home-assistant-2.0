@@ -8,6 +8,11 @@ import push
 import util
 
 
+@state_trigger("binary_sensor.yvette_charger", "climate.yvette_hvac_climate_system")
+def update_watch_complication():
+    push.update_complications(target="marshall")
+
+
 @util.require_pref_check("Yvette Drive Critical", "On", reset=True)
 @state_trigger("binary_sensor.yvette_parking_brake=='off'")
 def send_critical_on_drive():
