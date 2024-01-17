@@ -1,9 +1,13 @@
-from datetime import date
-
 import push
 
 
-@event_trigger("wakeup_time")
+@time_trigger("cron(*/10 * * * *)")
+def space_heater_auto_off():
+    two_hours_ago = (datetime.now() - timedelta(hours=2)).astimezone(tz.tzlocal())
+    if switch.space_heater == "on" and switch.space_heater.last_changed < two_hours_ago:
+        switch.turn_off(entity_id="switch.space_heater")
+
+
 @state_trigger("person.emily == 'home'")
 def meeting_active_notification():
     if pyscript.entity_card_office == "Busy":
@@ -80,8 +84,7 @@ def entity_card_tap():
 
 @service("pyscript.office_hold")
 def entity_card_hold():
-    pyscript.entity_card_office.staging["last_timecard"] = date.today()
-    pyscript.entity_card_office.blink = False
+    switch.toggle(entity_id="switch.space_heater")
 
 
 @service("pyscript.office_dtap")

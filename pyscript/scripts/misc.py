@@ -65,13 +65,6 @@ def clear_feed_chelsea_notification():
     noti.clear()
 
 
-@time_trigger("cron(*/10 * * * *)")
-def space_heater_auto_off():
-    two_hours_ago = (datetime.now() - timedelta(hours=2)).astimezone(tz.tzlocal())
-    if switch.space_heater == "on" and switch.space_heater.last_changed < two_hours_ago:
-        switch.turn_off(entity_id="switch.space_heater")
-
-
 @state_trigger("person.marshall", "person.emily")
 def notify_on_zone_change(**kwargs):
     name = state.getattr(kwargs["var_name"])["friendly_name"]
