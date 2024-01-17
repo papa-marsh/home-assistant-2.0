@@ -65,10 +65,11 @@ def clear_feed_chelsea_notification():
     noti.clear()
 
 
-@state_trigger("switch.space_heater=='on'")
+@time_trigger("cron(*/10 * * * *)")
 def space_heater_auto_off():
-    task.sleep(3 * 60 * 60)
-    switch.turn_off(entity_id="switch.space_heater")
+    two_hours_ago = (datetime.now() - timedelta(hours=2)).astimezone(tz.tzlocal())
+    if switch.space_heater == "on" and switch.space_heater.last_changed < two_hours_ago:
+        switch.turn_off(entity_id="switch.space_heater")
 
 
 @state_trigger("person.marshall", "person.emily")

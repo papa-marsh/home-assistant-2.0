@@ -17,7 +17,7 @@ def reset_media_controls():
     media_player.volume_set(entity_id="media_player.living_room_tv", volume_level=0.1)
 
 
-@time_trigger("cron(0 19 * * *)")
+@time_trigger("cron(0 18 * * *)")
 def lower_office_volume():
     if person.emily != secrets.IN_LAWS_ZONE:
         media_player.volume_set(entity_id="media_player.office", volume_level=0.25)
