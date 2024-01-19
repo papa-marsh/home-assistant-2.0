@@ -45,7 +45,7 @@ def persist_entity_card_office():
         default_value="Available",
         default_attributes={
             "name": "Office",
-            "state_icon": "mdi:rocket",
+            "state_icon": "mdi:cloud",
             "active": False,
             "blink": False,
             "row_1_icon": "mdi:speaker",
@@ -54,7 +54,7 @@ def persist_entity_card_office():
             "row_2_icon": "mdi:volume-high",
             "row_2_value": "",
             "row_2_color": "default",
-            "row_3_icon": "mdi:calendar-clock",
+            "row_3_icon": "mdi:thermometer-water",
             "row_3_value": "",
             "row_3_color": "default",
             "staging": {},
@@ -69,7 +69,7 @@ def entity_card_tap():
             "pyscript.entity_card_office",
             value="Available",
             active=False,
-            state_icon="mdi:rocket",
+            state_icon="mdi:cloud",
         )
         switch.turn_off(entity_id="switch.office_door_led")
     else:
@@ -96,13 +96,30 @@ def entity_card_dtap():
 @state_trigger("media_player.office")
 def entity_card_update_row_1():
     pyscript.entity_card_office.row_1_value = media_player.office
+    pyscript.entity_card_office.row_1_icon = "mdi:speaker-wireless" if media_player.office == "playing" else "mdi:speaker"
 
 
 @time_trigger("startup")
 @state_trigger("media_player.office", "media_player.office.volume_level")
 def entity_card_update_row_2():
-    pyscript.entity_card_office.row_2_value = f"{round(media_player.office.volume_level * 100)}%"
+    volume = round(media_player.office.volume_level * 100)
+    pyscript.entity_card_office.row_2_value = f"{volume}%"
+    if volume >= 35:
+        pyscript.entity_card_office.row_2_icon = "mdi:volume-high"
+    elif volume >= 20:
+        pyscript.entity_card_office.row_2_icon = "mdi:volume-medium"
+    else:
+        pyscript.entity_card_office.row_2_icon = "mdi:volume-low"
 
 
+@time_trigger("startup")
+@state_trigger("sensor.office_ambient_sensor_temperature", "sensor.office_ambient_sensor_humidity", "switch.space_heater")
 def entity_card_update_row_3():
-    ...
+    if sensor.office_ambient_sensor_temperature in ["unknown", "unavailable"]:
+        pyscript.entity_card_office.row_3_value = "Offline"
+        pyscript.entity_card_office.row_3_icon = "mdi:thermometer-off"
+    else:
+        temp = float(sensor.office_ambient_sensor_temperature)
+        humidity = float(sensor.office_ambient_sensor_humidity)
+        pyscript.entity_card_office.row_3_value = f"{temp:.0f}° · {humidity:.0f}%"
+        pyscript.entity_card_office.row_3_icon = "mdi:radiator" if switch.space_heater == "on" else "mdi:thermometer-water"
