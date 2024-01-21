@@ -3,7 +3,7 @@ NOTI_CRIT_SOUND = "3rd_party_critical.caf"
 
 BASE_FILE_PATH = "/config/pyscript/files/"
 
-YVETTE_LOW_THRESHOLD = 30
+TESS_LOW_THRESHOLD = 30
 
 NEST_DISPLAYS = [
     "media_player.office_display",

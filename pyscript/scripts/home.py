@@ -140,11 +140,11 @@ def clear_door_open_notification(**kwargs):
 
 
 @state_trigger(
-    "person.marshall", "person.emily", "device_tracker.yvette_location_tracker"
+    "person.marshall", "person.emily", "device_tracker.tess_location_tracker"
 )
 def garage_auto_open(**kwargs):
     now = datetime.now().astimezone(tz.tzlocal())
-    location = device_tracker.yvette_location_tracker
+    location = device_tracker.tess_location_tracker
     if (
         kwargs["value"] == "home"
         and kwargs["old_value"] != "home"

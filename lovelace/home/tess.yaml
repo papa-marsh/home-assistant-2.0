@@ -1,0 +1,36 @@
+type: entities
+entities:
+  - entity: update.tess_software_update
+    name: Software Version
+  - entity: binary_sensor.tess_asleep
+    name: Sleep Mode
+  - entity: binary_sensor.tess_charger
+    name: Charger
+  - entity: sensor.tess_battery
+    name: Battery Level
+  - entity: binary_sensor.tess_doors
+    name: Doors
+  - entity: number.tess_charge_limit
+    name: Charge Limit
+  - entity: select.tess_heated_seat_left
+    name: Driver Seat Heater
+  - entity: switch.tess_heated_steering
+    name: Steering Wheel Heater
+  - entity: lock.tess_doors
+    name: Door Locks
+  - entity: switch.tess_sentry_mode
+    name: Sentry Mode
+  - entity: cover.tess_trunk
+    name: Trunk
+  - entity: cover.tess_frunk
+    name: Frunk
+  - entity: cover.tess_windows
+    name: Windows
+style: |
+  ha-card {
+    height: 584px !important;
+  }
+  #states div {
+    margin-top: 2px !important;
+    margin-bottom: -2px !important;
+  }
