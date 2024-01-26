@@ -8,6 +8,23 @@ import push
 import util
 
 
+@state_trigger("pyscript.chelsea_next_fixture.blink==True")
+def chelsea_kickoff_notification():
+    competition = pyscript.chelsea_next_fixture.competition
+    opponent = pyscript.chelsea_next_fixture.home_team if pyscript.chelsea_next_fixture.home_team != "Chelsea" else pyscript.chelsea_next_fixture.away_team
+    location = calendar.chelsea_fixtures.location
+    message = f"The {competition} match against {opponent} is about to kick off at {location}"
+    noti = push.Notification(
+        title="Chelsea Kickoff",
+        message=message[4:] if "the the" in message.lower() else message,
+        tag="chelsea_match",
+        group="chelsea_match",
+        priority="time-sensitive",
+        target="marshall",
+    )
+    noti.send()
+
+
 @time_trigger("cron(0 7,17 * * *)")
 def toggle_butterfly_night_light():
     if datetime.now().hour < 12:
