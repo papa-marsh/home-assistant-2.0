@@ -27,7 +27,7 @@ STOCKS_CONFIG = {
         "icon": "mdi:cloud",
         "public": {
             "price": True,
-            "price_prec": 2,
+            "price_prec": 0,
             "cents": False,
             "k_suffix": False,
             "change": True,
@@ -63,11 +63,11 @@ STOCKS_CONFIG = {
         },
     },
     "row_3": {
-        "symbol": "astr",
-        "icon": "mdi:rocket-launch",
+        "symbol": "aapl",
+        "icon": "mdi:apple",
         "public": {
             "price": True,
-            "price_prec": 2,
+            "price_prec": 0,
             "cents": False,
             "k_suffix": False,
             "change": True,
@@ -75,7 +75,7 @@ STOCKS_CONFIG = {
         },
         "private": {
             "price": True,
-            "price_prec": 3,
+            "price_prec": 2,
             "cents": False,
             "k_suffix": False,
             "change": False,
@@ -90,7 +90,7 @@ CRYPTO_CONFIG = {
         "icon": "mdi:bitcoin",
         "public": {
             "price": True,
-            "price_prec": 1,
+            "price_prec": 0,
             "cents": False,
             "k_suffix": True,
             "change": True,
