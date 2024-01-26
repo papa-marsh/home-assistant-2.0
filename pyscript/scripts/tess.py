@@ -72,9 +72,9 @@ def charge_to_max():
 def charge_if_low():
     if device_tracker.tess_location_tracker == "home":
         task.unique("tess_charge_if_low")
-        if int(sensor.tess_battery) < constants.YVETTE_LOW_THRESHOLD:
+        if int(sensor.tess_battery) < constants.TESS_LOW_THRESHOLD:
             switch.turn_on(entity_id="switch.tess_charger")
-            while int(sensor.tess_battery) < constants.YVETTE_LOW_THRESHOLD:
+            while int(sensor.tess_battery) < constants.TESS_LOW_THRESHOLD:
                 if datetime.now().hour >= 23:
                     return
                 task.sleep(60)
