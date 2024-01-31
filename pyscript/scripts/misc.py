@@ -55,11 +55,6 @@ def turn_off_sound_machine(**kwargs):
     switch.turn_off(entity_id="switch.ellies_sound_machine")
 
 
-@state_trigger("switch.ellies_sound_machine=='on'")
-def sleep_time():
-    media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
-
-
 @time_trigger("cron(0 8,20 * * *)")
 def feed_chelsea_notification():
     last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())

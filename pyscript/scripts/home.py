@@ -147,7 +147,7 @@ def garage_auto_open(**kwargs):
     location = device_tracker.tess_location_tracker
     if (
         kwargs["value"] == "home"
-        and kwargs["old_value"] != "home"
+        and kwargs["old_value"] not in ["home", "unavailable"]
         and cover.east_stall == "closed"
         and 6 <= now.hour < 23
         and (now - cover.east_stall.last_changed).seconds > 300

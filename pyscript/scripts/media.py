@@ -20,7 +20,12 @@ def reset_media_controls():
 @time_trigger("cron(0 18 * * *)")
 def lower_office_volume():
     if person.emily != secrets.IN_LAWS_ZONE:
-        media_player.volume_set(entity_id="media_player.office", volume_level=0.25)
+        media_player.volume_set(entity_id="media_player.office", volume_level=0.22)
+
+
+@state_trigger("switch.ellies_sound_machine=='on'")
+def bedtime_speaker_volume():
+    media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
 
 
 @time_trigger("startup")
