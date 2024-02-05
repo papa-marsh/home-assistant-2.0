@@ -126,7 +126,7 @@ def ios_tess_air(**kwargs):
     climate.turn_on(entity_id="climate.tess_hvac_climate_system")
 
 
-@event_trigger("ios.action_fired", "actionName=='Seat Heat'")
+@event_trigger("ios.action_fired", "actionName=='Seat Heater'")
 def ios_seat_heat(**kwargs):
     if climate.tess_hvac_climate_system == "heat_cool":
         select.select_option(entity_id="select.tess_heated_seat_rear_left", option="High")
@@ -134,7 +134,7 @@ def ios_seat_heat(**kwargs):
         noti = push.Notification(
             title="Command Failed",
             message="Tess climate must be on to turn on seat heater",
-            target="emily",
+            target="emily" if kwargs["sourceDeviceID"] == "emilys_iphone" else "marshall",
             tag="command_failed_seat_heater",
             group="command_failed_seat_heater",
             priority="time-sensitive",
