@@ -1,10 +1,14 @@
 from datetime import datetime
 from dateutil import tz
+from typing import TYPE_CHECKING
 
-import dates
-import files
-import push
-import secrets
+if TYPE_CHECKING:
+    from ..modules import dates, files, push, secrets
+else:
+    import dates
+    import files
+    import push
+    import secrets
 
 
 def get_calendar_events(days=14, next_only=False, ignore_ongoing=False):

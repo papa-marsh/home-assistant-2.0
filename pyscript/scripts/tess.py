@@ -1,11 +1,15 @@
 from datetime import datetime
 from dateutil import tz
+from typing import TYPE_CHECKING
 
-import secrets
-import constants
-import dates
-import push
-import util
+if TYPE_CHECKING:
+    from ..modules import constants, dates, push, secrets, util
+else:
+    import constants
+    import dates
+    import push
+    import secrets
+    import util
 
 
 @state_trigger("binary_sensor.tess_charger", "climate.tess_hvac_climate_system")

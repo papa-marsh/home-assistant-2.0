@@ -1,10 +1,14 @@
 import os
+from typing import TYPE_CHECKING
 
-import constants
-import dates
-import files
-import push
-import util
+if TYPE_CHECKING:
+    from ..modules import constants, dates, files, push, util
+else:
+    import constants
+    import dates
+    import files
+    import push
+    import util
 
 
 # @time_trigger("startup")

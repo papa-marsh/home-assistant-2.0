@@ -1,6 +1,10 @@
 from random import random
+from typing import TYPE_CHECKING
 
-import constants
+if TYPE_CHECKING:
+    from ..modules import constants
+else:
+    import constants
 
 
 class Notification:

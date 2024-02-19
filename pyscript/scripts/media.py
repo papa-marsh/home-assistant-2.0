@@ -1,5 +1,10 @@
-import constants
-import secrets
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..modules import constants, secrets
+else:
+    import constants
+    import secrets
 
 
 @time_trigger("cron(0 4 * * *)")

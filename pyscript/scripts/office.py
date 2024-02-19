@@ -1,7 +1,11 @@
 from datetime import datetime, timedelta
 from dateutil import tz
+from typing import TYPE_CHECKING
 
-import push
+if TYPE_CHECKING:
+    from ..modules import push
+else:
+    import push
 
 
 @time_trigger("cron(*/10 * * * *)")

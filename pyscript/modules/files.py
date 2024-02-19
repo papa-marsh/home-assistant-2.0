@@ -1,8 +1,12 @@
 from datetime import datetime
 import os
 import yaml
+from typing import TYPE_CHECKING
 
-import constants
+if TYPE_CHECKING:
+    from ..modules import constants
+else:
+    import constants
 
 
 @pyscript_executor

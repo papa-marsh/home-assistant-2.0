@@ -1,8 +1,12 @@
 from datetime import date, datetime, timedelta
 import os
+from typing import TYPE_CHECKING
 
-import dates
-import util
+if TYPE_CHECKING:
+    from ..modules import dates, util
+else:
+    import dates
+    import util
 
 
 @time_trigger("startup")

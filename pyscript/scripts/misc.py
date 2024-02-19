@@ -1,10 +1,14 @@
 from datetime import datetime, timedelta
 from dateutil import tz
+from typing import TYPE_CHECKING
 
-import dates
-import files
-import push
-import util
+if TYPE_CHECKING:
+    from ..modules import dates, files, push, util
+else:
+    import dates
+    import files
+    import push
+    import util
 
 
 @state_trigger("pyscript.chelsea_next_fixture.blink==True")

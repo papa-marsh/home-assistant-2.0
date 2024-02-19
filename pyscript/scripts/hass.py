@@ -1,8 +1,12 @@
 import os
+from typing import TYPE_CHECKING
 
-import constants
-import files
-import push
+if TYPE_CHECKING:
+    from ..modules import constants, files, push
+else:
+    import constants
+    import files
+    import push
 
 
 @service("pyscript.sync_zones")

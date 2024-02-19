@@ -1,6 +1,12 @@
-import api
-import constants
-import secrets
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..modules import constants, secrets
+    from ..modules.api import CryptoAPI, StocksAPI
+else:
+    from api import CryptoAPI, StocksAPI
+    import constants
+    import secrets
 
 
 @time_trigger("startup")
@@ -54,7 +60,7 @@ def crypto_stage_and_populate():
 
 
 def crypto_stage_entity():
-    response = api.get_crypto_quotes(symbols=[symbol for symbol in secrets.CRYPTO_QTY])
+    response = CryptoAPI.get_crypto_quotes(symbols=[symbol for symbol in secrets.CRYPTO_QTY])
 
     staging = {
         "btc_week": response["BTC"]["change_week"],
@@ -176,12 +182,12 @@ def stocks_stage_entity():
     try:
         staging = {
             "balance": secrets.STOCKS_BALANCE,
-            "spy_week": api.get_stock_week_change(symbol="SPY"),
+            "spy_week": StocksAPI.get_stock_week_change(symbol="SPY"),
             "total": secrets.STOCKS_BALANCE,
         }
 
         for symbol in secrets.STOCKS_QTY:
-            quote = api.get_stock_quote(symbol=symbol)
+            quote = StocksAPI.get_stock_quote(symbol=symbol)
             staging[symbol.lower()] = {
                 "price": quote["current"],
                 "change": quote["change"],
