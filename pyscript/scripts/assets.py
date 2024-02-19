@@ -60,7 +60,7 @@ def crypto_stage_and_populate():
 
 
 def crypto_stage_entity():
-    response = CryptoAPI.get_crypto_quotes(symbols=[symbol for symbol in secrets.CRYPTO_QTY])
+    response = CryptoAPI.get_quotes(symbols=[symbol for symbol in secrets.CRYPTO_QTY])
 
     staging = {
         "btc_week": response["BTC"]["change_week"],
@@ -182,12 +182,12 @@ def stocks_stage_entity():
     try:
         staging = {
             "balance": secrets.STOCKS_BALANCE,
-            "spy_week": StocksAPI.get_stock_week_change(symbol="SPY"),
+            "spy_week": StocksAPI.get_weekly_change(symbol="SPY"),
             "total": secrets.STOCKS_BALANCE,
         }
 
         for symbol in secrets.STOCKS_QTY:
-            quote = StocksAPI.get_stock_quote(symbol=symbol)
+            quote = StocksAPI.get_quote(symbol=symbol)
             staging[symbol.lower()] = {
                 "price": quote["current"],
                 "change": quote["change"],

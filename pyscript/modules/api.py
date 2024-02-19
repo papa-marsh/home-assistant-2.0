@@ -9,8 +9,7 @@ else:
 
 
 class StocksAPI():
-
-    def get_stock_quote(self, symbol: str = "SPY") -> dict:
+    def get_quote(self, symbol: str = "SPY") -> dict:
         url = f"https://finnhub.io/api/v1/quote?symbol={symbol.upper()}&token={secrets.FINNHUB_TOKEN}"
         r = task.executor(requests.get, url).json()
 
@@ -22,7 +21,7 @@ class StocksAPI():
 
         return output
 
-    def get_stock_week(self, symbol: str = "SPY") -> float:
+    def get_weekly_quote(self, symbol: str = "SPY") -> float:
         url = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={symbol.upper()}&apikey={secrets.ALPHAVANTAGE_KEY}"
         r = task.executor(requests.get, url).json()
 
@@ -36,7 +35,7 @@ class StocksAPI():
 
         return price
 
-    def get_stock_week_change(self, symbol: str = "SPY") -> float:
+    def get_weekly_change(self, symbol: str = "SPY") -> float:
         current_price = self.get_stock_quote(symbol)["current"]
         week_open_price = float(self.get_stock_week(symbol))
 
@@ -44,7 +43,7 @@ class StocksAPI():
 
 
 class CryptoAPI():
-    def get_crypto_quotes(self, symbols=["BTC"], limit=500) -> dict:
+    def get_quotes(self, symbols=["BTC"], limit=500) -> dict:
         url = f"https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit={limit}&convert=USD"
         headers = {
             "Accepts": "application/json",
