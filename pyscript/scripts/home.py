@@ -332,5 +332,5 @@ def entity_card_blink():
 @time_trigger("cron(0 7,19 * * *)")
 def entity_card_feed_chelsea():
     last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
-    if last_opened < datetime.now().astimezone(tz.tzlocal()) - timedelta(minutes=30):
+    if last_opened < datetime.now().astimezone(tz.tzlocal()) - timedelta(minutes=60):
         pyscript.entity_card_home.row_3_color = "red"
