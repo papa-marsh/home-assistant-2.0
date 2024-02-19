@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    import pyscript
     from ..modules import constants, secrets
     from ..modules.api import CryptoAPI, StocksAPI
 else:
@@ -60,7 +61,8 @@ def crypto_stage_and_populate():
 
 
 def crypto_stage_entity():
-    response = CryptoAPI.get_quotes(symbols=[symbol for symbol in secrets.CRYPTO_QTY])
+    api = CryptoAPI
+    response = api.get_quotes(symbols=[symbol for symbol in secrets.CRYPTO_QTY])
 
     staging = {
         "btc_week": response["BTC"]["change_week"],
@@ -180,14 +182,15 @@ def stocks_stage_and_populate():
 
 def stocks_stage_entity():
     try:
+        api = StocksAPI()
         staging = {
             "balance": secrets.STOCKS_BALANCE,
-            "spy_week": StocksAPI.get_weekly_change(symbol="SPY"),
+            "spy_week": api.get_weekly_change(symbol="SPY"),
             "total": secrets.STOCKS_BALANCE,
         }
 
         for symbol in secrets.STOCKS_QTY:
-            quote = StocksAPI.get_quote(symbol=symbol)
+            quote = api.get_quote(symbol=symbol)
             staging[symbol.lower()] = {
                 "price": quote["current"],
                 "change": quote["change"],

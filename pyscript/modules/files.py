@@ -1,7 +1,7 @@
 from datetime import datetime
 import os
 import yaml
-from typing import TYPE_CHECKING
+from typing import Any, List, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..modules import constants
@@ -9,66 +9,83 @@ else:
     import constants
 
 
-@pyscript_executor
-def read(file_name, key_list=None, default_value=None):
-    try:
-        with open(f"{constants.BASE_FILE_PATH}{file_name}.yaml") as file:
-            result = yaml.safe_load(file)
+class File:
+    def __init__(self, file_name: str) -> None:
+        self.path = f"{constants.BASE_FILE_PATH}{file_name}.yaml"
 
-        if key_list and isinstance(result, dict):
-            for key in key_list:
-                result = result[key]
-    except Exception:
-        result = default_value
+    @pyscript_executor
+    def read(self, key_list: List[str] = None, default_value: Any = None):
+        """
+        Reads the contents of a file or the value at a given key path.
+        If key_list is provided, read the value at the corresponding dictionary path.
+        """
+        try:
+            with open(self.path) as file:
+                result = yaml.safe_load(file)
 
-    return result
+            if key_list and isinstance(result, dict):
+                for key in key_list:
+                    result = result[key]
+        except Exception:
+            result = default_value
 
+        return result
 
-@pyscript_executor
-def write(file_name, key_list=None, value=None):
-    path = f"{constants.BASE_FILE_PATH}{file_name}.yaml"
-    if os.path.exists(path):
-        with open(path) as file:
-            contents = yaml.safe_load(file)
-            if contents is None:
-                contents = {}
-    else:
-        contents = {}
+    @pyscript_executor
+    def write(self, key_list: List[str] = None, value: Any = None) -> None:
+        """
+        Writes to a file or the value at a given key path.
+        If key_list is provided, write/overwrite the value at the corresponding dictionary path.
+        Will create the file if it doesn't exist.
+        """
+        if os.path.exists(self.path):
+            with open(self.path) as file:
+                contents = yaml.safe_load(file)
+                if contents is None:
+                    contents = {}
+        else:
+            contents = {}
 
-    contents_edit = contents
-    for key in key_list[:-1]:
-        if key not in contents_edit:
-            contents_edit[key] = {}
-        contents_edit = contents_edit[key]
+        contents_edit = contents
+        for key in key_list[:-1]:
+            if key not in contents_edit:
+                contents_edit[key] = {}
+            contents_edit = contents_edit[key]
 
-    if key_list:
-        contents_edit[key_list[-1]] = value
+        if key_list:
+            contents_edit[key_list[-1]] = value
 
-    with open(path, "w") as file:
-        yaml.safe_dump(contents, file)
+        with open(self.path, "w") as file:
+            yaml.safe_dump(contents, file)
 
+    @pyscript_executor
+    def append(self, value: Any = None) -> None:
+        """
+        Appends a line at the end of the given file.
+        Works for List and Dict files. Dict key is set to current timestamp.
+        Will create the file as a List if it doesn't exist.
+        """
+        if os.path.exists(self.path):
+            with open(self.path) as file:
+                contents = yaml.safe_load(file)
+                if contents is None:
+                    contents = []
+        else:
+            contents = []
 
-@pyscript_executor
-def append(file_name, value=None):
-    path = f"{constants.BASE_FILE_PATH}{file_name}.yaml"
-    if os.path.exists(path):
-        with open(path) as file:
-            contents = yaml.safe_load(file)
-            if contents is None:
-                contents = []
-    else:
-        contents = []
+        if isinstance(contents, dict):
+            contents[datetime.now()] = value
+        else:
+            contents.append(value)
 
-    if isinstance(contents, dict):
-        contents[datetime.now()] = value
-    else:
-        contents.append(value)
+        with open(self.path, "w") as file:
+            yaml.safe_dump(contents, file)
 
-    with open(path, "w") as file:
-        yaml.safe_dump(contents, file)
-
-
-@pyscript_executor
-def overwrite(file_name, contents):
-    with open(f"{constants.BASE_FILE_PATH}{file_name}.yaml", "w") as file:
-        yaml.safe_dump(contents, file)
+    @pyscript_executor
+    def overwrite(self, contents: Any) -> None:
+        """
+        Completely overwrites a file with the value of the contents arg.
+        Will create the file if it doesn't exist.
+        """
+        with open(self.path, "w") as file:
+            yaml.safe_dump(contents, file)

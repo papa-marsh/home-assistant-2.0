@@ -3,11 +3,13 @@ from dateutil import tz
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    import pyscript
     from ..modules import constants, dates, push, secrets, util
+    from ..modules.push import Notification
 else:
     import constants
     import dates
-    import push
+    from push import Notification
     import secrets
     import util
 
@@ -20,7 +22,7 @@ def update_watch_complication():
 @util.require_pref_check("Tess Drive Critical", "On", reset=True)
 @state_trigger("binary_sensor.tess_parking_brake=='off'")
 def send_critical_on_drive():
-    noti = push.Notification(
+    noti = Notification(
         title="Tess In Drive",
         message="Parking brake is off and Tess is in drive",
         target="marshall",
@@ -41,7 +43,7 @@ def reset_charge_limit():
     default_limit = util.get_pref("Tess Charge Limit", value_only=True)
     if int(number.tess_charge_limit) != int(default_limit):
         number.set_value(entity_id="number.tess_charge_limit", value=default_limit)
-        noti = push.Notification(
+        noti = Notification(
             title="Charge Limit Reset",
             message=f"Tess charge limit has been reset to {default_limit}%",
             target="marshall",
@@ -53,7 +55,7 @@ def reset_charge_limit():
 
 @service("pyscript.tess_charge_to_max")
 def charge_to_max():
-    noti = push.Notification(
+    noti = Notification(
         title="Charging to Max",
         message="Tess has started charging to 100%",
         target="all",
@@ -92,7 +94,7 @@ def charge_reminder():
         and binary_sensor.tess_charger == "off"
         and int(sensor.tess_battery) < int(number.tess_charge_limit) - 10
     ):
-        noti = push.Notification(
+        noti = Notification(
             title="Tess is Unplugged",
             message=f"Heads up - Tess is unplugged with {sensor.tess_battery}% battery",
             target="all",
@@ -105,7 +107,7 @@ def charge_reminder():
 
 @state_trigger("binary_sensor.tess_charger=='on'")
 def clear_charge_reminder():
-    noti = push.Notification(tag="tess_unplugged")
+    noti = Notification(tag="tess_unplugged")
     noti.clear()
 
 
@@ -135,7 +137,7 @@ def ios_seat_heat(**kwargs):
     if climate.tess_hvac_climate_system == "heat_cool":
         select.select_option(entity_id="select.tess_heated_seat_rear_left", option="High")
     else:
-        noti = push.Notification(
+        noti = Notification(
             title="Command Failed",
             message="Tess climate must be on to turn on seat heater",
             target="emily" if kwargs["sourceDeviceID"] == "emilys_iphone" else "marshall",

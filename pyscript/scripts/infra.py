@@ -2,34 +2,16 @@ import os
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..modules import constants, dates, files, push, util
+    import pyscript
+    from ..modules import constants, dates, util
+    from ..modules.files import File
+    from ..modules.push import Notification
 else:
     import constants
     import dates
-    import files
-    import push
+    from files import File
+    from push import Notification
     import util
-
-
-# @time_trigger("startup")
-# def persist_reminders():
-#     state.persist(
-#         "pyscript.reminders",
-#         default_attributes={
-#             "heap": []
-#         },
-#     )
-#     set_reminder_var_state()
-
-
-# @state_trigger("pyscript.reminders.heap")
-# def set_reminder_var_state():
-#     pyscript.reminders = len(pyscript.reminders.heap)
-
-
-# @time_trigger("cron(*/15 * * * *)")
-# def reminder_trigger_handler():
-#     pyscript.reminders
 
 
 @time_trigger("startup")
@@ -51,7 +33,7 @@ def persist_vars():
 
 @time_trigger("cron(*/15 * * * *)")
 def pref_trigger_handler():
-    pref_list = files.read(file_name="preferences")
+    pref_list = File("preferences").read()
     now = dates.parse_timestamp(output_format="time")
     for pref in pref_list:
         if pref_list[pref]["value"] == now and "service" in pref_list[pref]:
@@ -63,7 +45,7 @@ def backup_files():
     for file in os.listdir(constants.BASE_FILE_PATH):
         if ".yaml" in file:
             file_name = file.split(".yaml")[0]
-            files.overwrite(f"backups/{file_name}", files.read(file_name))
+            File(f"backups/{file_name}").overwrite(File(file_name).read())
 
 
 @service("pyscript.populate_preferences")
@@ -71,7 +53,7 @@ def backup_files():
 def populate_preferences():
     input_select.set_options(
         entity_id="input_select.preference_selector",
-        options=[pref for pref in files.read(file_name="preferences")],
+        options=[pref for pref in File("preferences").read()],
         blocking=True,
     )
     input_select.select_first(
@@ -106,13 +88,13 @@ def set_preference_value(**kwargs):
 @time_trigger("cron(0 5 * * *)")
 def reset_preferences():
     reset = ""
-    prefs = files.read(file_name="preferences")
+    prefs = File("preferences").read()
     for pref in prefs:
         if "default" in prefs[pref] and prefs[pref]["value"] != prefs[pref]["default"]:
             util.set_pref(pref, prefs[pref]["default"])
             reset += f", {pref}"
     if reset:
-        noti = push.Notification(
+        noti = Notification(
             title="Preferences Reset",
             message=f"The following preferences were reset to default: {reset[2:]}",
             tag="prefs_reset",

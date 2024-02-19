@@ -1,8 +1,13 @@
 from datetime import date, datetime, timedelta
 from dateutil import tz
+from typing import Literal, Optional
 
 
-def parse_timestamp(timestamp=None, output_format="iso"):
+def parse_timestamp(timestamp: Optional[str | datetime] = None, output_format: Literal["iso", "date", "time", "datetime"] = "iso") -> str:
+    """
+    Returns formatted string of date/time from the given timestamp or ISO string.
+    'output_format' can be "iso" (default), "date", "time", or "datetime".
+    """
     if not timestamp:
         timestamp = datetime.now()
     elif isinstance(timestamp, str):
@@ -20,13 +25,19 @@ def parse_timestamp(timestamp=None, output_format="iso"):
     return timestamp
 
 
-def format_duration(timestamp, comparison=None, include_seconds=False):
+def format_duration(timestamp: timedelta | datetime, comparison: Optional[datetime] = None, include_seconds: bool = False) -> str:
+    """
+    Returns formatted string for the time interval between 'timestamp' and 'comparison' (default is now).
+    If 'timestamp' is an interval, 'comparison' is ignored.
+    Supports negative internvals, but does not include a negative sign.
+    """
     if isinstance(timestamp, timedelta):
         interval = timestamp
     elif comparison:
         interval = timestamp - comparison
     else:
         interval = timestamp.astimezone(tz.tzlocal()) - datetime.now().astimezone(tz.tzlocal())
+
     hours, minutes, seconds = str(abs(interval)).split(".")[0].split(":")
     duration = ""
 
@@ -43,18 +54,27 @@ def format_duration(timestamp, comparison=None, include_seconds=False):
     return duration
 
 
-def get_next_weekday(day):
+def get_next_weekday(day: Literal["mon", "tue", "wed", "thu", "fri", "sat", "sun"]) -> date:
+    """
+    Given a weekday, returns a date object for the next occurance of that weekday.
+    Includes the current day (eg. If today is Monday, then get_next_weekday("mon") = date.today().)
+    """
+    DAYS = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
+
     today = date.today()
-    day_map = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
-    try:
-        day = int(day)
-    except Exception:
-        day = day_map[day.lower()]
+    day = DAYS[day]
 
-    return today + timedelta((day - today.weekday()) % 7)
+    next_weekday = today + timedelta((day - today.weekday()) % 7)
+
+    return next_weekday
 
 
-def date_countdown(target, short=False):
+def date_countdown(target: date, short: bool = False) -> str:
+    """
+    Returns a formatted "countdown" until a given date.
+    If short=False: Returns "Today", "Tomorrow", or "X Days".
+    If short=True: Only return an integer.
+    """
     today = date.today()
 
     if (target - today).days == 0:
@@ -69,7 +89,12 @@ def date_countdown(target, short=False):
     return countdown
 
 
-def colloquial_date(target, short=False, ordinals=False):
+def colloquial_date(target: date, short: bool = False, ordinals: bool = False) -> str:
+    """
+    Returns the "friendly" way to reference a future date (eg. "Today", "Tomorrow", "Friday").
+    If target date is more than a week away, return month & date (eg. "March 19(th)").
+    If short=True, shorten weekday/month names.
+    """
     today = date.today()
     ord_map = {"1": "st", "2": "nd", "3": "rd"}
 
@@ -82,6 +107,7 @@ def colloquial_date(target, short=False, ordinals=False):
     else:
         output = target.strftime("%b %-d") if short else target.strftime("%B %-d")
         if ordinals:
-            output += ord_map[output[-1]] if output[-1] in ord_map else "th"
+            last_char = output[-1]
+            output += ord_map[last_char] if last_char in ord_map else "th"
 
     return output

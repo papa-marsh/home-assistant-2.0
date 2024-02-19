@@ -3,11 +3,14 @@ from dateutil import tz
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..modules import dates, files, push, util
+    import pyscript
+    from ..modules import dates, util
+    from ..modules.files import File
+    from ..modules.push import Notification
 else:
     import dates
-    import files
-    import push
+    from files import File
+    from push import Notification
     import util
 
 
@@ -17,7 +20,7 @@ def chelsea_kickoff_notification():
     opponent = pyscript.chelsea_next_fixture.home_team if pyscript.chelsea_next_fixture.home_team != "Chelsea" else pyscript.chelsea_next_fixture.away_team
     location = calendar.chelsea_fixtures.location
     message = f"The {competition} match against {opponent} is about to kick off at {location}"
-    noti = push.Notification(
+    noti = Notification(
         title="Chelsea Kickoff",
         message=message[4:] if "the the" in message.lower() else message,
         tag="chelsea_match",
@@ -38,7 +41,7 @@ def toggle_butterfly_night_light():
 
 @event_trigger("sleepy_time")
 def ios_shortcut_sleepy_time():
-    if files.read("zones", [person.emily, "near_home"], False):
+    if File("zones").read([person.emily, "near_home"], False):
         turn_on_sound_machine()
 
 
@@ -62,7 +65,7 @@ def turn_off_sound_machine(**kwargs):
 def feed_chelsea_notification():
     last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
     if last_opened < datetime.now().astimezone(tz.tzlocal()) - timedelta(hours=2):
-        noti = push.Notification(
+        noti = Notification(
             title="Feed Beth",
             message=f"Don't forget Chelsea's {'breakfast' if datetime.now().hour < 12 else 'dinner'}",
             tag="feed_chelsea",
@@ -76,7 +79,7 @@ def feed_chelsea_notification():
 @time_trigger("startup")
 @state_trigger("binary_sensor.chelsea_cabinet_sensor")
 def clear_feed_chelsea_notification():
-    noti = push.Notification(tag="feed_chelsea")
+    noti = Notification(tag="feed_chelsea")
     noti.clear()
 
 
@@ -89,22 +92,22 @@ def notify_on_zone_change(**kwargs):
         pyscript.vars.suppress_zone_noti[name] = False
 
     elif util.get_pref(f"{name} Zone Notifications") == "On":
-        new_zone = files.read("zones", [kwargs["value"]])
+        new_zone = File("zones").read([kwargs["value"]])
         if "debounce" in new_zone:
             pyscript.vars.suppress_zone_noti[name] = True
             task.sleep(new_zone["debounce"])
             pyscript.vars.suppress_zone_noti[name] = False
 
         new_prefix = new_zone["prefix"] if "prefix" in new_zone else ""
-        old_prefix = files.read("zones", [kwargs["old_value"], "prefix"], "")
+        old_prefix = File("zones").read([kwargs["old_value"], "prefix"], "")
 
-        if not files.read("zones", [kwargs["value"], "is_region"], False):
+        if not File("zones").read([kwargs["value"], "is_region"], False):
             message = f"{name} arrived at {new_prefix}{kwargs['value']}"
 
             if new_zone == "home" and pyscript.vars.left_home_timestamp[name].day == datetime.now().day:
                 message += f" after {dates.format_duration(pyscript.vars.left_home_timestamp[name])}"
 
-        elif not files.read("zones", [kwargs["old_value"], "is_region"], False):
+        elif not File("zones").read([kwargs["old_value"], "is_region"], False):
             message = f"{name} left {old_prefix}{kwargs['old_value']}"
 
             if kwargs["old_value"].last_changed.astimezone(tz.tzlocal()).day == datetime.now().day:
@@ -117,7 +120,7 @@ def notify_on_zone_change(**kwargs):
         else:
             message = f"{name} left {old_prefix}{kwargs['old_value']}"
 
-        noti = push.Notification(
+        noti = Notification(
             message=message,
             group="notify_on_zone_change",
             tag="notify_on_zone_change",
@@ -128,7 +131,7 @@ def notify_on_zone_change(**kwargs):
 
 @time_trigger("cron(0 5 * * *)")
 def clear_zone_change_notifications():
-    noti = push.Notification(tag="notify_on_zone_change")
+    noti = Notification(tag="notify_on_zone_change")
     noti.clear()
 
 

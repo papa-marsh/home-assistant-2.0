@@ -1,5 +1,5 @@
 from random import random
-from typing import TYPE_CHECKING
+from typing import Any, Literal, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..modules import constants
@@ -8,18 +8,36 @@ else:
 
 
 class Notification:
-    def __init__(self, **kwargs):
-        self.action_data = kwargs["action_data"] if "action_data" in kwargs else None
-        self.actions = kwargs["actions"] if "actions" in kwargs else []
-        self.group = kwargs["group"] if "group" in kwargs else str(random())
-        self.message = kwargs["message"] if "message" in kwargs else ""
-        self.priority = kwargs["priority"] if "priority" in kwargs else "active"
-        self.sound = kwargs["sound"] if "sound" in kwargs else constants.NOTI_SOUND
-        self.tag = kwargs["tag"] if "tag" in kwargs else str(random())
-        self.target = kwargs["target"] if "target" in kwargs else None
-        self.title = kwargs["title"] if "title" in kwargs else ""
+    """
+    Comprehensive push notification class.
+    Use .add_action() to make the notification actionable.
+    'action_data' gets included in the payload when HASS receives an actionable notification's respose.
+    Setting sound="passive" will send silently without waking screen.
+    """
 
-    def _stage(self):
+    def __init__(
+        self,
+        action_data: Any = None,
+        actions: list[dict[str, Any]] = [],
+        group: Optional[str] = None,
+        message: str = "",
+        priority: Literal["passive", "active", "time-sensitive" "critical"] = "active",
+        sound: str = constants.NOTI_SOUND,
+        tag: str = None,
+        target: Literal["marshall", "emily", "all"] = "marshall",
+        title: str = "",
+    ) -> None:
+        self.action_data = action_data
+        self.actions = actions
+        self.group = group or str(random())
+        self.message = message
+        self.priority = priority
+        self.sound = sound
+        self.tag = tag or str(random())
+        self.target = target
+        self.title = title
+
+    def _stage(self) -> None:
         self.payload = {
             "message": self.message,
             "title": self.title,
@@ -41,25 +59,37 @@ class Notification:
             },
         }
 
-    def send(self, target=None):
+    def send(self, target: Optional[Literal["marshall", "emily", "all"]] = None) -> None:
+        """
+        Stages notification data and calls the HASS native notify service.
+        """
         if target:
             self.target = target
         self._stage()
         call_notify_service(self.target, self.payload)
 
-    def clear(self):
+    def clear(self) -> None:
+        """
+        Attempts to clear any notifications with this instance's tag.
+        """
         payload = {"message": "clear_notification", "data": {"tag": self.tag}}
         call_notify_service(target="all", payload=payload)
 
     def add_action(
         self,
-        id,
-        title,
-        destructive=False,
-        nav_view=None,
-        input=False,
-        require_auth=False,
-    ):
+        id: str,
+        title: str,
+        destructive: bool = False,
+        nav_view: Optional[str] = None,
+        input: bool = False,
+        require_auth: bool = False,
+    ) -> None:
+        """
+        Adds an action to the push notification with which a user can send back a response.
+        'id' is a unique identifier. 'title' is what's shown on the button itself.
+        Set input=True to allow a text input response after pressing the button.
+        'nav_view' can be used to bring user to a specific tab in the HA app (eg. "home").
+        """
         action = {
             "action": id,
             "title": title,
@@ -76,24 +106,36 @@ class Notification:
         self.actions.append(action)
 
 
-def call_notify_service(target, payload):
-    if target.lower() in ["marshall", "all"]:
+def call_notify_service(target: Literal["marshall", "emily", "all"], payload: dict) -> None:
+    """
+    Directly call the native HASS notify service with a given push notification payload.
+    """
+    if target in ["marshall", "all"]:
         notify.mobile_app_marshalls_iphone(**payload)
-    if target.lower() in ["emily", "all"]:
+    if target in ["emily", "all"]:
         notify.mobile_app_emily_s_iphone(**payload)
 
 
-def update_location(target="all"):
+def update_location(target: Literal["marshall", "emily", "all"] = "all") -> None:
+    """
+    Attempt to retrieve the location data of a given user from their HA app.
+    """
     payload = {"message": "request_location_update"}
-    call_notify_service(target=target, payload=payload)
+    call_notify_service(target, payload)
 
 
-def update_complications(target="all"):
+def update_complications(target: Literal["marshall", "emily", "all"] = "all") -> None:
+    """
+    Attempt to update the Apple Watch complications for a given user.
+    """
     payload = {"message": "update_complications"}
-    call_notify_service(target=target, payload=payload)
+    call_notify_service(target, payload)
 
 
-def debug(message="Placeholder message"):
+def debug(message: str = "Placeholder message") -> None:
+    """
+    Simple notification intended for quick developer debugging.
+    """
     noti = Notification(
         title="Debug",
         message=message,

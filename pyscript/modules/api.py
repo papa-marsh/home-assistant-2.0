@@ -10,7 +10,15 @@ else:
 
 class StocksAPI():
     def get_quote(self, symbol: str = "SPY") -> dict:
-        url = f"https://finnhub.io/api/v1/quote?symbol={symbol.upper()}&token={secrets.FINNHUB_TOKEN}"
+        """
+        Returns a dict of "current", "change", and "prev_close" for a given stock symbol.
+        Change is returned in percent format (0-100).
+        Uses Finnhub API.
+        """
+        symbol = symbol.upper()
+        token = secrets.FINNHUB_TOKEN
+        url = f"https://finnhub.io/api/v1/quote?symbol={symbol}&token={token}"
+
         r = task.executor(requests.get, url).json()
 
         output = {
@@ -22,7 +30,14 @@ class StocksAPI():
         return output
 
     def get_weekly_quote(self, symbol: str = "SPY") -> float:
-        url = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={symbol.upper()}&apikey={secrets.ALPHAVANTAGE_KEY}"
+        """
+        Returns the price of the given symbol for the most recent week available.
+        Uses Alpha Vantage API.
+        """
+        symbol = symbol.upper()
+        key = secrets.ALPHAVANTAGE_KEY
+        url = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={symbol}&apikey={key}"
+
         r = task.executor(requests.get, url).json()
 
         latest_week = list(r["Weekly Time Series"].keys())[0]
@@ -31,19 +46,31 @@ class StocksAPI():
         current_week_number = date.today().isocalendar().week
 
         week_key = "1. open" if latest_week_number == current_week_number else "4. close"
+
         price = r["Weekly Time Series"][latest_week][week_key]
 
         return price
 
     def get_weekly_change(self, symbol: str = "SPY") -> float:
-        current_price = self.get_stock_quote(symbol)["current"]
-        week_open_price = float(self.get_stock_week(symbol))
+        """
+        Uses Finnhub API for current price and Alpha Vantage API for week open price.
+        Returns the weekly change for a given stock symbol.
+        Change is returned in decimal format (0-1).
+        """
+        current_price = self.get_quote(symbol)["current"]
+        week_open_price = float(self.get_weekly_quote(symbol))
 
         return (current_price / week_open_price) - 1
 
 
 class CryptoAPI():
     def get_quotes(self, symbols=["BTC"], limit=500) -> dict:
+        """
+        Returns a dict of market data keyed by symbol.
+        Each symbol is a dict with keys "rank", "price", "change_hour", "change_day", and "change_week".
+        Change is returned in percent format (0-100).
+        Uses CoinMarketCap API.
+        """
         url = f"https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit={limit}&convert=USD"
         headers = {
             "Accepts": "application/json",

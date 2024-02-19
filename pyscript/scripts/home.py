@@ -3,12 +3,15 @@ from dateutil import tz
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..modules import constants, dates, files, push, util
+    import pyscript
+    from ..modules import constants, dates, util
+    from ..modules.files import File
+    from ..modules.push import Notification
 else:
     import constants
     import dates
-    import files
-    import push
+    from files import File
+    from push import Notification
     import util
 
 
@@ -38,7 +41,7 @@ def door_open_notification(**kwargs):
 @util.require_pref_check("Door Open Reminder Notifications", "On")
 def door_open_notification_loop(id, name, open_time, silent):
     task.unique(f"{id}_left_open")
-    noti = push.Notification(
+    noti = Notification(
         title=f"{'Garage' if 'stall' in id else 'Door'} Open",
         tag=f"{id}_left_open",
         group=f"{id}_left_open",
@@ -93,7 +96,7 @@ def turn_off_door_open_notification(**kwargs):
     task.unique(f"{id}_left_open")
     if id == "slider_door" and climate.thermostat != "off":
         climate.turn_off(entity_id="climate.thermostat")
-        noti = push.Notification(
+        noti = Notification(
             title="Air Off",
             message="The thermostat and reminder notification have been turned off",
             tag="slider_door_left_open",
@@ -115,7 +118,7 @@ def close_garage_from_notification(**kwargs):
     cover.close_cover(entity_id=f"cover.{id}")
     task.sleep(30)
     if state.get(f"cover.{id}") == "open":
-        noti = push.Notification(
+        noti = Notification(
             title="Command Failed",
             tag=f"{id}_left_open",
             group=f"{id}_left_open",
@@ -139,7 +142,7 @@ def clear_door_open_notification(**kwargs):
     if kwargs["value"] in ["closed", "off"] and kwargs["old_value"] in ["open", "on"]:
         id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
         task.unique(f"{id}_left_open")
-        noti = push.Notification(tag=f"{id}_left_open")
+        noti = Notification(tag=f"{id}_left_open")
         noti.clear()
 
 
@@ -156,7 +159,7 @@ def garage_auto_open(**kwargs):
         and 6 <= now.hour < 23
         and (now - cover.east_stall.last_changed).seconds > 300
         and (location != "home" or (now - location.last_changed).seconds < 300)
-        and files.read("zones", [location, "near_home"], False)
+        and File("zones").read([location, "near_home"], False)
     ):
         cover.open_cover(entity_id="cover.east_stall")
 
@@ -167,11 +170,11 @@ def garage_auto_open(**kwargs):
 def ios_garage_stall(**kwargs):
     triggered_by = "emily" if kwargs["sourceDeviceID"] == "emilys_iphone" else "marshall"
     triggered_from = state.get(f"person.{triggered_by}")
-    if files.read("zones", [triggered_from, "near_home"], False):
+    if File("zones").read([triggered_from, "near_home"], False):
         stall = kwargs["actionName"].split(" ")[0].lower()
         cover.toggle(entity_id=f"cover.{stall}_stall")
     else:
-        noti = push.Notification(
+        noti = Notification(
             title="Command Failed",
             message="You must be closer to home to control the garage",
             target=triggered_by,
@@ -199,7 +202,7 @@ def door_open_critical_notification(**kwargs):
 
         if target:
             door = state.getattr(kwargs["var_name"])["friendly_name"].split(" ")[0]
-            noti = push.Notification(
+            noti = Notification(
                 title=f"{door} Door Open",
                 message=f"{door} door opened at {dates.parse_timestamp(output_format='time')}",
                 tag=f"{door}_critical",
@@ -224,7 +227,7 @@ def ios_bathroom_floor(**kwargs):
 @state_trigger("int(climate.bathroom_floor_thermostat.current_temperature) >= 80")
 def ios_bathroom_floor_ready():
     if pyscript.vars.bathroom_floor_push_target:
-        noti = push.Notification(
+        noti = Notification(
             title="Bathroom Ready",
             message=f"The floor is warmed up until {pyscript.vars.bathroom_floor_end_time}!",
             tag="ios_bathroom_floor_ready",

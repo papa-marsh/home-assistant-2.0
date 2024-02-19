@@ -3,6 +3,7 @@ import os
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    import pyscript
     from ..modules import dates, util
 else:
     import dates

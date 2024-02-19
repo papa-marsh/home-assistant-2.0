@@ -3,9 +3,10 @@ from dateutil import tz
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..modules import push
+    import pyscript
+    from ..modules.push import Notification
 else:
-    import push
+    from push import Notification
 
 
 @time_trigger("cron(*/10 * * * *)")
@@ -18,7 +19,7 @@ def space_heater_auto_off():
 @state_trigger("person.emily == 'home'")
 def meeting_active_notification():
     if pyscript.entity_card_office == "Busy":
-        noti = push.Notification(
+        noti = Notification(
             target="emily",
             title="Heads Up",
             message="Dad's in a meeting",
@@ -32,7 +33,7 @@ def meeting_active_notification():
 @time_trigger("startup")
 @state_trigger("pyscript.entity_card_office == 'Available'")
 def clear_meeting_active_notification():
-    noti = push.Notification(tag="meeting_active")
+    noti = Notification(tag="meeting_active")
     noti.clear()
 
 
