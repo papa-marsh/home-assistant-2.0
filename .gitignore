@@ -1,11 +1,11 @@
 .cloud
 .storage
 .vscode
+.pytest_cache
 
 home-assistant_v2.db
 home-assistant_v2.db-shm
 home-assistant_v2.db-wal
-
 home-assistant.log
 home-assistant.log.1
 home-assistant.log.fault
@@ -18,9 +18,6 @@ image
 
 deps
 tts
-
-json-files/debug-log.json
-json-files/zones.json
 
 secrets.py
 secrets.yaml
