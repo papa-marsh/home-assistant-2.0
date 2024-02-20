@@ -51,13 +51,14 @@ def ios_shortcut_wakeup_time():
         turn_off_sound_machine()
 
 
+@time_trigger("cron(0 17 * * *)")
 @event_trigger("ios.action_fired", "actionName=='Sound On'")
-def turn_on_sound_machine(**kwargs):
+def turn_on_sound_machine(**_):
     switch.turn_on(entity_id="switch.ellies_sound_machine")
 
 
 @event_trigger("ios.action_fired", "actionName=='Sound Off'")
-def turn_off_sound_machine(**kwargs):
+def turn_off_sound_machine(**_):
     switch.turn_off(entity_id="switch.ellies_sound_machine")
 
 

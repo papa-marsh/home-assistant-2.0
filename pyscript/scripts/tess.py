@@ -125,7 +125,7 @@ def sentry_off_at_in_laws():
 
 
 @event_trigger("ios.action_fired", "actionName=='Tess Air'")
-def ios_tess_air(**kwargs):
+def ios_tess_air(**_):
     if climate.tess_hvac_climate_system == "off":
         pyscript.entity_card_tess.blink = True
     task.sleep(1)
@@ -150,7 +150,7 @@ def ios_seat_heat(**kwargs):
 
 @util.require_ios_action_unlock
 @event_trigger("ios.action_fired", "actionName=='Frunk'")
-def ios_frunk(**kwargs):
+def ios_frunk(**_):
     cover.open_cover(entity_id="cover.tess_frunk")
 
 

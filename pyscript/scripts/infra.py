@@ -106,7 +106,7 @@ def reset_preferences():
 
 
 @event_trigger("ios.action_fired", "actionName=='Unlock Actions'")
-def ios_unlock_actions(**kwargs):
+def ios_unlock_actions(**_):
     state.setattr("pyscript.vars.ios_actions_unlocked", True)
     task.sleep(10)
     state.setattr("pyscript.vars.ios_actions_unlocked", False)
