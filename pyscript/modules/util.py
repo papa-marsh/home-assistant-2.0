@@ -3,10 +3,10 @@ from dateutil import tz
 from typing import Any, Callable, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import pyscript
-    from ..modules import dates, secrets
-    from ..modules.files import File
-    from ..modules.push import Notification
+    from . import dates, secrets
+    from .dummy import *
+    from .files import File
+    from .push import Notification
 else:
     import dates
     from files import File

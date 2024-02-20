@@ -3,7 +3,8 @@ import requests
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..modules import secrets
+    from . import secrets
+    from .dummy import *
 else:
     import secrets
 

@@ -3,7 +3,7 @@ from dateutil import tz
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import pyscript
+    from ..modules.dummy import *
     from ..modules.push import Notification
 else:
     from push import Notification

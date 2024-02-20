@@ -2,8 +2,8 @@ import os
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import pyscript
     from ..modules import constants, dates, util
+    from ..modules.dummy import *
     from ..modules.files import File
     from ..modules.push import Notification
 else:

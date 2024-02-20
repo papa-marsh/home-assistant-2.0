@@ -1,5 +1,11 @@
 [flake8]
-ignore = E501,F821,W503
+ignore = E501,F401,F403F405,F821,W503
+
 # E501 = line length
+
+# F401 = module unused
+# F403 = `import *` used, can't detect undefined
+# F405 = undefined or from `import *`
 # F821 = undefined name
+
 # W503 = new line before binary operator

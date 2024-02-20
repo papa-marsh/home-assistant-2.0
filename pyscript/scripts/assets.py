@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import pyscript
     from ..modules import constants, secrets
+    from ..modules.dummy import *
     from ..modules.api import CryptoAPI, StocksAPI
 else:
     from api import CryptoAPI, StocksAPI
@@ -61,7 +61,7 @@ def crypto_stage_and_populate():
 
 
 def crypto_stage_entity():
-    api = CryptoAPI
+    api = CryptoAPI()
     response = api.get_quotes(symbols=[symbol for symbol in secrets.CRYPTO_QTY])
 
     staging = {

@@ -1,6 +1,9 @@
 from datetime import date, datetime, timedelta
 from dateutil import tz
-from typing import Literal, Optional
+from typing import Literal, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .dummy import *
 
 
 def parse_timestamp(timestamp: Optional[str | datetime] = None, output_format: Literal["iso", "date", "time", "datetime"] = "iso") -> str:

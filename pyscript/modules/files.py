@@ -4,7 +4,8 @@ import yaml
 from typing import Any, List, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..modules import constants
+    from . import constants
+    from .dummy import *
 else:
     import constants
 

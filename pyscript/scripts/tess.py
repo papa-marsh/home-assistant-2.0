@@ -3,12 +3,13 @@ from dateutil import tz
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import pyscript
     from ..modules import constants, dates, push, secrets, util
+    from ..modules.dummy import *
     from ..modules.push import Notification
 else:
     import constants
     import dates
+    import push
     from push import Notification
     import secrets
     import util
