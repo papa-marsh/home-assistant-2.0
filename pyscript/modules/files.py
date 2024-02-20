@@ -16,7 +16,7 @@ class File:
     @pyscript_executor
     def read(self, key_list: List[str] = None, default_value: Any = None):
         """
-        Reads the contents of a file or the value at a given key path.
+        Reads the full contents of a file or the value at a given key path if provided.
         If key_list is provided, read the value at the corresponding dictionary path.
         """
         try:
