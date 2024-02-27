@@ -1,12 +1,13 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..modules import constants, secrets
+    from ..modules import secrets
+    from ..modules.constants import CRYPTO_CONFIG, STOCKS_CONFIG, ASSET_ACTIVE_THRESHOLD, ASSET_COLOR_THRESHOLD
     from ..modules.dummy import *
     from ..modules.api import CryptoAPI, StocksAPI
 else:
     from api import CryptoAPI, StocksAPI
-    import constants
+    from constants import CRYPTO_CONFIG, STOCKS_CONFIG, ASSET_ACTIVE_THRESHOLD, ASSET_COLOR_THRESHOLD
     import secrets
 
 
@@ -21,13 +22,13 @@ def persist_entity_card_crypto():
             "active": False,
             "blink": False,
             "private": False,
-            "row_1_icon": constants.CRYPTO_CONFIG["row_1"]["icon"],
+            "row_1_icon": CRYPTO_CONFIG["row_1"]["icon"],
             "row_1_value": "",
             "row_1_color": "default",
-            "row_2_icon": constants.CRYPTO_CONFIG["row_2"]["icon"],
+            "row_2_icon": CRYPTO_CONFIG["row_2"]["icon"],
             "row_2_value": "",
             "row_2_color": "default",
-            "row_3_icon": constants.CRYPTO_CONFIG["row_3"]["icon"],
+            "row_3_icon": CRYPTO_CONFIG["row_3"]["icon"],
             "row_3_value": "",
             "row_3_color": "default",
             "staging": {},
@@ -90,13 +91,13 @@ def crypto_populate_card(private=False):
         pyscript.entity_card_crypto = format_price(pyscript.entity_card_crypto.staging["total"], precision=0)
 
     for row in range(1, 4):
-        config = constants.CRYPTO_CONFIG[f"row_{row}"][visibility]
-        symbol = constants.CRYPTO_CONFIG[f"row_{row}"]["symbol"]
-        icon = constants.CRYPTO_CONFIG[f"row_{row}"]["icon"]
+        config = CRYPTO_CONFIG[f"row_{row}"][visibility]
+        symbol = CRYPTO_CONFIG[f"row_{row}"]["symbol"]
+        icon = CRYPTO_CONFIG[f"row_{row}"]["icon"]
         staged = pyscript.entity_card_crypto.staging[symbol]
         value = ""
 
-        if abs(staged["change"]) >= constants.ASSET_ACTIVE_THRESHOLD:
+        if abs(staged["change"]) >= ASSET_ACTIVE_THRESHOLD:
             active = True
 
         if config["price"]:
@@ -141,13 +142,13 @@ def persist_entity_card_stocks():
             "active": False,
             "blink": False,
             "private": False,
-            "row_1_icon": constants.STOCKS_CONFIG["row_1"]["icon"],
+            "row_1_icon": STOCKS_CONFIG["row_1"]["icon"],
             "row_1_value": "",
             "row_1_color": "default",
-            "row_2_icon": constants.STOCKS_CONFIG["row_2"]["icon"],
+            "row_2_icon": STOCKS_CONFIG["row_2"]["icon"],
             "row_2_value": "",
             "row_2_color": "default",
-            "row_3_icon": constants.STOCKS_CONFIG["row_3"]["icon"],
+            "row_3_icon": STOCKS_CONFIG["row_3"]["icon"],
             "row_3_value": "",
             "row_3_color": "default",
             "staging": {},
@@ -215,13 +216,13 @@ def stocks_populate_card(private=False):
         pyscript.entity_card_stocks = format_price(pyscript.entity_card_stocks.staging["total"], precision=0)
 
     for row in range(1, 4):
-        config = constants.STOCKS_CONFIG[f"row_{row}"][visibility]
-        symbol = constants.STOCKS_CONFIG[f"row_{row}"]["symbol"]
-        icon = constants.STOCKS_CONFIG[f"row_{row}"]["icon"]
+        config = STOCKS_CONFIG[f"row_{row}"][visibility]
+        symbol = STOCKS_CONFIG[f"row_{row}"]["symbol"]
+        icon = STOCKS_CONFIG[f"row_{row}"]["icon"]
         staged = pyscript.entity_card_stocks.staging[symbol]
         value = ""
 
-        if abs(staged["change"]) >= constants.ASSET_ACTIVE_THRESHOLD:
+        if abs(staged["change"]) >= ASSET_ACTIVE_THRESHOLD:
             active = True
 
         if visibility == "public":
@@ -300,9 +301,9 @@ def format_color(change, percent_formatted=False):
     if not percent_formatted:
         change *= 100
 
-    if change >= constants.ASSET_COLOR_THRESHOLD:
+    if change >= ASSET_COLOR_THRESHOLD:
         color = "green"
-    elif change <= constants.ASSET_COLOR_THRESHOLD * -1:
+    elif change <= ASSET_COLOR_THRESHOLD * -1:
         color = "red"
     else:
         color = "default"

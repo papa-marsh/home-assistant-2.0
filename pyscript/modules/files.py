@@ -12,6 +12,9 @@ else:
 
 class File:
     def __init__(self, file_name: str) -> None:
+        """
+        Requires the filename in string format without the .yaml extension
+        """
         self.path = f"{constants.BASE_FILE_PATH}{file_name}.yaml"
 
     @pyscript_executor
