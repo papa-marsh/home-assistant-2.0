@@ -85,7 +85,7 @@ def set_preference_value(**kwargs):
         util.set_pref(input_select.preference_selector, str(kwargs["value"]))
 
 
-@time_trigger("cron(0 5 * * *)")
+@time_trigger("cron(0 7 * * *)")
 def reset_preferences():
     reset = ""
     prefs = File("preferences").read()
