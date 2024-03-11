@@ -1,12 +1,12 @@
 from datetime import date, datetime, timedelta
 from dateutil import tz
-from typing import Literal, Optional, TYPE_CHECKING
+from typing import Literal, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .dummy import *
 
 
-def parse_timestamp(timestamp: Optional[str | datetime] = None, output_format: Literal["iso", "date", "time", "datetime"] = "iso") -> str:
+def parse_timestamp(timestamp: str | datetime | None = None, output_format: Literal["iso", "date", "time", "datetime"] = "iso") -> str:
     """
     Returns formatted string of date/time from the given timestamp or ISO string.
     'output_format' can be "iso" (default), "date", "time", or "datetime".
@@ -28,7 +28,7 @@ def parse_timestamp(timestamp: Optional[str | datetime] = None, output_format: L
     return timestamp
 
 
-def format_duration(timestamp: timedelta | datetime, comparison: Optional[datetime] = None, include_seconds: bool = False) -> str:
+def format_duration(timestamp: timedelta | datetime, comparison: datetime | None = None, include_seconds: bool = False) -> str:
     """
     Returns formatted string for the time interval between 'timestamp' and 'comparison' (default is now).
     If 'timestamp' is an interval, 'comparison' is ignored.

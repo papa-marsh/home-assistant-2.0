@@ -1,5 +1,5 @@
 from random import random
-from typing import Any, Literal, Optional, TYPE_CHECKING
+from typing import Any, Literal, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import constants
@@ -19,17 +19,17 @@ class Notification:
     def __init__(
         self,
         action_data: Any = None,
-        actions: list[dict[str, Any]] = [],
-        group: Optional[str] = None,
+        actions: list[dict[str, Any]] = None,
+        group: str | None = None,
         message: str = "",
         priority: Literal["passive", "active", "time-sensitive" "critical"] = "active",
         sound: str = constants.NOTI_SOUND,
-        tag: str = None,
+        tag: str | None = None,
         target: Literal["marshall", "emily", "all"] = "marshall",
         title: str = "",
     ) -> None:
         self.action_data = action_data
-        self.actions = actions
+        self.actions = actions or []
         self.group = group or str(random())
         self.message = message
         self.priority = priority
@@ -60,7 +60,7 @@ class Notification:
             },
         }
 
-    def send(self, target: Optional[Literal["marshall", "emily", "all"]] = None) -> None:
+    def send(self, target: Literal["marshall", "emily", "all"] | None = None) -> None:
         """
         Stages notification data and calls the HASS native notify service.
         """
@@ -81,7 +81,7 @@ class Notification:
         id: str,
         title: str,
         destructive: bool = False,
-        nav_view: Optional[str] = None,
+        nav_view: str | None = None,
         input: bool = False,
         require_auth: bool = False,
     ) -> None:

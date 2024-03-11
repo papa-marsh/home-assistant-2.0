@@ -18,7 +18,7 @@ class File:
         self.path = f"{constants.BASE_FILE_PATH}{file_name}.yaml"
 
     @pyscript_executor
-    def read(self, key_list: List[str] = None, default_value: Any = None):
+    def read(self, key_list: List[str] | None = None, default_value: Any = None):
         """
         Reads the full contents of a file or the value at a given key path if provided.
         If key_list is provided, read the value at the corresponding dictionary path.
@@ -36,10 +36,11 @@ class File:
         return result
 
     @pyscript_executor
-    def write(self, key_list: List[str] = None, value: Any = None) -> None:
+    def write(self, key_list: List[str], value: Any) -> None:
         """
         Writes to a file or the value at a given key path.
-        If key_list is provided, write/overwrite the value at the corresponding dictionary path.
+        Write/overwrite the value at the dictionary path corresponding to key_list.
+        To write to the file dictionary's root (ie. overwrite entire file), use .overwrite() instead.
         Will create the file if it doesn't exist.
         """
         if os.path.exists(self.path):

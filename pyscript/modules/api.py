@@ -65,7 +65,7 @@ class StocksAPI():
 
 
 class CryptoAPI():
-    def get_quotes(self, symbols=["BTC"], limit=500) -> dict:
+    def get_quotes(self, symbols: list[str], limit: int = 500) -> dict:
         """
         Returns a dict of market data keyed by symbol.
         Each symbol is a dict with keys "rank", "price", "change_hour", "change_day", and "change_week".
@@ -77,6 +77,9 @@ class CryptoAPI():
             "Accepts": "application/json",
             "X-CMC_PRO_API_KEY": f"{secrets.CMC_KEY}",
         }
+
+        if not symbols:
+            symbols = ["BTC"]
 
         r = task.executor(requests.get, url, headers=headers).json()
         parsed = {}
