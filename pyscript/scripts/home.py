@@ -3,7 +3,7 @@ from dateutil import tz
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..modules import constants, dates, util
+    from ..modules import constants, dates, secrets, util
     from ..modules.dummy import *
     from ..modules.files import File
     from ..modules.push import Notification
@@ -12,6 +12,7 @@ else:
     import dates
     from files import File
     from push import Notification
+    import secrets
     import util
 
 
@@ -195,7 +196,8 @@ def ios_garage_stall(**kwargs):
 def door_open_critical_notification(**kwargs):
     if kwargs["value"] == "on" and kwargs["old_value"] == "off":
         target = None
-        if person.marshall not in ["home", "East Grand Rapids"] and person.emily not in ["home", "East Grand Rapids"]:
+        exception = person.marshall == "East Grand Rapids" and person.emily == secrets.IN_LAWS_ZONE
+        if person.marshall != "home" and person.emily != "home" and not exception:
             target = "all"
         elif 1 <= datetime.now().hour < 6:
             target = "marshall"

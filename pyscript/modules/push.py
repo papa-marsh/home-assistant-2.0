@@ -22,7 +22,7 @@ class Notification:
         actions: list[dict[str, Any]] = None,
         group: str | None = None,
         message: str = "",
-        priority: Literal["passive", "active", "time-sensitive" "critical"] = "active",
+        priority: Literal["passive", "active", "time-sensitive", "critical"] = "active",
         sound: str = constants.NOTI_SOUND,
         tag: str | None = None,
         target: Literal["marshall", "emily", "all"] = "marshall",

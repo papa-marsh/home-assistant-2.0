@@ -98,22 +98,30 @@ def notify_on_zone_change(**kwargs):
     if util.get_pref(f"{name} Zone Notifications") != "On":
         return
 
-    debounced_zone = pyscript.vars.zone_debounced[name]["debounced_zone"]
-    containing_zone = pyscript.vars.zone_debounced[name]["containing_zone"]
+    debounced_zone = pyscript.vars.zone_debounce[name]["debounced_zone"]
+    containing_zone = pyscript.vars.zone_debounce[name]["containing_zone"]
     if old_zone == debounced_zone and new_zone == containing_zone:
-        pyscript.vars.zone_debounced[name] = {"debounced_zone": None, "containing_zone": None}
+        pyscript.vars.zone_debounce[name] = {"debounced_zone": None, "containing_zone": None}
         return
 
     if "debounce" in new_data:
-        pyscript.vars.zone_debounced[name] = {"debounced_zone": new_zone, "containing_zone": old_zone}
-        task.sleep(new_zone["debounce"])
-        pyscript.vars.zone_debounced[name] = {"debounced_zone": None, "containing_zone": None}
+        pyscript.vars.zone_debounce[name] = {"debounced_zone": new_zone, "containing_zone": old_zone}
+        task.sleep(new_data["debounce"])
+        pyscript.vars.zone_debounce[name] = {"debounced_zone": None, "containing_zone": None}
 
     if not new_data.get("is_region"):
         message = f"{name} arrived at {new_prefix}{new_zone}"
         if new_zone == "home":
             duration = dates.format_duration(pyscript.vars.left_home_timestamp[name])
             message += f" after {duration}"
+            noti = Notification(
+                message=f"You were away for {duration}",
+                group="summary_on_zone_change",
+                tag="summary_on_zone_change",
+                target=name.lower(),
+                priority="passive"
+            )
+            noti.send()
 
     elif not old_data.get("is_region"):
         duration = dates.format_duration(kwargs['old_value'].last_changed)
@@ -126,6 +134,7 @@ def notify_on_zone_change(**kwargs):
                 group="summary_on_zone_change",
                 tag="summary_on_zone_change",
                 target=name.lower(),
+                priority="passive"
             )
             noti.send()
 

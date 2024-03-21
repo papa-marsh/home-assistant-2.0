@@ -32,7 +32,7 @@ def format_duration(timestamp: timedelta | datetime, comparison: datetime | None
     """
     Returns formatted string for the time interval between 'timestamp' and 'comparison' (default is now).
     If 'timestamp' is an interval, 'comparison' is ignored.
-    Supports negative internvals, but does not include a negative sign.
+    Supports negative intervals, but does not include a negative sign.
     """
     if isinstance(timestamp, timedelta):
         interval = timestamp
