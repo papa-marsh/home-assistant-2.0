@@ -31,7 +31,7 @@ def chelsea_kickoff_notification():
     noti.send()
 
 
-@time_trigger("cron(0 7,17 * * *)")
+@time_trigger("cron(0 7,18 * * *)")
 def toggle_butterfly_night_light():
     if datetime.now().hour < 12:
         switch.turn_on(entity_id="switch.butterfly_night_light")
@@ -86,47 +86,62 @@ def clear_feed_chelsea_notification():
 @state_trigger("person.marshall", "person.emily")
 def notify_on_zone_change(**kwargs):
     name = state.getattr(kwargs["var_name"])["friendly_name"]
+    old_zone = kwargs["old_value"]
+    old_data = File("zones").read([old_zone])
+    old_prefix = old_data.get("prefix", "")
+    new_zone = kwargs["value"]
+    new_data = File("zones").read([new_zone])
+    new_prefix = new_data.get("prefix", "")
+
     task.unique(f"{name.lower()}_zone_notify")
 
-    if pyscript.vars.suppress_zone_noti[name]:
-        pyscript.vars.suppress_zone_noti[name] = False
+    if util.get_pref(f"{name} Zone Notifications") != "On":
+        return
 
-    elif util.get_pref(f"{name} Zone Notifications") == "On":
-        new_zone = File("zones").read([kwargs["value"]])
-        if "debounce" in new_zone:
-            pyscript.vars.suppress_zone_noti[name] = True
-            task.sleep(new_zone["debounce"])
-            pyscript.vars.suppress_zone_noti[name] = False
+    debounced_zone = pyscript.vars.zone_debounced[name]["debounced_zone"]
+    containing_zone = pyscript.vars.zone_debounced[name]["containing_zone"]
+    if old_zone == debounced_zone and new_zone == containing_zone:
+        pyscript.vars.zone_debounced[name] = {"debounced_zone": None, "containing_zone": None}
+        return
 
-        new_prefix = new_zone["prefix"] if "prefix" in new_zone else ""
-        old_prefix = File("zones").read([kwargs["old_value"], "prefix"], "")
+    if "debounce" in new_data:
+        pyscript.vars.zone_debounced[name] = {"debounced_zone": new_zone, "containing_zone": old_zone}
+        task.sleep(new_zone["debounce"])
+        pyscript.vars.zone_debounced[name] = {"debounced_zone": None, "containing_zone": None}
 
-        if not File("zones").read([kwargs["value"], "is_region"], False):
-            message = f"{name} arrived at {new_prefix}{kwargs['value']}"
+    if not new_data.get("is_region"):
+        message = f"{name} arrived at {new_prefix}{new_zone}"
+        if new_zone == "home":
+            duration = dates.format_duration(pyscript.vars.left_home_timestamp[name])
+            message += f" after {duration}"
 
-            if new_zone == "home" and pyscript.vars.left_home_timestamp[name].day == datetime.now().day:
-                message += f" after {dates.format_duration(pyscript.vars.left_home_timestamp[name])}"
+    elif not old_data.get("is_region"):
+        duration = dates.format_duration(kwargs['old_value'].last_changed)
+        message = f"{name} left {old_prefix}{old_zone} after {duration}"
+        if old_zone == "home":
+            pyscript.vars.left_home_timestamp[name] = datetime.now()
+        elif util.get_pref(f"{name} Zone Summary Notifications") == "On":
+            noti = Notification(
+                message=f"You spent {duration} at {old_prefix}{old_zone}",
+                group="summary_on_zone_change",
+                tag="summary_on_zone_change",
+                target=name.lower(),
+            )
+            noti.send()
 
-        elif not File("zones").read([kwargs["old_value"], "is_region"], False):
-            message = f"{name} left {old_prefix}{kwargs['old_value']}"
+    elif new_zone != "not_home":
+        message = f"{name} is in {new_prefix}{new_zone}"
 
-            if kwargs["old_value"].last_changed.astimezone(tz.tzlocal()).day == datetime.now().day:
-                message += f" after {dates.format_duration(kwargs['old_value'].last_changed)}"
-            if kwargs["old_value"] == "home":
-                pyscript.vars.left_home_timestamp[name] = datetime.now()
+    else:
+        message = f"{name} left {old_prefix}{old_zone}"
 
-        elif kwargs["value"] != "not_home":
-            message = f"{name} is in {new_prefix}{kwargs['value']}"
-        else:
-            message = f"{name} left {old_prefix}{kwargs['old_value']}"
-
-        noti = Notification(
-            message=message,
-            group="notify_on_zone_change",
-            tag="notify_on_zone_change",
-            target="emily" if name == "Marshall" else "marshall",
+    noti = Notification(
+        message=message,
+        group="notify_on_zone_change",
+        tag="notify_on_zone_change",
+        target="emily" if name == "Marshall" else "marshall",
         )
-        noti.send()
+    noti.send()
 
 
 @time_trigger("cron(0 5 * * *)")
