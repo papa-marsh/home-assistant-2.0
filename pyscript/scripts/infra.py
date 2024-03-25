@@ -29,10 +29,7 @@ def persist_vars():
     pyscript.vars.ios_actions_unlocked = False
     pyscript.vars.preference_value_mutex = False
     pyscript.vars.suppress_zone_noti = {"Marshall": False, "Emily": False}
-    pyscript.vars.zone_debounce = {
-        "Marshall": {"debounced_zone": None, "containing_zone": None},
-        "Emily": {"debounced_zone": None, "containing_zone": None}
-    }
+    pyscript.vars.zone_debounce = {"Marshall":  None, "Emily": None}
 
 
 @time_trigger("cron(*/15 * * * *)")

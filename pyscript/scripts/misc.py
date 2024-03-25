@@ -39,27 +39,14 @@ def toggle_butterfly_night_light():
         switch.turn_off(entity_id="switch.butterfly_night_light")
 
 
-@event_trigger("sleepy_time")
-def ios_shortcut_sleepy_time():
-    if File("zones").read([person.emily, "near_home"], False):
-        turn_on_sound_machine()
-
-
-@event_trigger("wakeup_time")
-def ios_shortcut_wakeup_time():
-    if 6 <= datetime.now().hour < 17:
-        turn_off_sound_machine()
-
-
-@event_trigger("ios.action_fired", "actionName=='Sound On'")
-def turn_on_sound_machine(**_):
-    switch.turn_on(entity_id="switch.ellies_sound_machine")
-
-
-@event_trigger("ios.action_fired", "actionName=='Sound Off'")
-def turn_off_sound_machine(**_):
-    switch.turn_off(entity_id="switch.ellies_sound_machine")
-
+@event_trigger("emily_good_morning")
+def emily_good_morning():
+    emily_near_home = File("zones").read([person.emily, "near_home"], False)
+    is_day_time = 6 <= datetime.now().hour < 17
+    
+    if emily_near_home and is_day_time:
+        switch.turn_on(entity_id="switch.ellies_sound_machine")
+        
 
 @time_trigger("cron(0 8,20 * * *)")
 def feed_chelsea_notification():
@@ -98,16 +85,14 @@ def notify_on_zone_change(**kwargs):
     if util.get_pref(f"{name} Zone Notifications") != "On":
         return
 
-    debounced_zone = pyscript.vars.zone_debounce[name]["debounced_zone"]
-    containing_zone = pyscript.vars.zone_debounce[name]["containing_zone"]
-    if old_zone == debounced_zone and new_zone == containing_zone:
-        pyscript.vars.zone_debounce[name] = {"debounced_zone": None, "containing_zone": None}
+    if old_zone == pyscript.vars.zone_debounce[name]:
+        pyscript.vars.zone_debounce[name] = None
         return
 
     if "debounce" in new_data:
-        pyscript.vars.zone_debounce[name] = {"debounced_zone": new_zone, "containing_zone": old_zone}
+        pyscript.vars.zone_debounce[name] = new_zone
         task.sleep(new_data["debounce"])
-        pyscript.vars.zone_debounce[name] = {"debounced_zone": None, "containing_zone": None}
+        pyscript.vars.zone_debounce[name] = None
 
     if not new_data.get("is_region"):
         message = f"{name} arrived at {new_prefix}{new_zone}"
