@@ -59,24 +59,38 @@ def persist_chelsea_next_fixture():
 @time_trigger("startup", "cron(0 0 * * *)")
 @state_trigger("calendar.chelsea_fixtures.start_time")
 def set_chelsea_fixture_card():
-    description = calendar.chelsea_fixtures.description.split("\n")
-    home = description[0].split(" v ")[0]
-    away = description[0].split(" v ")[1]
-    start = datetime.strptime(calendar.chelsea_fixtures.start_time, "%Y-%m-%d %H:%M:%S")
-    badge = os.listdir("/config/www/soccer_badges")
+    try:
+        description = calendar.chelsea_fixtures.description.split("\n")
+        home = description[0].split(" v ")[0]
+        away = description[0].split(" v ")[1]
+        start = datetime.strptime(calendar.chelsea_fixtures.start_time, "%Y-%m-%d %H:%M:%S")
+        badge = os.listdir("/config/www/soccer_badges")
 
-    state.set(
-        "pyscript.chelsea_next_fixture",
-        value=datetime.now(),
-        home_team=home,
-        away_team=away,
-        competition=description[2],
-        top_row=description[2],
-        date=dates.colloquial_date(start.date()),
-        time=start.time().strftime("%-I:%M %p"),
-        home_path=f"/local/soccer_badges/{home}.png" if f"{home}.png" in badge else "/local/soccer_badges/Default.png",
-        away_path=f"/local/soccer_badges/{away}.png" if f"{away}.png" in badge else "/local/soccer_badges/Default.png",
-    )
+        state.set(
+            "pyscript.chelsea_next_fixture",
+            value=datetime.now(),
+            home_team=home,
+            away_team=away,
+            competition=description[2],
+            top_row=description[2],
+            date=dates.colloquial_date(start.date()),
+            time=start.time().strftime("%-I:%M %p"),
+            home_path=f"/local/soccer_badges/{home}.png" if f"{home}.png" in badge else "/local/soccer_badges/Default.png",
+            away_path=f"/local/soccer_badges/{away}.png" if f"{away}.png" in badge else "/local/soccer_badges/Default.png",
+        )
+    except:
+        state.set(
+            "pyscript.chelsea_next_fixture",
+            home_team="",
+            away_team="",
+            competition="",
+            top_row="",
+            date="Unavailable",
+            time="",
+            home_path="/local/soccer_badges/Default.png",
+            away_path="/local/soccer_badges/Default.png",
+        )
+
 
 
 @service("pyscript.chelsea_fixture_tap")
@@ -94,9 +108,12 @@ def chelsea_fixture_tap():
 @time_trigger("startup", "cron(*/5 * * * *)")
 @state_trigger("calendar.chelsea_fixtures.start_time")
 def chelsea_fixture_blink():
-    start = datetime.strptime(calendar.chelsea_fixtures.start_time, "%Y-%m-%d %H:%M:%S")
-    if datetime.now() >= start - timedelta(minutes=10):
-        if not pyscript.chelsea_next_fixture.blink:
-            pyscript.chelsea_next_fixture.blink = True
-    else:
+    try:
+        start = datetime.strptime(calendar.chelsea_fixtures.start_time, "%Y-%m-%d %H:%M:%S")
+        if datetime.now() >= start - timedelta(minutes=10):
+            if not pyscript.chelsea_next_fixture.blink:
+                pyscript.chelsea_next_fixture.blink = True
+        else:
+            pyscript.chelsea_next_fixture.blink = False
+    except:
         pyscript.chelsea_next_fixture.blink = False

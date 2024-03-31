@@ -115,24 +115,18 @@ def entity_card_dtap():
 def entity_card_update_state():
     pyscript.entity_card_hass = update.home_assistant_core_update.installed_version[2:]
 
-    if pyscript.entity_card_hass.internet_up:
-        pyscript.entity_card_hass.blink = False
-
-    if not pyscript.entity_card_hass.internet_up:
-        pyscript.entity_card_hass.state_icon = "mdi:web-off"
-        pyscript.entity_card_hass.blink = True
-
-    elif (
-        update.home_assistant_core_update == "on"
-        or update.home_assistant_operating_system_update == "on"
-        or update.home_assistant_supervisor_update == "on"
-    ):
+    if update.home_assistant_core_update == "on" or update.home_assistant_supervisor_update == "on":
         pyscript.entity_card_hass.state_icon = "mdi:update"
         pyscript.entity_card_hass.active = True
-
     else:
         pyscript.entity_card_hass.state_icon = "mdi:home-assistant"
         pyscript.entity_card_hass.active = False
+
+    if pyscript.entity_card_hass.internet_up:
+        pyscript.entity_card_hass.blink = False
+    else:
+        pyscript.entity_card_hass.state_icon = "mdi:web-off"
+        pyscript.entity_card_hass.blink = True
 
 
 @time_trigger("startup")
@@ -167,6 +161,6 @@ def get_internet_status():
     for hostname in hostnames:
         if os.system(f"ping -c 1 {hostname}") == 0:
             pyscript.entity_card_hass.internet_up = True
-            break
-    else:
-        pyscript.entity_card_hass.internet_up = False
+            return
+
+    pyscript.entity_card_hass.internet_up = False

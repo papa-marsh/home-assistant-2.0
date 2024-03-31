@@ -24,5 +24,5 @@ def create_thought(**kwargs):
     file.write(key_list, today_thoughts)
 
 
-def morning_review():
+def daily_review():
     ...

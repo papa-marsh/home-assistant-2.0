@@ -277,7 +277,8 @@ def entity_card_hold():
 
 @service("pyscript.home_dtap")
 def entity_card_dtap():
-    pass
+    toggle = {"red": "default", "default": "red"}
+    pyscript.entity_card_home.row_3_color = toggle[pyscript.entity_card_home.row_3_color]
 
 
 @time_trigger("startup")
