@@ -1,6 +1,6 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from dateutil import tz
-from typing import TYPE_CHECKING
+from typing import Literal, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..modules import dates, util
@@ -41,11 +41,8 @@ def toggle_butterfly_night_light():
 
 @event_trigger("emily_good_morning")
 def emily_good_morning():
-    emily_near_home = File("zones").read([person.emily, "near_home"], False)
-    is_day_time = 6 <= datetime.now().hour < 17
-    
-    if emily_near_home and is_day_time:
-        switch.turn_on(entity_id="switch.ellies_sound_machine")
+    if 6 <= datetime.now().hour < 17:
+        switch.turn_off(entity_id="switch.ellies_sound_machine")
         
 
 @time_trigger("cron(0 8,20 * * *)")
@@ -157,3 +154,73 @@ def persist_complication_emily_location():
 def complication_emily_location_update():
     pyscript.complication_emily_location.inner = util.zone_short_name(person.emily)
     pyscript.complication_emily_location.outer = dates.parse_timestamp(output_format="time")
+
+
+@event_trigger("emily_cycle_started")
+def emily_cycle_started(**_):
+    add_cycle_event("start")
+
+
+@event_trigger("emily_cycle_ended")
+def emily_cycle_ended(**_):
+    add_cycle_event("end")
+
+
+def add_cycle_event(event_type: Literal["start", "end"]) -> None:
+    event_opposite = "end" if event_type == "start" else "start"
+    today = str(date.today())
+    raw = File("cycle").read(["raw"])
+    latest_date = sorted(raw)[-1]
+    last_event_type = raw[latest_date]
+
+    if event_type == last_event_type:
+        noti = Notification(
+            title="Command Failed",
+            message=f"Cycle has already {event_type}ed. Press and hold to modify the {event_type} date",
+            group="add_cycle_event",
+            tag="add_cycle_event",
+            target="emily"
+        )
+        noti.add_action(id="edit_cycle_event_0", title="Today")
+        noti.add_action(id="edit_cycle_event_1", title="Yesterday")
+        for i in range(2, 7):
+            noti.add_action(
+                id=f"edit_cycle_event_{i}",
+                title=(date.today() - timedelta(days=i)).strftime("%A")
+            )
+
+        noti.send()
+
+    elif latest_date == today:
+        noti = Notification(
+            title="Command Failed",
+            message=f"Can't {event_type} cycle today because cycle {event_opposite}ed today. Re-trigger 'Cycle {event_opposite.capitalize()}ed' to edit",
+            group="add_cycle_event",
+            tag="add_cycle_event",
+            target="emily"
+        )
+        noti.send()
+
+    else:
+        File("cycle").write(["raw", today], event_type)
+
+
+@event_trigger(
+    "mobile_app_notification_action",
+    "action[:-2] == 'edit_cycle_event'",
+)
+def edit_cycle_event(**kwargs):
+    difference = int(kwargs["action"][-1])
+    new_date = date.today() - timedelta(days=difference)
+    raw = File("cycle").read(["raw"])
+    second_latest_date = datetime.strptime(sorted(raw)[-2], "%Y-%m-%d").date()
+
+    if new_date <= second_latest_date:
+        noti = Notification(
+            title="Command Failed",
+            message="There's a date conflict that will break things. Talk to Marshall to fix it",
+            group="add_cycle_event",
+            tag="add_cycle_event",
+            target="both"
+        )
+        noti.send()

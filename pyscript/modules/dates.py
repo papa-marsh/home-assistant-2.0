@@ -5,6 +5,8 @@ from typing import Literal, TYPE_CHECKING
 if TYPE_CHECKING:
     from .dummy import *
 
+DAYS = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
+
 
 def parse_timestamp(timestamp: str | datetime | None = None, output_format: Literal["iso", "date", "time", "datetime"] = "iso") -> str:
     """
@@ -62,7 +64,6 @@ def get_next_weekday(day: Literal["mon", "tue", "wed", "thu", "fri", "sat", "sun
     Given a weekday, returns a date object for the next occurance of that weekday.
     Includes the current day (eg. If today is Monday, then get_next_weekday("mon") = date.today().)
     """
-    DAYS = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
 
     today = date.today()
     day = DAYS[day]
