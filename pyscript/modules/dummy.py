@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     import climate
     import cover
     import device_tracker
+    import fan
     import input_select
     import log
     import media_player

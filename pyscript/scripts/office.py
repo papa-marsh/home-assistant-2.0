@@ -9,6 +9,17 @@ else:
     from push import Notification
 
 
+@time_trigger("cron(0 23 * * *)")
+def air_purifier_on():
+    medium_setting = 100 * (2 / 3)
+    fan.set_percentage(entity_id="fan.office_purifier", percentage=medium_setting)
+
+
+@time_trigger("cron(0 6 * * *)")
+def air_purifier_off():
+    fan.turn_off(entity_id="fan.office_purifier")
+
+
 @time_trigger("cron(*/10 * * * *)")
 def space_heater_auto_off():
     two_hours_ago = (datetime.now() - timedelta(hours=2)).astimezone(tz.tzlocal())
