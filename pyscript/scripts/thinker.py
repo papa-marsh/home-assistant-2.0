@@ -260,7 +260,7 @@ def send_reminder() -> None:
     first_seen = dates.colloquial_date(thought["date"])
 
     message = f"{thought['thought']}\n\n"
-    message += "First time seen" if seen_count == 1 else f"\\nnSeen {seen_count} times"
+    message += "First time seen" if seen_count == 1 else f"Seen {seen_count} times"
     message += f" since {first_seen}"
 
     noti = Notification(
