@@ -14,29 +14,32 @@ class Notification:
     Use .add_action() to make the notification actionable.
     'action_data' gets included in the payload when HASS receives an actionable notification's respose.
     Setting sound="passive" will send silently without waking screen.
+    'url' must be a full web URL (https://example.com) or a lovelace mobile view (overview).
     """
 
     def __init__(
         self,
-        action_data: Any = None,
-        actions: list[dict[str, Any]] = None,
-        group: str | None = None,
+        title: str = "",
         message: str = "",
-        priority: Literal["passive", "active", "time-sensitive", "critical"] = "active",
-        sound: str = constants.NOTI_SOUND,
+        group: str | None = None,
         tag: str | None = None,
         target: Literal["marshall", "emily", "all"] = "marshall",
-        title: str = "",
+        priority: Literal["passive", "active", "time-sensitive", "critical"] = "active",
+        sound: str = constants.NOTI_SOUND,
+        url: str = "overview",
+        actions: list[dict[str, Any]] = None,
+        action_data: Any = None,
     ) -> None:
-        self.action_data = action_data
-        self.actions = actions or []
-        self.group = group or str(random())
+        self.title = title
         self.message = message
-        self.priority = priority
-        self.sound = sound
+        self.group = group or str(random())
         self.tag = tag or str(random())
         self.target = target
-        self.title = title
+        self.priority = priority
+        self.sound = sound
+        self.url = url if "http" in url else f"/lovelace-mobile/{url}"
+        self.actions = actions or []
+        self.action_data = action_data
 
     def _stage(self) -> None:
         self.payload = {
@@ -47,6 +50,7 @@ class Notification:
                 "action_data": self.action_data,
                 "group": self.group,
                 "tag": self.tag,
+                "url": self.url,
                 "push": {
                     "sound": "none"
                     if self.sound == "none"

@@ -1,0 +1,2 @@
+type: markdown
+content: '{{ states.pyscript.thinker.attributes.review_markdown }}'

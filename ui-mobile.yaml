@@ -53,6 +53,21 @@ views:
             - !include lovelace/home/climate.yaml
             - !include lovelace/home/devices.yaml
   - theme: Backend-selected
+    title: Thinker
+    type: panel
+    icon: mdi:head-dots-horizontal
+    path: thinker
+    badges: []
+    cards:
+      - type: custom:mod-card
+        style: !include lovelace/style-mobile-view.yaml
+        card:
+          type: vertical-stack
+          cards:
+            - !include lovelace/thinker/review-thoughts.yaml
+            - !include lovelace/thinker/review-actions.yaml
+            - !include lovelace/thinker/review-edit.yaml
+  - theme: Backend-selected
     title: Soccer
     type: panel
     icon: mdi:soccer

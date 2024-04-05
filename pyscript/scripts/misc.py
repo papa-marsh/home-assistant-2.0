@@ -96,21 +96,24 @@ def notify_on_zone_change(**kwargs):
         if new_zone == "home":
             duration = dates.format_duration(pyscript.vars.left_home_timestamp[name])
             message += f" after {duration}"
-            noti = Notification(
-                message=f"You were away for {duration}",
-                group="summary_on_zone_change",
-                tag="summary_on_zone_change",
-                target=name.lower(),
-                priority="passive"
-            )
-            noti.send()
+
+            if util.get_pref(f"{name} Zone Summary Notifications") == "On":
+                noti = Notification(
+                    message=f"You were away for {duration}",
+                    group="summary_on_zone_change",
+                    tag="summary_on_zone_change",
+                    target=name.lower(),
+                    priority="passive"
+                )
+                noti.send()
 
     elif not old_data.get("is_region"):
-        duration = dates.format_duration(kwargs['old_value'].last_changed)
+        duration = dates.format_duration(old_zone.last_changed)
+        skip_zone_update = duration in ["0m", "1m", "2m", "3m", "4m", "5m"]
         message = f"{name} left {old_prefix}{old_zone} after {duration}"
         if old_zone == "home":
             pyscript.vars.left_home_timestamp[name] = datetime.now()
-        elif util.get_pref(f"{name} Zone Summary Notifications") == "On":
+        elif util.get_pref(f"{name} Zone Summary Notifications") == "On" and not skip_zone_update:
             noti = Notification(
                 message=f"You spent {duration} at {old_prefix}{old_zone}",
                 group="summary_on_zone_change",

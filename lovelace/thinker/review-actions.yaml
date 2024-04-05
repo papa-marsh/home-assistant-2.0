@@ -1,0 +1,85 @@
+type: custom:state-switch
+entity: pyscript.thinker
+states:
+  "on":
+    type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        icon: mdi:check
+        styles:
+          card:
+            - height: 70px
+          icon:
+            - color: '[[[ return "var(--primary-text-color)"; ]]]'
+        tap_action:
+          action: call-service
+          service: thinker.review_thought
+          service_data:
+            state: save
+      - type: custom:button-card
+        icon: mdi:close
+        styles:
+          card:
+            - height: 70px
+          icon:
+            - color: '[[[ return "var(--primary-text-color)"; ]]]'
+        tap_action:
+          action: call-service
+          service: thinker.review_thought
+          service_data:
+            state: skip
+      - type: custom:button-card
+        entity: pyscript.thinker_edit_thought
+        show_name: false
+        icon: 
+            '[[[ if ( entity.state == "off" ) return "mdi:pencil";
+            else return "mdi:content-save-edit"; ]]]'
+        styles:
+          card:
+            - height: 70px
+          icon:
+            - color: '[[[ return "var(--primary-text-color)"; ]]]'
+        tap_action:
+          action: call-service
+          service: 
+            '[[[ if ( entity.state == "off" ) return "thinker.edit_thought";
+            else return "thinker.confirm_edit"; ]]]'
+      - type: custom:button-card
+        icon: mdi:refresh
+        styles:
+          card:
+            - height: 70px
+          icon:
+            - color: '[[[ return "var(--primary-text-color)"; ]]]'
+        tap_action:
+          action: call-service
+          service: thinker.reset_review
+      - type: custom:button-card
+        entity: pyscript.thinker
+        show_name: false
+        icon: 
+            '[[[ if ( entity.attributes.ready_to_commit ) return "mdi:upload";
+            else return "mdi:lock"; ]]]'
+        styles:
+          card:
+            - height: 70px
+          icon:
+            - color: '[[[ return "var(--primary-text-color)"; ]]]'
+        tap_action:
+          action: 
+            '[[[ if ( entity.attributes.ready_to_commit ) return "call-service";
+            else return ""; ]]]'
+          service: thinker.commit_review
+  "off":
+    type: horizontal-stack
+    cards:
+      - type: custom:button-card
+        icon: mdi:refresh
+        styles:
+          card:
+            - height: 70px
+          icon:
+            - color: '[[[ return "var(--primary-text-color)"; ]]]'
+        tap_action:
+          action: call-service
+          service: thinker.reset_review

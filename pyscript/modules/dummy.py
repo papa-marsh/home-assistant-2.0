@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     import device_tracker
     import fan
     import input_select
+    import input_text
     import log
     import media_player
     import notify

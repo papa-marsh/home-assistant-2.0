@@ -97,7 +97,7 @@ def colloquial_date(target: date, short: bool = False, ordinals: bool = False) -
     """
     Returns the "friendly" way to reference a future date (eg. "Today", "Tomorrow", "Friday").
     If target date is more than a week away, return month & date (eg. "March 19(th)").
-    If short=True, shorten weekday/month names.
+    If short=True, shorten weekday/month names. Also works for dates in the past.
     """
     today = date.today()
     ord_map = {"1": "st", "2": "nd", "3": "rd"}

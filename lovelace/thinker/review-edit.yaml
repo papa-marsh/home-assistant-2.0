@@ -1,0 +1,17 @@
+type: custom:state-switch
+entity: pyscript.thinker_edit_thought
+states:
+  "on":
+    type: entity
+    entity: input_text.thinker_edit_thought
+    name: Tap to edit...
+    icon: mdi:text-box-edit-outline
+    style: |
+      .info {
+        line-height: 16px !important;
+      }
+      .value {
+        font-size: 14px !important;
+        text-wrap-mode: wrap !important;
+        white-space: pre-wrap !important
+      }
