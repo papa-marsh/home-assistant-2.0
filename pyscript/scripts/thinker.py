@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Any, Literal, TYPE_CHECKING
 import random
 
@@ -117,16 +117,19 @@ def populate_review_thoughts() -> int:
 
 def populate_review_markdown() -> None:
     if not pyscript.thinker.review_thoughts:
-        pyscript.thinker.review_markdown = "# Nothing to Review!"
-        pyscript.thinker.review_markdown += "\n### Time to do some thinking..."
+        pyscript.thinker.review_markdown = (
+            "# Nothing to Review!\n"
+            "### Time to do some thinking..."
+        )
         return
 
     date_key = pyscript.thinker.review_thoughts[0]["date"]
     day_of_week = date_key.strftime("%A")
     colloquial_date = dates.colloquial_date(date_key, ordinals=True)
 
-    markdown_content = "# New Thoughts to Review!"
-    markdown_content += f"\n## {day_of_week}, {colloquial_date}"
+    markdown_content = (
+        "# New Thoughts to Review!\n"
+        f"## {day_of_week}, {colloquial_date}")
 
     for thought_data in pyscript.thinker.review_thoughts:
         symbol = STATE_SYMBOLS[thought_data["state"]]
@@ -192,7 +195,7 @@ def commit_review() -> None:
         if review_thought["state"] == "save":
             date_string = review_thought["date"].strftime("%Y/%m/%d")
             preprocessed_date = datetime.strptime(date_string, "%Y/%m/%d").date()
-            
+
             persisted_thoughts.append({
                 "date": preprocessed_date,
                 "thought": review_thought["thought"],
@@ -233,28 +236,43 @@ def get_persisted_thought(track_access: bool = False) -> dict[str, str | int]:
     return output
 
 
-@time_trigger("cron(* 6-22 * * *)")
+@time_trigger("cron(* * * * *)")
 def check_send_reminder() -> None:
     """
     On each minute of the day, randomly determine if we should send a reminder.
     The liklihood increases as the time since last reminder increases.
     """
     if not pyscript.thinker.last_reminder:
-        send_reminder()
-        return
+        pyscript.thinker.last_reminder = datetime.now() - timedelta(hours=3)
 
-    ...
+    elapsed_minutes = (datetime.now() - pyscript.thinker.last_reminder).seconds / 60
+    probability = (elapsed_minutes / 5000) ** 2
+
+    if random.random() < probability:
+        pyscript.thinker.last_reminder = datetime.now()
+        if 6 <= datetime.now().hour < 22:
+            send_reminder()
 
 
 def send_reminder() -> None:
-    ...
+    thought = get_persisted_thought(track_access=True)
+    seen_count = thought["reminder_count"] + 1
+    first_seen = dates.colloquial_date(thought["date"])
+
+    message = f"{thought['thought']}"
+    message += "\n\nFirst time seen" if seen_count == 1 else f"\\nnSeen {seen_count} times"
+    message += f" since {first_seen}"
 
     noti = Notification(
-        ...
+        title="Don't Forget that...",
+        message=message,
+        group="thought_reminder",
+        target="marshall",
+        sound="HourlyChime_Haptic.caf"
     )
-    noti.add_action(id="thinker_reminder_more", title="More")
-    noti.add_action(id="thinker_reminder_less", title="Less")
-    noti.add_action(id="thinker_reminder_done", title="Done")
+    # noti.add_action(id="thinker_reminder_more", title="More")
+    # noti.add_action(id="thinker_reminder_less", title="Less")
+    # noti.add_action(id="thinker_reminder_done", title="Done")
     noti.send()
 
-    pyscript.thinker.last_reminder = datetime.now()
+    
