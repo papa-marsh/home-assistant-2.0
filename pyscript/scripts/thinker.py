@@ -246,7 +246,7 @@ def check_send_reminder() -> None:
         pyscript.thinker.last_reminder = datetime.now() - timedelta(hours=3)
 
     elapsed_minutes = (datetime.now() - pyscript.thinker.last_reminder).seconds / 60
-    probability = (elapsed_minutes / 5000) ** 2
+    probability = (elapsed_minutes / 5000) ** 1.5
 
     if random.random() < probability:
         pyscript.thinker.last_reminder = datetime.now()
@@ -259,12 +259,12 @@ def send_reminder() -> None:
     seen_count = thought["reminder_count"] + 1
     first_seen = dates.colloquial_date(thought["date"])
 
-    message = f"{thought['thought']}"
-    message += "\n\nFirst time seen" if seen_count == 1 else f"\\nnSeen {seen_count} times"
+    message = f"{thought['thought']}\n\n"
+    message += "First time seen" if seen_count == 1 else f"\\nnSeen {seen_count} times"
     message += f" since {first_seen}"
 
     noti = Notification(
-        title="Don't Forget that...",
+        title="Don't Forget...",
         message=message,
         group="thought_reminder",
         target="marshall",
