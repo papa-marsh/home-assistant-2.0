@@ -77,6 +77,9 @@ def notify_on_zone_change(**kwargs):
     new_data = File("zones").read([new_zone])
     new_prefix = new_data.get("prefix", "")
 
+    if old_zone == "home":
+        pyscript.vars.left_home_timestamp[name] = datetime.now()
+
     task.unique(f"{name.lower()}_zone_notify")
 
     if util.get_pref(f"{name} Zone Notifications") != "On":
@@ -109,11 +112,12 @@ def notify_on_zone_change(**kwargs):
 
     elif not old_data.get("is_region"):
         duration = dates.format_duration(old_zone.last_changed)
-        skip_zone_update = duration in ["0m", "1m", "2m", "3m", "4m", "5m"]
+        zone_summary_on = util.get_pref(f"{name} Zone Summary Notifications") == "On"
+        too_short_for_update = (datetime.now() - old_zone.last_changed).seconds < (5 * 60)
+
         message = f"{name} left {old_prefix}{old_zone} after {duration}"
-        if old_zone == "home":
-            pyscript.vars.left_home_timestamp[name] = datetime.now()
-        elif util.get_pref(f"{name} Zone Summary Notifications") == "On" and not skip_zone_update:
+
+        if zone_summary_on and old_zone != "home" and not too_short_for_update:
             noti = Notification(
                 message=f"You spent {duration} at {old_prefix}{old_zone}",
                 group="summary_on_zone_change",
