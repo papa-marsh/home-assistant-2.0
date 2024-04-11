@@ -66,7 +66,7 @@ def set_reviewed_status(reviewed: bool, date_key: date | None = None) -> None:
     File("thinker").write(key_list, reviewed)
 
 
-@time_trigger("cron(30 9 * * 1-5)")
+@time_trigger("cron(25 9 * * 1-5)")
 def daily_review() -> None:
     thought_count = populate_review_thoughts()
 
