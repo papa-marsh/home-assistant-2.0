@@ -31,18 +31,16 @@ def chelsea_kickoff_notification():
     noti.send()
 
 
-@time_trigger("cron(0 7,18 * * *)")
+@state_trigger("switch.ellies_sound_machine == 'on'")
 def toggle_butterfly_night_light():
-    if datetime.now().hour < 12:
-        switch.turn_on(entity_id="switch.butterfly_night_light")
-    else:
-        switch.turn_off(entity_id="switch.butterfly_night_light")
+    switch.turn_off(entity_id="switch.butterfly_night_light")
 
 
 @event_trigger("emily_good_morning")
 def emily_good_morning():
     if 6 <= datetime.now().hour < 17:
         switch.turn_off(entity_id="switch.ellies_sound_machine")
+        switch.turn_on(entity_id="switch.butterfly_night_light")
         
 
 @time_trigger("cron(0 8,20 * * *)")
@@ -70,6 +68,7 @@ def clear_feed_chelsea_notification():
 @state_trigger("person.marshall", "person.emily")
 def notify_on_zone_change(**kwargs):
     name = state.getattr(kwargs["var_name"])["friendly_name"]
+    now = datetime.now().astimezone(tz.tzlocal())
     old_zone = kwargs["old_value"]
     old_data = File("zones").read([old_zone])
     old_prefix = old_data.get("prefix", "")
@@ -78,7 +77,7 @@ def notify_on_zone_change(**kwargs):
     new_prefix = new_data.get("prefix", "")
 
     if old_zone == "home":
-        pyscript.vars.left_home_timestamp[name] = datetime.now()
+        pyscript.vars.left_home_timestamp[name] = now
 
     task.unique(f"{name.lower()}_zone_notify")
 
@@ -111,9 +110,10 @@ def notify_on_zone_change(**kwargs):
                 noti.send()
 
     elif not old_data.get("is_region"):
-        duration = dates.format_duration(old_zone.last_changed)
+        old_zone_entered = old_zone.last_changed.astimezone(tz.tzlocal())
+        duration = dates.format_duration(old_zone_entered)
         zone_summary_on = util.get_pref(f"{name} Zone Summary Notifications") == "On"
-        too_short_for_update = (datetime.now() - old_zone.last_changed).seconds < (5 * 60)
+        too_short_for_update = (now - old_zone_entered).seconds < (5 * 60)
 
         message = f"{name} left {old_prefix}{old_zone} after {duration}"
 
