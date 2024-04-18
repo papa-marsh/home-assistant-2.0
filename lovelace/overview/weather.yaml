@@ -1,15 +1,13 @@
 type: weather-forecast
 entity: weather.weather
+name: East Grand Rapids
 show_current: true
 show_forecast: true
-name: East Grand Rapids
+forecast_type: daily
 style: |
   ha-card {
     height: 199px !important;
   }
   .templow {
     display: none !important;
-  }
-  .temp {
-    margin: 0px !important;
   }

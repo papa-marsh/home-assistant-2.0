@@ -31,16 +31,18 @@ def chelsea_kickoff_notification():
     noti.send()
 
 
-@state_trigger("switch.ellies_sound_machine == 'on'")
+@state_trigger("switch.ellies_sound_machine")
 def toggle_butterfly_night_light():
-    switch.turn_off(entity_id="switch.butterfly_night_light")
+    if switch.ellies_sound_machine == "off":
+        switch.turn_on(entity_id="switch.butterfly_night_light")
+    else:
+        switch.turn_off(entity_id="switch.butterfly_night_light")
 
 
 @event_trigger("emily_good_morning")
 def emily_good_morning():
     if 6 <= datetime.now().hour < 17:
         switch.turn_off(entity_id="switch.ellies_sound_machine")
-        switch.turn_on(entity_id="switch.butterfly_night_light")
         
 
 @time_trigger("cron(0 8,20 * * *)")
