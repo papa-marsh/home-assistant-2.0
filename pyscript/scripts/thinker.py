@@ -242,7 +242,7 @@ def check_send_reminder() -> None:
     On each minute of the day, randomly determine if we should send a reminder.
     The liklihood increases as the time since last reminder increases.
     """
-    if not pyscript.thinker.last_reminder:
+    if not pyscript.thinker.last_reminder or not isinstance(pyscript.thinker.last_reminder, datetime):
         pyscript.thinker.last_reminder = datetime.now() - timedelta(hours=3)
 
     elapsed_minutes = (datetime.now() - pyscript.thinker.last_reminder).seconds / 60
