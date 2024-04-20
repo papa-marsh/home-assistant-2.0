@@ -18,6 +18,15 @@ def air_purifier_on():
 @time_trigger("cron(0 6 * * *)")
 def air_purifier_off():
     fan.turn_off(entity_id="fan.office_purifier")
+    now = datetime.now().astimezone(tz.tzlocal())
+    if (now - fan.office_purifier.last_changed).seconds / 3600 > 24:
+        noti = Notification(
+            target="marshall",
+            title="Air Purifier Error",
+            message="The air purifier hasn't run in more than 24 hours",
+        )
+        noti.send()
+
 
 
 @time_trigger("cron(*/10 * * * *)")
@@ -82,6 +91,7 @@ def persist_entity_card_office():
 
 
 @service("pyscript.office_tap")
+@event_trigger("office_leds")
 def entity_card_tap():
     if pyscript.entity_card_office.active:
         state.set(

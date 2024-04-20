@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     import cover
     import device_tracker
     import fan
+    import homeassistant
     import input_select
     import input_text
     import log

@@ -1,5 +1,6 @@
 kiosk_mode: !include lovelace/cast-kiosk-mode.yaml
 sidebar: !include lovelace/cast-sidebar.yaml
+background: var(--background-image)
 views:
   - theme: Backend-selected
     title: Overview

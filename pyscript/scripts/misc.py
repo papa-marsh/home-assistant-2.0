@@ -166,12 +166,12 @@ def complication_emily_location_update():
 
 
 @event_trigger("emily_cycle_started")
-def emily_cycle_started(**_):
+def emily_cycle_started(**__):
     add_cycle_event("start")
 
 
 @event_trigger("emily_cycle_ended")
-def emily_cycle_ended(**_):
+def emily_cycle_ended(**__):
     add_cycle_event("end")
 
 

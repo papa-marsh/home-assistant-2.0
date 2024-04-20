@@ -3,9 +3,26 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ..modules import constants, secrets
     from ..modules.dummy import *
+    from ..modules.push import Notification
 else:
     import constants
+    from push import Notification
     import secrets
+
+
+@event_trigger("ellies_playlist")
+def play_ellies_playlist(**__):
+    caller = "emily" if kwargs["sourceDeviceID"] == "emilys_iphone" else "marshall"
+    if state.get(f"person.{caller}") == "home":
+        input_select.select_option(entity_id="input_select.media_card_playlist", option="Songs")
+    else:
+        noti = Notification(
+            title="Command Failed",
+            target=caller,
+            priority="time-sensitive",
+            message=f"You must be home to start Ellie's Playlist",
+        )
+        noti.send()
 
 
 @time_trigger("cron(0 4 * * *)")
@@ -24,14 +41,10 @@ def reset_media_controls():
 
 
 @state_trigger("switch.ellies_sound_machine=='on'")
-def lower_office_volume():
+def bedtime_speaker_volume():
     if person.emily != secrets.IN_LAWS_ZONE:
         media_player.volume_set(entity_id="media_player.office", volume_level=0.22)
-
-
-@state_trigger("switch.ellies_sound_machine=='on'")
-def bedtime_speaker_volume():
-    media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
+        media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
 
 
 @time_trigger("startup")
@@ -55,7 +68,12 @@ def persist_media_card():
 @state_trigger("media_player.living_room.media_playlist", "sensor.sonos_favorites")
 def set_media_card_playlists():
     task.unique("set_media_card_playlists")
-    options = [sensor.sonos_favorites.items[source] for source in sensor.sonos_favorites.items]
+    try:
+        options = [sensor.sonos_favorites.items[source] for source in sensor.sonos_favorites.items]
+    except:
+        sonos_integration_id = "5710f1a75e16bd6a0b67108a0d28adbe"
+        homeassistant.reload_config_entry(entry_id=sonos_integration_id)
+        return
 
     if "media_playlist" not in state.getattr("media_player.living_room"):
         playlist = "None Selected"
