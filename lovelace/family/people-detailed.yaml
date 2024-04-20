@@ -10,8 +10,9 @@ entities:
   - entity: binary_sensor.emily_s_iphone_focus
   - entity: sensor.emily_s_iphone_battery_level
   - entity: sensor.emily_s_iphone_connection_type
-style:
-  .entity $: |
-    div {
-      overflow: visible !important;
-    }
+card_mod:
+  style:
+    .entity $: |
+      div {
+        overflow: visible !important;
+      }

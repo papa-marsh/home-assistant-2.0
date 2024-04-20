@@ -4,10 +4,11 @@ name: East Grand Rapids
 show_current: true
 show_forecast: true
 forecast_type: daily
-style: |
-  ha-card {
-    height: 199px !important;
-  }
-  .templow {
-    display: none !important;
-  }
+card_mod:
+  style: |
+    ha-card {
+      height: 199px !important;
+    }
+    .templow {
+      display: none !important;
+    }

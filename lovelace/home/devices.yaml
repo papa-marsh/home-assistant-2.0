@@ -28,16 +28,17 @@ entities:
     secondary_info: last-changed
   - entity: light.outside_lights
   - entity: switch.office_door_led
-style:
-  .: |
-    ha-card {
-      height: 436px !important;
-    }
-    #states div {
-      margin-top: -2px !important;
-      margin-bottom: 14px !important;
-    }
-  fold-entity-row $: |
-    ha-icon {
-      margin-left: 10px !important;
-    }
+card_mod:
+  style:
+    .: |
+      ha-card {
+        height: 436px !important;
+      }
+      #states div {
+        margin-top: -2px !important;
+        margin-bottom: 14px !important;
+      }
+    fold-entity-row $: |
+      ha-icon {
+        margin-left: 10px !important;
+      }

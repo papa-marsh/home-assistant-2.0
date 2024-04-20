@@ -24,9 +24,10 @@ entities:
     name: Swap Use
   - entity: sensor.swap_free
     name: Swap Free
-style:
-  "#states": |
-    div {
-      margin-top: -6px !important;
-      margin-bottom: -5px !important;
-    }
+card_mod:
+  style:
+    "#states": |
+      div {
+        margin-top: -6px !important;
+        margin-bottom: -5px !important;
+      }

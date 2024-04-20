@@ -20,17 +20,18 @@ entities:
     name: " "
     speaker_group:
       show_group_count: false
-    style: |
-      .entity__info {
-        max-height: 40px
-      }
-      .entity__info__media {
-        opacity: 1 !important;
-        color: var(--primary-text-color) !important;
-        font-size: larger !important;
-        white-space: initial !important;
-        max-height: unset !important;
-      }
+    card_mod:
+      style: |
+        .entity__info {
+          max-height: 40px
+        }
+        .entity__info__media {
+          opacity: 1 !important;
+          color: var(--primary-text-color) !important;
+          font-size: larger !important;
+          white-space: initial !important;
+          max-height: unset !important;
+        }
     type: custom:mini-media-player
   - type: custom:paper-buttons-row
     buttons:
@@ -78,11 +79,12 @@ entities:
     states:
       controls:
         type: entities
-        style: |
-          ha-card {
-            background: none !important;
-            margin: -14px -14px -20px !important;
-          }
+        card_mod:
+          style: |
+            ha-card {
+              background: none !important;
+              margin: -14px -14px -20px !important;
+            }
         entities:
           - type: custom:paper-buttons-row
             buttons:
@@ -134,22 +136,23 @@ entities:
                   service_data:
                     entity_id: media_player.living_room
   - artwork: none
-    style:
-      .: |
-        ha-card {
-          margin-top: 9px !important;
-        }
-      mmp-powerstrip $:
-        mmp-media-controls:
-          .: |
-            mmp-media-controls {
-              max-width: 95% !important;
-              margin-right: -5px !important;
-            }
-          $: |
-            ha-icon-button {
-              margin: 0 -10px !important;
-            }
+    card_mod:
+      style:
+        .: |
+          ha-card {
+            margin-top: 9px !important;
+          }
+        mmp-powerstrip $:
+          mmp-media-controls:
+            .: |
+              mmp-media-controls {
+                max-width: 95% !important;
+                margin-right: -5px !important;
+              }
+            $: |
+              ha-icon-button {
+                margin: 0 -10px !important;
+              }
     entity: media_player.living_room
     group: true
     name: Living Room
@@ -192,22 +195,23 @@ entities:
           prev: true
           progress: true
           source: true
-        style:
-          .: |
-            ha-card {
-              margin-top: -21px !important;
-            }
-          mmp-powerstrip $:
-            mmp-media-controls:
-              .: |
-                mmp-media-controls {
-                  max-width: 95% !important;
-                  margin-right: -5px !important;
-                }
-              $: |
-                ha-icon-button {
-                  margin: 0 -10px 0 6px !important;
-                }
+        card_mod:
+          style:
+            .: |
+              ha-card {
+                margin-top: -21px !important;
+              }
+            mmp-powerstrip $:
+              mmp-media-controls:
+                .: |
+                  mmp-media-controls {
+                    max-width: 95% !important;
+                    margin-right: -5px !important;
+                  }
+                $: |
+                  ha-icon-button {
+                    margin: 0 -10px 0 6px !important;
+                  }
   - type: custom:state-switch
     entity: pyscript.media_card
     default: hidden
@@ -232,22 +236,23 @@ entities:
           prev: true
           progress: true
           source: true
-        style:
-          .: |
-            ha-card {
-              margin-top: -20px !important;
-            }
-          mmp-powerstrip $:
-            mmp-media-controls:
-              .: |
-                mmp-media-controls {
-                  max-width: 95% !important;
-                  margin-right: -5px !important;
-                }
-              $: |
-                ha-icon-button {
-                  margin: 0 -10px 0 -4px !important;
-                }
+        card_mod:
+          style:
+            .: |
+              ha-card {
+                margin-top: -20px !important;
+              }
+            mmp-powerstrip $:
+              mmp-media-controls:
+                .: |
+                  mmp-media-controls {
+                    max-width: 95% !important;
+                    margin-right: -5px !important;
+                  }
+                $: |
+                  ha-icon-button {
+                    margin: 0 -10px 0 -4px !important;
+                  }
   - type: custom:state-switch
     entity: pyscript.media_card
     default: hidden
@@ -272,22 +277,23 @@ entities:
           prev: true
           progress: true
           source: true
-        style:
-          .: |
-            ha-card {
-              margin-top: -25px !important;
-            }
-          mmp-powerstrip $:
-            mmp-media-controls:
-              .: |
-                mmp-media-controls {
-                  max-width: 95% !important;
-                  margin-right: -5px !important;
-                }
-              $: |
-                ha-icon-button {
-                  margin: 0 -10px 0 -6px !important;
-                }
+        card_mod:
+          style:
+            .: |
+              ha-card {
+                margin-top: -25px !important;
+              }
+            mmp-powerstrip $:
+              mmp-media-controls:
+                .: |
+                  mmp-media-controls {
+                    max-width: 95% !important;
+                    margin-right: -5px !important;
+                  }
+                $: |
+                  ha-icon-button {
+                    margin: 0 -10px 0 -6px !important;
+                  }
   - type: custom:state-switch
     entity: pyscript.media_card
     default: hidden
@@ -312,26 +318,28 @@ entities:
           prev: true
           progress: true
           source: true
-        style:
-          .: |
-            ha-card {
-              margin-top: -25px !important;
-            }
-          mmp-powerstrip $:
-            mmp-media-controls:
-              .: |
-                mmp-media-controls {
-                  max-width: 95% !important;
-                  margin-right: -5px !important;
-                }
-              $: |
-                ha-icon-button {
-                  margin: 0 -10px 0 4px !important;
-                }
-style: |
-  ha-card {
-    height: 319px !important;
-  }
-  #states {
-    padding-top: 6px !important;
-  }
+        card_mod:
+          style:
+            .: |
+              ha-card {
+                margin-top: -25px !important;
+              }
+            mmp-powerstrip $:
+              mmp-media-controls:
+                .: |
+                  mmp-media-controls {
+                    max-width: 95% !important;
+                    margin-right: -5px !important;
+                  }
+                $: |
+                  ha-icon-button {
+                    margin: 0 -10px 0 4px !important;
+                  }
+card_mod:
+  style: |
+    ha-card {
+      height: 319px !important;
+    }
+    #states {
+      padding-top: 6px !important;
+    }

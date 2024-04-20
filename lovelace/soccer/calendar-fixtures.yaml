@@ -14,8 +14,9 @@ showLocation: false
 showLoader: false
 showProgressBar: false
 hideDuplicates: true
-style: |
-  ha-card {
-    height: 584px !important;
-    overflow: hidden !important;
-  }
+card_mod:
+  style: |
+    ha-card {
+      height: 584px !important;
+      overflow: hidden !important;
+    }

@@ -26,11 +26,12 @@ entities:
     name: Frunk
   - entity: cover.tess_windows
     name: Windows
-style: |
-  ha-card {
-    height: 584px !important;
-  }
-  #states div {
-    margin-top: 2px !important;
-    margin-bottom: -2px !important;
-  }
+card_mod:
+  style: |
+    ha-card {
+      height: 584px !important;
+    }
+    #states div {
+      margin-top: 2px !important;
+      margin-bottom: -2px !important;
+    }
