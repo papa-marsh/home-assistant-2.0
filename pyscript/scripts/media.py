@@ -11,8 +11,8 @@ else:
 
 
 @event_trigger("ellies_playlist")
-def play_ellies_playlist(**__):
-    caller = "emily" if kwargs["sourceDeviceID"] == "emilys_iphone" else "marshall"
+def play_ellies_playlist(**kwargs):
+    caller = kwargs['caller']
     if state.get(f"person.{caller}") == "home":
         input_select.select_option(entity_id="input_select.media_card_playlist", option="Songs")
     else:
