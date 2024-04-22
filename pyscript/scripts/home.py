@@ -272,10 +272,10 @@ def persist_entity_card_home():
             "state_icon": "mdi:home",
             "active": False,
             "blink": False,
-            "row_1_icon": "mdi:thermometer",
+            "row_1_icon": "mdi:thermometer-water",
             "row_1_value": "",
             "row_1_color": "default",
-            "row_2_icon": "mdi:water",
+            "row_2_icon": "mdi:hvac",
             "row_2_value": "",
             "row_2_color": "default",
             "row_3_icon": "mdi:dog",
@@ -331,22 +331,36 @@ def entity_card_update_state():
 
 
 @time_trigger("startup")
-@state_trigger("climate.thermostat.current_temperature", "climate.thermostat.hvac_action")
+@state_trigger("climate.thermostat.current_temperature", "climate.thermostat.current_humidity")
 def entity_card_update_row_1():
-    if climate.thermostat == "unavailable":
+    if climate.thermostat in ["unknown", "unavailable"]:
         pyscript.entity_card_home.row_1_value = "Offline"
+        pyscript.entity_card_office.row_1_icon = "mdi:thermometer-off"
     else:
-        action = climate.thermostat.hvac_action if "hvac_action" in climate.thermostat else climate.thermostat
-        pyscript.entity_card_home.row_1_value = f"{action} - {climate.thermostat.current_temperature}°"
-
+        temp = climate.thermostat.current_temperature
+        humidity = climate.thermostat.current_humidity
+        pyscript.entity_card_home.row_1_value = f"{temp:.0f}° · {humidity:.0f}%"
+        pyscript.entity_card_home.row_1_icon = "mdi:thermometer-water"
 
 @time_trigger("startup")
-@state_trigger("climate.thermostat.current_humidity")
+@state_trigger("climate.thermostat", "climate.thermostat.hvac_action", "climate.thermostat.temperature", "climate.thermostat.current_temperature")
 def entity_card_update_row_2():
-    if climate.thermostat == "unavailable":
+    if climate.thermostat in ["unknown", "unavailable"]:
         pyscript.entity_card_home.row_2_value = "Offline"
+        pyscript.entity_card_home.row_2_icon = "mdi:fan-off"
     else:
-        pyscript.entity_card_home.row_2_value = f"{round(climate.thermostat.current_humidity)}%"
+        mode = climate.thermostat
+        action = climate.thermostat.hvac_action
+        temp = int(climate.thermostat.current_temperature)
+        preset = climate.thermostat.temperature
+        icon = {
+            "cool": "mdi:snowflake",
+            "heat": "mdi:fire",
+            "off": "mdi:hvac-off"
+        }
+        value = f"{action}" if temp == preset else f"{action} ({preset}°)"
+        pyscript.entity_card_home.row_2_value = value
+        pyscript.entity_card_home.row_2_icon = icon[mode]
 
 
 @state_trigger("binary_sensor.chelsea_cabinet_sensor=='on'")
