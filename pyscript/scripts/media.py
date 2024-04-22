@@ -10,6 +10,21 @@ else:
     import secrets
 
 
+@event_trigger("emilys_playlist")
+def play_emilys_playlist(**kwargs):
+    caller = kwargs['caller']
+    if state.get(f"person.{caller}") == "home":
+        input_select.select_option(entity_id="input_select.media_card_playlist", option="Emily's Playlist")
+    else:
+        noti = Notification(
+            title="Command Failed",
+            target=caller,
+            priority="time-sensitive",
+            message=f"You must be home to start Emily's Playlist",
+        )
+        noti.send()
+
+
 @event_trigger("ellies_playlist")
 def play_ellies_playlist(**kwargs):
     caller = kwargs['caller']
@@ -96,10 +111,9 @@ def set_media_card_playlists():
 def play_media_card_playlist():
     current_playlist = media_player.living_room.media_playlist if "media_playlist" in media_player.living_room else None
     if current_playlist != input_select.media_card_playlist:
-        media_player.select_source(
-            entity_id="media_player.living_room",
-            source=input_select.media_card_playlist,
-        )
+        media_player.shuffle_set(entity_id=constants.SPEAKER_GROUP, shuffle=True)
+        media_player.repeat_set(entity_id=constants.SPEAKER_GROUP, repeat="all")
+        media_player.select_source(entity_id="media_player.living_room", source=input_select.media_card_playlist)
 
 
 @service("pyscript.media_card_group")

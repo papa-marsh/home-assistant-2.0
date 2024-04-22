@@ -229,19 +229,26 @@ def door_open_critical_notification(**kwargs):
             noti.send()
 
 
+@event_trigger("bathroom_floor")
 @event_trigger("ios.action_fired", "actionName=='Bathroom Floor'")
-def ios_bathroom_floor(**kwargs):
+def heat_bathroom_floor(**kwargs):
+    if kwargs["event_type"] == "ios.action_fired":
+        caller = "emily" if kwargs["sourceDeviceID"] == "emilys_iphone" else "marshall"
+    else:
+        caller = kwargs["caller"]
+
     duration = int(util.get_pref("Bathroom Floor Heat Minutes", value_only=True))
     end_time = datetime.now() + timedelta(minutes=duration)
-    climate.set_temperature(entity_id="climate.bathroom_floor_thermostat", temperature=85)
-    pyscript.vars.bathroom_floor_push_target = "emily" if kwargs["sourceDeviceID"] == "emilys_iphone" else "marshall"
+    pyscript.vars.bathroom_floor_push_target = caller
     pyscript.vars.bathroom_floor_end_time = dates.parse_timestamp(end_time, output_format="time")
+
+    climate.set_temperature(entity_id="climate.bathroom_floor_thermostat", temperature=85)
     task.sleep(duration)
     climate.set_preset_mode(entity_id="climate.bathroom_floor_thermostat", preset_mode="auto")
 
 
 @state_trigger("int(climate.bathroom_floor_thermostat.current_temperature) >= 80")
-def ios_bathroom_floor_ready():
+def heat_bathroom_floor_ready():
     if pyscript.vars.bathroom_floor_push_target:
         noti = Notification(
             title="Bathroom Ready",
