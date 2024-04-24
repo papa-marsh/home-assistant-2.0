@@ -100,7 +100,8 @@ def set_media_card_playlists():
             pyscript.vars.sonos_last_reload = now
             homeassistant.reload_config_entry(entry_id=sonos_integration_id)
         return
-            
+
+    options = [sensor.sonos_favorites.items[source] for source in sensor.sonos_favorites.items]
 
     if "media_playlist" not in state.getattr("media_player.living_room"):
         playlist = "None Selected"
