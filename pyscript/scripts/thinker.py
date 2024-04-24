@@ -243,14 +243,14 @@ def check_send_reminder() -> None:
     The liklihood increases as the time since last reminder increases.
     """
     if not pyscript.thinker.last_reminder or not isinstance(pyscript.thinker.last_reminder, datetime):
-        pyscript.thinker.last_reminder = datetime.now() - timedelta(hours=3)
+        pyscript.thinker.last_reminder = dates.now() - timedelta(hours=3)
 
-    elapsed_minutes = (datetime.now() - pyscript.thinker.last_reminder).seconds / 60
+    elapsed_minutes = (dates.now() - pyscript.thinker.last_reminder).seconds / 60
     probability = (elapsed_minutes / 5000) ** 1.5
 
     if random.random() < probability:
-        pyscript.thinker.last_reminder = datetime.now()
-        if 6 <= datetime.now().hour < 22:
+        pyscript.thinker.last_reminder = dates.now()
+        if 6 <= dates.now().hour < 22:
             send_reminder()
 
 

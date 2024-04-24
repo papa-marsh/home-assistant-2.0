@@ -1,4 +1,3 @@
-from datetime import datetime
 import os
 from typing import TYPE_CHECKING
 
@@ -31,7 +30,7 @@ def persist_vars():
     pyscript.vars.preference_value_mutex = False
     pyscript.vars.suppress_zone_noti = {"Marshall": False, "Emily": False}
     pyscript.vars.zone_debounce = {"Marshall":  None, "Emily": None}
-    pyscript.vars.sonos_last_reload = datetime.now()
+    pyscript.vars.sonos_last_reload = dates.now()
 
 
 @time_trigger("cron(*/15 * * * *)")

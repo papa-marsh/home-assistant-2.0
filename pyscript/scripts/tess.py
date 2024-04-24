@@ -1,5 +1,3 @@
-from datetime import datetime
-from dateutil import tz
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -82,7 +80,7 @@ def charge_if_low():
         if int(sensor.tess_battery) < constants.TESS_LOW_THRESHOLD:
             switch.turn_on(entity_id="switch.tess_charger")
             while int(sensor.tess_battery) < constants.TESS_LOW_THRESHOLD:
-                if datetime.now().hour >= 23:
+                if dates.now().hour >= 23:
                     return
                 task.sleep(60)
             switch.turn_off(entity_id="switch.tess_charger")
@@ -327,7 +325,7 @@ def entity_card_update_row_3():
         pyscript.entity_card_tess.row_3_icon = "mdi:thermometer-off"
     else:
         try:
-            delta = dates.parse_timestamp(sensor.tess_arrival_time) - datetime.now().astimezone(tz.tzlocal())
+            delta = dates.parse_timestamp(sensor.tess_arrival_time) - dates.now()
             eta = delta.days * 86400 + delta.seconds
         except Exception:
             eta = 0

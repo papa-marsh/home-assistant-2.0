@@ -41,17 +41,18 @@ def toggle_butterfly_night_light():
 
 @event_trigger("emily_good_morning")
 def emily_good_morning():
-    if 6 <= datetime.now().hour < 17:
+    if 6 <= dates.now().hour < 17:
         switch.turn_off(entity_id="switch.ellies_sound_machine")
         
 
 @time_trigger("cron(0 8,20 * * *)")
 def feed_chelsea_notification():
     last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
-    if last_opened < datetime.now().astimezone(tz.tzlocal()) - timedelta(hours=2):
+    now = dates.now()
+    if last_opened < now - timedelta(hours=2):
         noti = Notification(
             title="Feed Beth",
-            message=f"Don't forget Chelsea's {'breakfast' if datetime.now().hour < 12 else 'dinner'}",
+            message=f"Don't forget Chelsea's {'breakfast' if now.hour < 12 else 'dinner'}",
             tag="feed_chelsea",
             group="feed_chelsea",
             priority="time-sensitive",
@@ -70,7 +71,7 @@ def clear_feed_chelsea_notification():
 @state_trigger("person.marshall", "person.emily")
 def notify_on_zone_change(**kwargs):
     name = state.getattr(kwargs["var_name"])["friendly_name"]
-    now = datetime.now().astimezone(tz.tzlocal())
+    now = dates.now()
     old_zone = kwargs["old_value"]
     old_data = File("zones").read([old_zone])
     old_prefix = old_data.get("prefix", "")

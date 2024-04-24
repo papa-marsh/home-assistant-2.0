@@ -1,13 +1,13 @@
-from datetime import datetime
 import os
 import yaml
 from typing import Any, List, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from . import constants
+    from . import constants, dates
     from .dummy import *
 else:
     import constants
+    import dates
 
 
 class File:
@@ -79,7 +79,7 @@ class File:
             contents = []
 
         if isinstance(contents, dict):
-            contents[datetime.now()] = value
+            contents[dates.now()] = value
         else:
             contents.append(value)
 

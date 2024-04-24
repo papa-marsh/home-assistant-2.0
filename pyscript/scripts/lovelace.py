@@ -41,7 +41,7 @@ def set_sidebar_text():
 def persist_chelsea_next_fixture():
     state.persist(
         "pyscript.chelsea_next_fixture",
-        default_value=datetime.now().isoformat(),
+        default_value=dates.now().isoformat(),
         default_attributes={
             "home_team": "Home",
             "away_team": "Away",
@@ -68,7 +68,7 @@ def set_chelsea_fixture_card():
 
         state.set(
             "pyscript.chelsea_next_fixture",
-            value=datetime.now(),
+            value=dates.now(),
             home_team=home,
             away_team=away,
             competition=description[2],
@@ -110,7 +110,7 @@ def chelsea_fixture_tap():
 def chelsea_fixture_blink():
     try:
         start = datetime.strptime(calendar.chelsea_fixtures.start_time, "%Y-%m-%d %H:%M:%S")
-        if datetime.now() >= start - timedelta(minutes=10):
+        if dates.now() >= start - timedelta(minutes=10):
             if not pyscript.chelsea_next_fixture.blink:
                 pyscript.chelsea_next_fixture.blink = True
         else:

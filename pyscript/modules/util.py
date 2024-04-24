@@ -1,5 +1,3 @@
-from datetime import datetime
-from dateutil import tz
 from typing import Any, Callable, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -25,10 +23,8 @@ def get_calendar_events(days: int = 14, next_only: bool = False, ignore_ongoing:
 
     if ignore_ongoing:
         events = []
-        now = datetime.now().astimezone(tz.tzlocal())
-
         for event in results[secrets.FAMILY_CALENDAR]["events"]:
-            if dates.parse_timestamp(event["start"]) >= now:
+            if dates.parse_timestamp(event["start"]) >= dates.now():
                 events.append(event)
     else:
         events = results[secrets.FAMILY_CALENDAR]["events"]

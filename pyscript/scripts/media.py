@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..modules import constants, secrets
+    from ..modules import constants, dates, secrets
     from ..modules.dummy import *
     from ..modules.push import Notification
 else:
     import constants
+    import dates
     from push import Notification
     import secrets
 
@@ -83,12 +84,22 @@ def persist_media_card():
 @state_trigger("media_player.living_room.media_playlist", "sensor.sonos_favorites")
 def set_media_card_playlists():
     task.unique("set_media_card_playlists")
+    now = dates.now()
+    sonos_integration_id = "5710f1a75e16bd6a0b67108a0d28adbe"
+    
+    if not isinstance(pyscript.vars.sonos_last_reload, datetime):
+        pyscript.vars.sonos_last_reload = now
+
+    seconds_since_reload = (now - pyscript.vars.sonos_last_reload).seconds
+
     try:
-        options = [sensor.sonos_favorites.items[source] for source in sensor.sonos_favorites.items]
+        sensor.sonos_favorites.items
     except:
-        sonos_integration_id = "5710f1a75e16bd6a0b67108a0d28adbe"
-        homeassistant.reload_config_entry(entry_id=sonos_integration_id)
+        if seconds_since_reload > 3600:
+            pyscript.vars.sonos_last_reload = now
+            homeassistant.reload_config_entry(entry_id=sonos_integration_id)
         return
+            
 
     if "media_playlist" not in state.getattr("media_player.living_room"):
         playlist = "None Selected"

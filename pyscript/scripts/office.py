@@ -1,11 +1,13 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from dateutil import tz
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from ..modules import dates
     from ..modules.dummy import *
     from ..modules.push import Notification
 else:
+    import dates
     from push import Notification
 
 
@@ -18,8 +20,7 @@ def air_purifier_on():
 @time_trigger("cron(0 6 * * *)")
 def air_purifier_off():
     fan.turn_off(entity_id="fan.office_purifier")
-    now = datetime.now().astimezone(tz.tzlocal())
-    if (now - fan.office_purifier.last_changed).seconds / 3600 > 24:
+    if (dates.now() - fan.office_purifier.last_changed).seconds / 3600 > 24:
         noti = Notification(
             target="marshall",
             title="Air Purifier Error",
@@ -31,7 +32,7 @@ def air_purifier_off():
 
 @time_trigger("cron(*/10 * * * *)")
 def space_heater_auto_off():
-    two_hours_ago = (datetime.now() - timedelta(hours=2)).astimezone(tz.tzlocal())
+    two_hours_ago = (dates.now() - timedelta(hours=2)).astimezone(tz.tzlocal())
     if switch.space_heater == "on" and switch.space_heater.last_changed < two_hours_ago:
         switch.turn_off(entity_id="switch.space_heater")
 

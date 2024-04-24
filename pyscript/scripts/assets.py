@@ -250,7 +250,7 @@ def stocks_populate_card(private=False):
         else:
             amount = staged["price"] * secrets.STOCKS_QTY[symbol.upper()]
             if symbol == "goog":
-                amount += pyscript.entity_card_stocks.staging["GOOGL"]["price"] * secrets.STOCKS_QTY["GOOGL"]
+                amount += pyscript.entity_card_stocks.staging["googl"]["price"] * secrets.STOCKS_QTY["GOOGL"]
             value = format_price(amount, precision=0)
 
         color = format_color(staged["change"], percent_formatted=True)

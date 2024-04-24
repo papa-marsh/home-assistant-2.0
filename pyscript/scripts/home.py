@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from dateutil import tz
 from typing import TYPE_CHECKING
 
@@ -42,7 +42,7 @@ def door_open_notification(**kwargs):
     if kwargs["value"] in ["open", "on"] and kwargs["old_value"] in ["closed", "off"]:
         id = kwargs["var_name"].split(".")[1].replace("_sensor", "")
         name = state.getattr(kwargs["var_name"])["friendly_name"].replace(" Sensor", "")
-        open_time = datetime.now()
+        open_time = dates.now()
         task.unique(f"{id}_left_open")
         task.sleep(10 * 60)
         door_open_notification_loop(
@@ -81,7 +81,7 @@ def door_open_notification_loop(id, name, open_time, silent):
             destructive=True,
         )
     while True:
-        duration = (datetime.now().astimezone(tz.tzlocal()) - open_time.astimezone(tz.tzlocal())).seconds // 60
+        duration = (dates.now() - open_time.astimezone(tz.tzlocal())).seconds // 60
         noti.message = f"{name} has been open for {duration} minutes"
         noti.send()
         task.sleep(10 * 60)
@@ -165,7 +165,7 @@ def clear_door_open_notification(**kwargs):
     "person.marshall", "person.emily", "device_tracker.tess_location_tracker"
 )
 def garage_auto_open(**kwargs):
-    now = datetime.now().astimezone(tz.tzlocal())
+    now = dates.now()
     location = device_tracker.tess_location_tracker
     if (
         kwargs["value"] == "home"
@@ -213,7 +213,7 @@ def door_open_critical_notification(**kwargs):
         exception = person.marshall == "East Grand Rapids" and person.emily == secrets.IN_LAWS_ZONE
         if person.marshall != "home" and person.emily != "home" and not exception:
             target = "all"
-        elif 1 <= datetime.now().hour < 6:
+        elif 1 <= dates.now().hour < 6:
             target = "marshall"
 
         if target:
@@ -238,7 +238,7 @@ def heat_bathroom_floor(**kwargs):
         caller = kwargs["caller"]
 
     duration = int(util.get_pref("Bathroom Floor Heat Minutes", value_only=True))
-    end_time = datetime.now() + timedelta(minutes=duration)
+    end_time = dates.now() + timedelta(minutes=duration)
     pyscript.vars.bathroom_floor_push_target = caller
     pyscript.vars.bathroom_floor_end_time = dates.parse_timestamp(end_time, output_format="time")
 
@@ -347,7 +347,7 @@ def entity_card_update_row_1():
 def entity_card_update_row_2():
     if climate.thermostat in ["unknown", "unavailable"]:
         pyscript.entity_card_home.row_2_value = "Offline"
-        pyscript.entity_card_home.row_2_icon = "mdi:fan-off"
+        pyscript.entity_card_home.row_2_icon = "mdi:hvac"
     else:
         mode = climate.thermostat
         action = climate.thermostat.hvac_action
@@ -377,5 +377,5 @@ def entity_card_blink():
 @time_trigger("cron(0 7,19 * * *)")
 def entity_card_feed_chelsea():
     last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
-    if last_opened < datetime.now().astimezone(tz.tzlocal()) - timedelta(minutes=60):
+    if last_opened < dates.now() - timedelta(minutes=60):
         pyscript.entity_card_home.row_3_color = "red"

@@ -43,7 +43,7 @@ STOCKS_CONFIG = {
         },
     },
     "row_2": {
-        "symbol": "googl",
+        "symbol": "goog",
         "icon": "mdi:google",
         "public": {
             "price": True,

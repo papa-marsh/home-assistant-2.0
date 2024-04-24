@@ -8,13 +8,17 @@ if TYPE_CHECKING:
 DAYS = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
 
 
+def now() -> datetime:
+    return datetime.now().astimezone(tz.tzlocal())
+
+
 def parse_timestamp(timestamp: str | datetime | None = None, output_format: Literal["iso", "date", "time", "datetime"] = "iso") -> str:
     """
     Returns formatted string of date/time from the given timestamp or ISO string.
     'output_format' can be "iso" (default), "date", "time", or "datetime".
     """
     if not timestamp:
-        timestamp = datetime.now()
+        timestamp = now()
     elif isinstance(timestamp, str):
         timestamp = datetime.fromisoformat(timestamp).astimezone(tz.tzlocal())
     else:
@@ -41,7 +45,7 @@ def format_duration(timestamp: timedelta | datetime, comparison: datetime | None
     elif comparison:
         interval = timestamp - comparison
     else:
-        interval = timestamp.astimezone(tz.tzlocal()) - datetime.now().astimezone(tz.tzlocal())
+        interval = timestamp.astimezone(tz.tzlocal()) - now()
 
     hours, minutes, seconds = str(abs(interval)).split(".")[0].split(":")
     duration = ""
