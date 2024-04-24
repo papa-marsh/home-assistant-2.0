@@ -245,7 +245,9 @@ def check_send_reminder() -> None:
     if not pyscript.thinker.last_reminder or not isinstance(pyscript.thinker.last_reminder, datetime):
         pyscript.thinker.last_reminder = dates.now() - timedelta(hours=3)
 
-    elapsed_minutes = (dates.now() - pyscript.thinker.last_reminder).seconds / 60
+    last_reminder = pyscript.thinker.last_reminder.astimezone(tz.tzlocal())
+
+    elapsed_minutes = (dates.now() - last_reminder).seconds / 60
     probability = (elapsed_minutes / 5000) ** 1.5
 
     if random.random() < probability:
