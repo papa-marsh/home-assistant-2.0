@@ -1,5 +1,5 @@
 from datetime import timedelta
-from dateutil import tz
+from dateutil.tz import tzlocal
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -32,7 +32,7 @@ def air_purifier_off():
 
 @time_trigger("cron(*/10 * * * *)")
 def space_heater_auto_off():
-    two_hours_ago = (dates.now() - timedelta(hours=2)).astimezone(tz.tzlocal())
+    two_hours_ago = (dates.now() - timedelta(hours=2)).astimezone(tzlocal())
     if switch.space_heater == "on" and switch.space_heater.last_changed < two_hours_ago:
         switch.turn_off(entity_id="switch.space_heater")
 

@@ -1,5 +1,5 @@
 from datetime import date, datetime, timedelta
-from dateutil import tz
+from dateutil.tz import tzlocal
 from typing import Literal, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -47,7 +47,7 @@ def emily_good_morning():
 
 @time_trigger("cron(0 8,20 * * *)")
 def feed_chelsea_notification():
-    last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
+    last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tzlocal())
     now = dates.now()
     if last_opened < now - timedelta(hours=2):
         noti = Notification(
@@ -113,7 +113,7 @@ def notify_on_zone_change(**kwargs):
                 noti.send()
 
     elif not old_data.get("is_region"):
-        old_zone_entered = old_zone.last_changed.astimezone(tz.tzlocal())
+        old_zone_entered = old_zone.last_changed.astimezone(tzlocal())
         duration = dates.format_duration(old_zone_entered)
         zone_summary_on = util.get_pref(f"{name} Zone Summary Notifications") == "On"
         too_short_for_update = (now - old_zone_entered).seconds < (5 * 60)

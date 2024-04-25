@@ -1,5 +1,5 @@
 from datetime import timedelta
-from dateutil import tz
+from dateutil.tz import tzlocal
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -81,7 +81,7 @@ def door_open_notification_loop(id, name, open_time, silent):
             destructive=True,
         )
     while True:
-        duration = (dates.now() - open_time.astimezone(tz.tzlocal())).seconds // 60
+        duration = (dates.now() - open_time.astimezone(tzlocal())).seconds // 60
         noti.message = f"{name} has been open for {duration} minutes"
         noti.send()
         task.sleep(10 * 60)
@@ -191,7 +191,7 @@ def ios_garage_stall(**kwargs):
     else:
         noti = Notification(
             title="Command Failed",
-            message="You must be closer to home to control the garage",
+            message="You must be closer to home to control the garage with your watch",
             target=triggered_by,
             tag="command_failed_ios_garage",
             group="command_failed_ios_garage",
@@ -376,6 +376,6 @@ def entity_card_blink():
 
 @time_trigger("cron(0 7,19 * * *)")
 def entity_card_feed_chelsea():
-    last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tz.tzlocal())
+    last_opened = binary_sensor.chelsea_cabinet_sensor.last_changed.astimezone(tzlocal())
     if last_opened < dates.now() - timedelta(minutes=60):
         pyscript.entity_card_home.row_3_color = "red"

@@ -1,4 +1,5 @@
 from datetime import date, datetime, timedelta
+from dateutil.tz import tzlocal
 from typing import Any, Literal, TYPE_CHECKING
 import random
 
@@ -31,7 +32,8 @@ def persist_thinker():
             "review_markdown": "",
             "review_index": 0,
             "ready_to_commit": False,
-            "last_reminder": None
+            "last_reminder": None,
+            "current_reminder": "",
         },
     )
     state.persist(
@@ -119,7 +121,9 @@ def populate_review_markdown() -> None:
     if not pyscript.thinker.review_thoughts:
         pyscript.thinker.review_markdown = (
             "# Nothing to Review!\n"
-            "### Time to do some thinking..."
+            "### Time to do some thinking...\n"
+            "---\n"
+            f"{pyscript.thinker.current_reminder}"
         )
         return
 
@@ -245,7 +249,7 @@ def check_send_reminder() -> None:
     if not pyscript.thinker.last_reminder or not isinstance(pyscript.thinker.last_reminder, datetime):
         pyscript.thinker.last_reminder = dates.now() - timedelta(hours=3)
 
-    last_reminder = pyscript.thinker.last_reminder.astimezone(tz.tzlocal())
+    last_reminder = pyscript.thinker.last_reminder.astimezone(tzlocal())
 
     elapsed_minutes = (dates.now() - last_reminder).seconds / 60
     probability = (elapsed_minutes / 5000) ** 1.5
@@ -265,16 +269,58 @@ def send_reminder() -> None:
     message += "First time seen" if seen_count == 1 else f"Seen {seen_count} times"
     message += f" since {first_seen}"
 
+    action_data = {
+        "first_seen": first_seen,
+        "thought": thought['thought']
+    }
+
     noti = Notification(
         title="Don't Forget...",
         message=message,
         group="thought_reminder",
         target="marshall",
-        sound="HourlyChime_Haptic.caf"
+        sound="HourlyChime_Haptic.caf",
+        action_data=action_data
     )
-    # noti.add_action(id="thinker_reminder_more", title="More")
-    # noti.add_action(id="thinker_reminder_less", title="Less")
-    # noti.add_action(id="thinker_reminder_done", title="Done")
+    noti.add_action(id="thinker_reminder_share", title="Share")
+    noti.add_action(id="thinker_reminder_pause", title="Pause")
+    noti.add_action(id="thinker_reminder_remove", title="Remove")
     noti.send()
 
-    
+    pyscript.thinker.current_reminder = message
+
+
+@event_trigger("mobile_app_notification_action", "action=='thinker_reminder_share'")
+def reminder_share(**kwargs) -> None:
+    first_seen = kwargs["action_data"]["first_seen"]
+    thought = kwargs["action_data"]["thought"]
+
+    message = f'I was just reminded of this thought from {first_seen}. Long-press to read it:\n\n"{thought}"'
+
+    noti = Notification(
+        title="Marshall Shared a Thought",
+        message=message,
+        group="shared_thought",
+        target="emily",
+        sound="HourlyChime_Haptic.caf",
+        url="thinker"
+    )
+    noti.send()
+
+
+@event_trigger("mobile_app_notification_action", "action==thinker_reminder_pause")
+def reminder_pause(**kwargs) -> None:
+    now = dates.now()
+    mean = timedelta(weeks=6).total_seconds()
+    sigma = 2.5
+    upper_limit = timedelta(weeks=2).total_seconds()
+    lower_limit = timedelta(weeks=10).total_seconds()
+    gauss_point = -1
+
+    while gauss_point < lower_limit or gauss_point > upper_limit:
+        gauss_point = random.gauss(mean, sigma)
+
+
+@event_trigger("mobile_app_notification_action", "action==thinker_reminder_remove")
+def reminder_remove(**kwargs) -> None:
+    ...

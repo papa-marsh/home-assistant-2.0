@@ -1,5 +1,5 @@
 from datetime import date, datetime, timedelta
-from dateutil import tz
+from dateutil.tz import tzlocal
 from typing import Literal, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -9,7 +9,7 @@ DAYS = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
 
 
 def now() -> datetime:
-    return datetime.now().astimezone(tz.tzlocal())
+    return datetime.now(tzlocal())
 
 
 def parse_timestamp(timestamp: str | datetime | None = None, output_format: Literal["iso", "date", "time", "datetime"] = "iso") -> str:
@@ -20,9 +20,9 @@ def parse_timestamp(timestamp: str | datetime | None = None, output_format: Lite
     if not timestamp:
         timestamp = now()
     elif isinstance(timestamp, str):
-        timestamp = datetime.fromisoformat(timestamp).astimezone(tz.tzlocal())
+        timestamp = datetime.fromisoformat(timestamp).astimezone(tzlocal())
     else:
-        timestamp = timestamp.astimezone(tz.tzlocal())
+        timestamp = timestamp.astimezone(tzlocal())
 
     if output_format == "date":
         timestamp = datetime.strftime(timestamp, "%-m/%-d/%y")
@@ -45,7 +45,7 @@ def format_duration(timestamp: timedelta | datetime, comparison: datetime | None
     elif comparison:
         interval = timestamp - comparison
     else:
-        interval = timestamp.astimezone(tz.tzlocal()) - now()
+        interval = timestamp.astimezone(tzlocal()) - now()
 
     hours, minutes, seconds = str(abs(interval)).split(".")[0].split(":")
     duration = ""
