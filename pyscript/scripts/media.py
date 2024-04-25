@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -96,7 +96,8 @@ def set_media_card_playlists():
     try:
         sensor.sonos_favorites.items
     except:
-        if seconds_since_reload > 3600:
+        hass_startup_time = dates.parse_timestamp(sensor.home_assistant_uptime, output_format=datetime)
+        if seconds_since_reload > 3600 and now - hass_startup_time > timedelta(minutes=10):
             pyscript.vars.sonos_last_reload = now
             homeassistant.reload_config_entry(entry_id=sonos_integration_id)
         return
@@ -122,6 +123,10 @@ def set_media_card_playlists():
 
 @state_trigger("input_select.media_card_playlist != 'None Selected'")
 def play_media_card_playlist():
+    hass_startup_time = dates.parse_timestamp(sensor.home_assistant_uptime, output_format=datetime)
+    if dates.now() - hass_startup_time < timedelta(seconds=120):
+        return
+
     current_playlist = media_player.living_room.media_playlist if "media_playlist" in media_player.living_room else None
     if current_playlist != input_select.media_card_playlist:
         media_player.shuffle_set(entity_id=constants.SPEAKER_GROUP, shuffle=True)
