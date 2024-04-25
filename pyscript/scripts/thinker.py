@@ -222,13 +222,21 @@ def get_persisted_thought(track_access: bool = False) -> dict[str, str | int]:
     file = File("thinker")
     thoughts = file.read(["persisted_thoughts"])
     max_count = 0
+    today = dates.now().date()
 
     for thought in thoughts:
         max_count = max(max_count, thought["reminder_count"])
 
     weights = [(max_count + 1) - thought["reminder_count"] for thought in thoughts]
-    selection = random.choices(thoughts, weights=weights, k=1)[0]
-    output = selection.copy()
+
+    for _ in range(20):
+        selection = random.choices(thoughts, weights=weights, k=1)[0]
+        paused_until = selection.get("paused_until", today - timedelta(days=1))
+        log.warning("here")
+        if paused_until <= today:
+            log.warning("also here")
+            selection.pop("paused_until", None)
+            break
     
     if track_access:
         selection_index = thoughts.index(selection)
@@ -237,7 +245,7 @@ def get_persisted_thought(track_access: bool = False) -> dict[str, str | int]:
 
         file.write(["persisted_thoughts"], thoughts)
     
-    return output
+    return selection.copy()
 
 
 @time_trigger("cron(* * * * *)")
@@ -269,18 +277,13 @@ def send_reminder() -> None:
     message += "First time seen" if seen_count == 1 else f"Seen {seen_count} times"
     message += f" since {first_seen}"
 
-    action_data = {
-        "first_seen": first_seen,
-        "thought": thought['thought']
-    }
-
     noti = Notification(
         title="Don't Forget...",
         message=message,
         group="thought_reminder",
         target="marshall",
         sound="HourlyChime_Haptic.caf",
-        action_data=action_data
+        action_data=thought
     )
     noti.add_action(id="thinker_reminder_share", title="Share")
     noti.add_action(id="thinker_reminder_pause", title="Pause")
@@ -292,7 +295,7 @@ def send_reminder() -> None:
 
 @event_trigger("mobile_app_notification_action", "action=='thinker_reminder_share'")
 def reminder_share(**kwargs) -> None:
-    first_seen = kwargs["action_data"]["first_seen"]
+    first_seen = dates.colloquial_date(kwargs["action_data"]["date"])
     thought = kwargs["action_data"]["thought"]
 
     message = f'I was just reminded of this thought from {first_seen}. Long-press to read it:\n\n"{thought}"'
@@ -308,19 +311,46 @@ def reminder_share(**kwargs) -> None:
     noti.send()
 
 
-@event_trigger("mobile_app_notification_action", "action==thinker_reminder_pause")
+@event_trigger("mobile_app_notification_action", "action=='thinker_reminder_pause'")
 def reminder_pause(**kwargs) -> None:
+    reminder_thought = kwargs["action_data"]["thought"]
     now = dates.now()
     mean = timedelta(weeks=6).total_seconds()
-    sigma = 2.5
-    upper_limit = timedelta(weeks=2).total_seconds()
-    lower_limit = timedelta(weeks=10).total_seconds()
+    lower_limit = timedelta(weeks=2).total_seconds()
+    upper_limit = timedelta(weeks=10).total_seconds()
+    sigma = 1500000
     gauss_point = -1
 
-    while gauss_point < lower_limit or gauss_point > upper_limit:
+    for _ in range(10):
         gauss_point = random.gauss(mean, sigma)
+        if lower_limit < gauss_point < upper_limit:
+            break
+
+    paused_until = (now + timedelta(seconds=gauss_point)).date()
+
+    file = File("thinker")
+    persisted_thoughts = file.read(["persisted_thoughts"])
+
+    for i, thought in enumerate(persisted_thoughts):
+        if thought["thought"] == reminder_thought:
+            persisted_thoughts[i]["paused_until"] = paused_until
+
+    file.write(["persisted_thoughts"], persisted_thoughts)
 
 
-@event_trigger("mobile_app_notification_action", "action==thinker_reminder_remove")
+@event_trigger("mobile_app_notification_action", "action=='thinker_reminder_remove'")
 def reminder_remove(**kwargs) -> None:
-    ...
+    thought = kwargs["action_data"]
+
+    file = File("thinker")
+    contents = file.read()
+    persisted_thoughts = contents["persisted_thoughts"]
+    removed_thoughts = contents["removed_thoughts"]
+    
+    persisted_thoughts = [pt for pt in persisted_thoughts if pt["thought"] != thought["thought"]]
+    removed_thoughts.append(thought)
+
+    contents["persisted_thoughts"] = persisted_thoughts
+    contents["removed_thoughts"] = removed_thoughts
+
+    file.overwrite(contents)

@@ -130,12 +130,12 @@ def entity_card_dtap():
 def entity_card_update_row_1():
     if sensor.office_ambient_sensor_temperature in ["unknown", "unavailable"]:
         pyscript.entity_card_office.row_1_value = "Offline"
-        pyscript.entity_card_office.row_1_icon = "mdi:thermometer-off"
     else:
         temp = float(sensor.office_ambient_sensor_temperature)
         humidity = float(sensor.office_ambient_sensor_humidity)
         pyscript.entity_card_office.row_1_value = f"{temp:.0f}° · {humidity:.0f}%"
-        pyscript.entity_card_office.row_1_icon = "mdi:radiator" if switch.space_heater == "on" else "mdi:thermometer-water"
+
+    pyscript.entity_card_office.row_1_icon = "mdi:radiator" if switch.space_heater == "on" else "mdi:thermometer-water"
 
 
 @time_trigger("startup")
