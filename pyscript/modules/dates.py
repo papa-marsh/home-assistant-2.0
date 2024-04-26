@@ -1,6 +1,6 @@
 from datetime import date, datetime, timedelta
 from dateutil.tz import tzlocal
-from typing import Literal, TYPE_CHECKING
+from typing import Any, Literal, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .dummy import *
@@ -10,6 +10,10 @@ DAYS = {"mon": 0, "tue": 1, "wed": 2, "thu": 3, "fri": 4, "sat": 5, "sun": 6}
 
 def now() -> datetime:
     return datetime.now(tzlocal())
+
+
+def today() -> date:
+    return datetime.today(tzlocal())
 
 
 def parse_timestamp(timestamp: str | datetime | None = None, output_format: Literal["iso", "date", "time", "datetime"] = "iso") -> str:

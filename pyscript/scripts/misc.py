@@ -99,7 +99,8 @@ def notify_on_zone_change(**kwargs):
     if not new_data.get("is_region"):
         message = f"{name} arrived at {new_prefix}{new_zone}"
         if new_zone == "home":
-            duration = dates.format_duration(pyscript.vars.left_home_timestamp[name])
+            left_home = dates.parse_timestamp(pyscript.vars.left_home_timestamp[name])
+            duration = dates.format_duration(left_home)
             message += f" after {duration}"
 
             if util.get_pref(f"{name} Zone Summary Notifications") == "On":
@@ -113,7 +114,7 @@ def notify_on_zone_change(**kwargs):
                 noti.send()
 
     elif not old_data.get("is_region"):
-        old_zone_entered = old_zone.last_changed.astimezone(tzlocal())
+        old_zone_entered = dates.parse_timestamp(old_zone.last_changed.astimezone(tzlocal()))
         duration = dates.format_duration(old_zone_entered)
         zone_summary_on = util.get_pref(f"{name} Zone Summary Notifications") == "On"
         too_short_for_update = (now - old_zone_entered).seconds < (5 * 60)
