@@ -1,0 +1,15 @@
+global:
+  # Custom: Variables
+  sidebar-background: "#2A2A2A"
+  # sidebar-text-color: "#FFF"
+  custom-card-active-background-color: "#777"
+  custom-warning-background-color: "#F00"
+  custom-warning-text-color: "#F00"
+  custom-favorable-text-color: "#0F0"
+  mdc-select-fill-color: none
+
+themes:
+  Default:
+    background: homekit-bg-blue-red.jpg
+  Red, White, & Blue:
+    background: red-white-blue.jpg
