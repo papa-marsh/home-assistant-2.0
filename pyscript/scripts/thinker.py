@@ -232,9 +232,7 @@ def get_persisted_thought(track_access: bool = False) -> dict[str, str | int]:
     for _ in range(20):
         selection = random.choices(thoughts, weights=weights, k=1)[0]
         paused_until = selection.get("paused_until", today - timedelta(days=1))
-        log.warning("here")
         if paused_until <= today:
-            log.warning("also here")
             selection.pop("paused_until", None)
             break
     
