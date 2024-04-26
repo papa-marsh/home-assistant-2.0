@@ -291,6 +291,7 @@ def send_reminder() -> None:
     noti.send()
 
     pyscript.thinker.current_reminder = message
+    populate_review_markdown()
 
 
 @event_trigger("mobile_app_notification_action", "action=='thinker_reminder_share'")
