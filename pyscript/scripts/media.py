@@ -16,6 +16,7 @@ else:
 def play_emilys_playlist(**kwargs):
     caller = kwargs['caller']
     if state.get(f"person.{caller}") == "home":
+        input_select.select_option(entity_id="input_select.media_card_playlist", option="None Selected")
         input_select.select_option(entity_id="input_select.media_card_playlist", option="Emily's Playlist")
     else:
         noti = Notification(
@@ -31,6 +32,7 @@ def play_emilys_playlist(**kwargs):
 def play_ellies_playlist(**kwargs):
     caller = kwargs['caller']
     if state.get(f"person.{caller}") == "home":
+        input_select.select_option(entity_id="input_select.media_card_playlist", option="None Selected")
         input_select.select_option(entity_id="input_select.media_card_playlist", option="Songs")
     else:
         noti = Notification(

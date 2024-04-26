@@ -62,7 +62,7 @@ def clear_meeting_active_notification():
 @state_trigger("media_player.playstation_4", "media_player.playstation_4.source")
 def toggle_playstation_fans():
     ignore_list = ["Amazon Prime Video", "Netflix"]
-    source = media_player.playstation_4.source if "source" in media_player.playstation_4.__dict__ else None
+    source = state.getattr("media_player.playstation_4").get("source", None)
 
     if media_player.playstation_4 == "playing" and source not in ignore_list:
         switch.turn_on(entity_id="switch.playstation_fans")

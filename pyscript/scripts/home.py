@@ -350,7 +350,7 @@ def entity_card_update_row_2():
         pyscript.entity_card_home.row_2_icon = "mdi:hvac"
     else:
         mode = climate.thermostat
-        action = climate.thermostat.hvac_action
+        action = state.getattr("climate.thermostat").get("hvac_action", "off")
         temp = int(climate.thermostat.current_temperature)
         preset = climate.thermostat.temperature
         icon = {
@@ -358,7 +358,7 @@ def entity_card_update_row_2():
             "heat": "mdi:fire",
             "off": "mdi:hvac-off"
         }
-        value = f"{action}" if temp == preset else f"{action} ({preset}°)"
+        value = f"{action}" if temp == preset or not preset else f"{action} ({preset}°)"
         pyscript.entity_card_home.row_2_value = value
         pyscript.entity_card_home.row_2_icon = icon[mode]
 

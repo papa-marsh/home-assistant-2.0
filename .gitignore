@@ -14,7 +14,6 @@ www/community
 custom_components
 image
 .ps4-games*
-themes/ios-themes
 
 deps
 tts
