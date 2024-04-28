@@ -41,7 +41,7 @@ def toggle_butterfly_night_light():
 
 @event_trigger("emily_good_morning")
 def emily_good_morning():
-    if 6 <= dates.now().hour < 17:
+    if 5 <= dates.now().hour < 17:
         switch.turn_off(entity_id="switch.ellies_sound_machine")
         
 
