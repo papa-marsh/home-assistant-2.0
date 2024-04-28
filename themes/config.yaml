@@ -11,3 +11,25 @@ themes:
     background: homekit-bg-blue-red.jpg
   Red, White, & Blue:
     background: red-white-blue.jpg
+    custom-primary-accent: "#D00"
+    custom-switch-checked: "#00D"
+    primary-color: var(--custom-primary-accent)
+    accent-color: var(--custom-primary-accent)
+    switch-checked-color: var(--custom-switch-checked)
+    switch-checked-track-color: var(--custom-switch-checked)
+  Springtime:
+    background: spring-flowers.jpg
+    custom-primary-accent: rgb(230, 160, 190)
+    custom-switch-checked: rgb(110, 170, 240)
+    primary-color: var(--custom-primary-accent)
+    accent-color: var(--custom-primary-accent)
+    switch-checked-color: var(--custom-switch-checked)
+    switch-checked-track-color: var(--custom-switch-checked)
+  Halloween:
+    background: spooky-cemetary.jpg
+    custom-primary-accent: rgb(240, 130, 70)
+    custom-switch-checked: rgb(50, 100, 60)
+    primary-color: var(--custom-primary-accent)
+    accent-color: var(--custom-primary-accent)
+    switch-checked-color: var(--custom-switch-checked)
+    switch-checked-track-color: var(--custom-switch-checked)

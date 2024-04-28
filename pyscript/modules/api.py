@@ -9,6 +9,34 @@ else:
     import secrets
 
 
+class OpenAIClient():
+    model = "gpt-4-turbo"
+    headers = {
+        "Content-Type: application/json",
+        f"Authorization: Bearer {secrets.OPEN_AI_KEY}",
+    }
+
+    @classmethod
+    def quick_response(cls, prompt: str) -> str:
+        """
+        Sends 'user_prompt' to the OpenAI API and returns the output from the specified model.
+        """
+        data = {
+            "model": cls.model,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        }
+
+        r = task.executor(requests.get, url).json()
+        output = r["choices"][0]["message"]["content"]
+
+        return output
+
+
 class StocksAPI():
     def get_quote(self, symbol: str = "SPY") -> dict:
         """
