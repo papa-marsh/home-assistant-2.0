@@ -10,7 +10,6 @@ else:
 
 
 class OpenAIClient():
-    url = "https://api.openai.com/v1/chat/completions"
     model = "gpt-4-turbo"
     headers = {
         "Content-Type: application/json",
@@ -22,6 +21,7 @@ class OpenAIClient():
         """
         Sends a prompt to the OpenAI API and returns the output message from the specified model.
         """
+        url = "https://api.openai.com/v1/chat/completions"
         data = {
             "model": model or cls.model,
             "messages": [
@@ -32,7 +32,7 @@ class OpenAIClient():
             ]
         }
 
-        r = task.executor(requests.get, cls.url, headers=cls.headers, data=data).json()
+        r = task.executor(requests.get, url, headers=cls.headers, data=data).json()
         output = r["choices"][0]["message"]["content"]
 
         return output
