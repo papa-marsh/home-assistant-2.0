@@ -222,7 +222,7 @@ def get_persisted_thought(track_access: bool = False) -> dict[str, str | int]:
     file = File("thinker")
     thoughts = file.read(["persisted_thoughts"])
     max_count = 0
-    today = dates.today()
+    today = datetime.today()
 
     for thought in thoughts:
         max_count = max(max_count, thought["reminder_count"])

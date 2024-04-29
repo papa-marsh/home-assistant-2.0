@@ -12,10 +12,6 @@ def now() -> datetime:
     return datetime.now(tzlocal())
 
 
-def today() -> date:
-    return datetime.today()
-
-
 def parse_timestamp(timestamp: str | datetime | None = None, output_format: Literal["iso", "date", "time", "datetime"] = "iso") -> str:
     """
     Returns formatted string of date/time from the given timestamp or ISO string.

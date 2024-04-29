@@ -14,6 +14,8 @@ www/community
 custom_components
 image
 .ps4-games*
+.ipynb_checkpoints*
+jupyter.ipynb
 
 deps
 tts
