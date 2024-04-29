@@ -13,7 +13,7 @@ def now() -> datetime:
 
 
 def today() -> date:
-    return datetime.today(tzlocal())
+    return datetime.today()
 
 
 def parse_timestamp(timestamp: str | datetime | None = None, output_format: Literal["iso", "date", "time", "datetime"] = "iso") -> str:
