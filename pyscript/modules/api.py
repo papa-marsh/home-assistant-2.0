@@ -19,7 +19,6 @@ class OpenAIClient():
             "Authorization": f"Bearer {self.api_key}",
         }
 
-    # @classmethod
     def quick_response(self, prompt: str, model: str | None = None) -> str:
         """
         Sends a single, contextless prompt to the OpenAI API and returns the output message from the specified model.
