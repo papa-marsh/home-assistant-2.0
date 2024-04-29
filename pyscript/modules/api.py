@@ -1,4 +1,5 @@
 from datetime import date, datetime
+import json
 import requests
 from typing import TYPE_CHECKING
 
@@ -10,20 +11,22 @@ else:
 
 
 class OpenAIClient():
-    model = "gpt-4-turbo"
-    headers = {
-        "Content-Type: application/json",
-        f"Authorization: Bearer {secrets.OPEN_AI_KEY}",
-    }
+    def __init__(self, model: str | None = None, api_key: str | None = None) -> None:
+        self.model = model or "gpt-4-turbo"
+        self.api_key = api_key or secrets.OPEN_AI_KEY
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}",
+        }
 
-    @classmethod
-    def quick_response(cls, prompt: str, model: str | None = None) -> str:
+    # @classmethod
+    def quick_response(self, prompt: str, model: str | None = None) -> str:
         """
-        Sends a prompt to the OpenAI API and returns the output message from the specified model.
+        Sends a single, contextless prompt to the OpenAI API and returns the output message from the specified model.
         """
         url = "https://api.openai.com/v1/chat/completions"
         data = {
-            "model": model or cls.model,
+            "model": model or self.model,
             "messages": [
                 {
                     "role": "user",
@@ -32,7 +35,8 @@ class OpenAIClient():
             ]
         }
 
-        r = task.executor(requests.get, url, headers=cls.headers, data=data).json()
+        data = json.dumps(data)
+        r = task.executor(requests.post, url, headers=self.headers, data=data).json()
         output = r["choices"][0]["message"]["content"]
 
         return output
