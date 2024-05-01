@@ -18,13 +18,15 @@ themes:
     switch-checked-color: var(--custom-switch-checked)
     switch-checked-track-color: var(--custom-switch-checked)
   Springtime:
-    background: spring-flowers.jpg
+    background: cherry-blossoms.jpg
     custom-primary-accent: rgb(230, 160, 190)
     custom-switch-checked: rgb(110, 170, 240)
     primary-color: var(--custom-primary-accent)
     accent-color: var(--custom-primary-accent)
     switch-checked-color: var(--custom-switch-checked)
     switch-checked-track-color: var(--custom-switch-checked)
+    ha-card-background: rgba(10, 10, 10, 0.55)
+    custom-card-active-background-color: "#7B7B7B"
   Halloween:
     background: spooky-cemetary.jpg
     custom-primary-accent: rgb(240, 130, 70)

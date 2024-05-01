@@ -123,6 +123,7 @@ def populate_review_markdown() -> None:
             "# Nothing to Review!\n"
             "### Time to do some thinking...\n"
             "---\n"
+            "### In case you missed it:\n"
             f"{pyscript.thinker.current_reminder}"
         )
         return

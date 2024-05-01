@@ -236,12 +236,12 @@ Red, White, & Blue:
 Springtime:
   accent-color: var(--custom-primary-accent)
   app-header-background-color: rgba(30, 2, 61, 0.4)
-  background-image: center / cover no-repeat fixed url('/hacsfiles/themes/backgrounds/spring-flowers.jpg')
+  background-image: center / cover no-repeat fixed url('/hacsfiles/themes/backgrounds/cherry-blossoms.jpg')
   card-background-color: var(--secondary-background-color)
   clear-background-color: var(--ha-card-background)
   code-editor-background-color: '#161616'
   codemirror-property: var(--accent-color)
-  custom-card-active-background-color: '#777'
+  custom-card-active-background-color: '#7B7B7B'
   custom-favorable-text-color: '#0F0'
   custom-primary-accent: rgb(230, 160, 190)
   custom-switch-checked: rgb(110, 170, 240)
@@ -249,7 +249,7 @@ Springtime:
   custom-warning-text-color: '#F00'
   disabled-text-color: '#555'
   divider-color: rgba(152, 152, 157, 0.3)
-  ha-card-background: rgba(10, 10, 10, 0.4)
+  ha-card-background: rgba(10, 10, 10, 0.55)
   ha-card-border-radius: 20px
   ha-card-border-width: 0
   ha-slider-background: none !important
