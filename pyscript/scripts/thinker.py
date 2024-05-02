@@ -306,7 +306,7 @@ def reminder_share(**kwargs) -> None:
         title="Marshall Shared a Thought",
         message=message,
         group="shared_thought",
-        target="marshall",
+        target="emily",
         sound="HourlyChime_Haptic.caf",
         url="thinker"
     )

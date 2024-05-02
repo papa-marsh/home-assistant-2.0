@@ -22,7 +22,7 @@ def chelsea_kickoff_notification():
     message = f"The {competition} match against {opponent} is about to kick off at {location}"
     noti = Notification(
         title="Chelsea Kickoff",
-        message=message.replace("The the", "the"),
+        message=message.replace("The the", "The"),
         tag="chelsea_match",
         group="chelsea_match",
         priority="time-sensitive",
