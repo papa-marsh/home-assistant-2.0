@@ -190,10 +190,11 @@ def sync_volume(target="media_player.living_room", **kwargs):
     task.sleep(0.2)
     if kwargs:
         target = kwargs["var_name"]
-    volume = state.getattr(target)["volume_level"]
-    for speaker in constants.SPEAKER_GROUP:
-        if speaker != target:
-            media_player.volume_set(entity_id=speaker, volume_level=volume)
+    volume = state.getattr(target).get("volume_level")
+    if volume:
+        for speaker in constants.SPEAKER_GROUP:
+            if speaker != target:
+                media_player.volume_set(entity_id=speaker, volume_level=volume)
 
 
 def group_speakers(target="media_player.living_room"):

@@ -295,8 +295,10 @@ def send_reminder() -> None:
 
 @event_trigger("mobile_app_notification_action", "action=='thinker_reminder_share'")
 def reminder_share(**kwargs) -> None:
-    first_seen = dates.colloquial_date(kwargs["action_data"]["date"])
     thought = kwargs["action_data"]["thought"]
+    date_string = kwargs["action_data"]["date"]
+    date_parsed = datetime.strptime(date_string, "%Y-%m-%d").date()
+    first_seen = dates.colloquial_date(date_parsed)
 
     message = f'I was just reminded of this thought from {first_seen}. Long-press to read it:\n\n"{thought}"'
 
@@ -304,7 +306,7 @@ def reminder_share(**kwargs) -> None:
         title="Marshall Shared a Thought",
         message=message,
         group="shared_thought",
-        target="emily",
+        target="marshall",
         sound="HourlyChime_Haptic.caf",
         url="thinker"
     )

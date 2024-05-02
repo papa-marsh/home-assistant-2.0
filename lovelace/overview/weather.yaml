@@ -1,5 +1,5 @@
 type: weather-forecast
-entity: weather.weather
+entity: weather.pirate_weather
 name: East Grand Rapids
 show_current: true
 show_forecast: true
