@@ -286,7 +286,7 @@ def send_reminder() -> None:
     )
     noti.add_action(id="thinker_reminder_share", title="Share")
     noti.add_action(id="thinker_reminder_pause", title="Pause")
-    noti.add_action(id="thinker_reminder_remove", title="Remove")
+    noti.add_action(id="thinker_reminder_remove", title="Remove", destructive=True),
     noti.send()
 
     pyscript.thinker.current_reminder = message
