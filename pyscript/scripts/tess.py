@@ -184,7 +184,10 @@ def complication_trailing():
 @time_trigger("startup")
 @state_trigger("sensor.tess_battery", "number.tess_charge_limit")
 def complication_gauge():
-    pyscript.complication_tess.gauge = int(sensor.tess_battery) / int(number.tess_charge_limit)
+    try:
+        pyscript.complication_tess.gauge = int(sensor.tess_battery) / int(number.tess_charge_limit)
+    except Exception as e:
+        log.error(f"Exception caught while updating Tess complication: {e}")
 
 
 @time_trigger("startup")
@@ -320,7 +323,7 @@ def entity_card_update_row_2():
     "sensor.tess_arrival_time",
 )
 def entity_card_update_row_3():
-    current_temp = climate.tess_hvac_climate_system.current_temperature
+    current_temp = state.getattr("climate.tess_hvac_climate_system").get("current_temperature")
     if climate.tess_hvac_climate_system in ["unknown", "unavailable"]:
         pyscript.entity_card_tess.row_3_icon = "mdi:thermometer-off"
     else:
@@ -331,9 +334,13 @@ def entity_card_update_row_3():
             eta = 0
 
         if binary_sensor.tess_parking_brake == "on" or eta <= 0:
-            pyscript.entity_card_tess.row_3_value = f"{current_temp}° F"
             pyscript.entity_card_tess.row_3_icon = "mdi:thermometer"
-            pyscript.entity_card_tess.row_3_color = "red" if current_temp and current_temp >= 105 else "default"
+            if current_temp:
+                pyscript.entity_card_tess.row_3_value = f"{current_temp}° F"
+                pyscript.entity_card_tess.row_3_color = "red" if current_temp and current_temp >= 105 else "default"
+            else:
+                pyscript.entity_card_tess.row_3_value = "Offline"
+                pyscript.entity_card_tess.row_3_color = "default"
         else:
             pyscript.entity_card_tess.row_3_value = f"{eta//60} minutes"
             pyscript.entity_card_tess.row_3_icon = "mdi:map-clock"
