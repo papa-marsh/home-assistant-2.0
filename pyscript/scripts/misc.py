@@ -16,13 +16,14 @@ else:
 
 @state_trigger("pyscript.chelsea_next_fixture.blink==True")
 def chelsea_kickoff_notification():
-    competition = pyscript.chelsea_next_fixture.competition
+    competition = pyscript.chelsea_next_fixture.competition.replace("The", "").replace("the", "")
     opponent = pyscript.chelsea_next_fixture.home_team if pyscript.chelsea_next_fixture.home_team != "Chelsea" else pyscript.chelsea_next_fixture.away_team
     location = calendar.chelsea_fixtures.location
     message = f"The {competition} match against {opponent} is about to kick off at {location}"
+
     noti = Notification(
         title="Chelsea Kickoff",
-        message=message.replace("The the", "The"),
+        message=message,
         tag="chelsea_match",
         group="chelsea_match",
         priority="time-sensitive",
@@ -84,9 +85,6 @@ def notify_on_zone_change(**kwargs):
 
     task.unique(f"{name.lower()}_zone_notify")
 
-    if util.get_pref(f"{name} Zone Notifications") != "On":
-        return
-
     if old_zone == pyscript.vars.zone_debounce[name]:
         pyscript.vars.zone_debounce[name] = None
         return
@@ -137,13 +135,14 @@ def notify_on_zone_change(**kwargs):
     else:
         message = f"{name} left {old_prefix}{old_zone}"
 
-    noti = Notification(
-        message=message,
-        group="notify_on_zone_change",
-        tag="notify_on_zone_change",
-        target="emily" if name == "Marshall" else "marshall",
+    if util.get_pref(f"{name} Zone Notifications") == "On":
+        noti = Notification(
+            message=message.replace("The", "the"),
+            group="notify_on_zone_change",
+            tag="notify_on_zone_change",
+            target="emily" if name == "Marshall" else "marshall",
         )
-    noti.send()
+        noti.send()
 
 
 @time_trigger("cron(0 5 * * *)")

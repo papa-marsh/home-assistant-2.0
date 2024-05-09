@@ -109,12 +109,10 @@ def chelsea_fixture_tap():
 @time_trigger("startup", "cron(*/5 * * * *)")
 @state_trigger("calendar.chelsea_fixtures.start_time")
 def chelsea_fixture_blink():
-    try:
-        start = datetime.strptime(calendar.chelsea_fixtures.start_time, "%Y-%m-%d %H:%M:%S")
-        if dates.now() >= start - timedelta(minutes=10):
-            if not pyscript.chelsea_next_fixture.blink:
-                pyscript.chelsea_next_fixture.blink = True
-        else:
-            pyscript.chelsea_next_fixture.blink = False
-    except:
+    start_string = calendar.chelsea_fixtures.start_time
+    start = datetime.strptime(start_string, "%Y-%m-%d %H:%M:%S").astimezone(tzlocal())
+    if dates.now() >= start - timedelta(minutes=10):
+        if not pyscript.chelsea_next_fixture.blink:
+            pyscript.chelsea_next_fixture.blink = True
+    else:
         pyscript.chelsea_next_fixture.blink = False
