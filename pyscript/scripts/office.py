@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from dateutil.tz import tzlocal
 from typing import TYPE_CHECKING
 
@@ -83,10 +83,10 @@ def persist_entity_card_office():
             "row_1_icon": "mdi:thermometer-water",
             "row_1_value": "",
             "row_1_color": "default",
-            "row_2_icon": "mdi:speaker",
+            "row_2_icon": "mdi:stop",
             "row_2_value": "",
             "row_2_color": "default",
-            "row_3_icon": "mdi:volume-high",
+            "row_3_icon": "mdi:web-clock",
             "row_3_value": "",
             "row_3_color": "default",
             "staging": {},
@@ -139,20 +139,20 @@ def entity_card_update_row_1():
 
 
 @time_trigger("startup")
-@state_trigger("media_player.office")
-def entity_card_update_row_2():
-    pyscript.entity_card_office.row_2_value = media_player.office
-    pyscript.entity_card_office.row_2_icon = "mdi:speaker-wireless" if media_player.office == "playing" else "mdi:speaker"
-
-
-@time_trigger("startup")
 @state_trigger("media_player.office", "media_player.office.volume_level")
-def entity_card_update_row_3():
+def entity_card_update_row_2():
     volume = round(media_player.office.volume_level * 100)
-    pyscript.entity_card_office.row_3_value = f"{volume}%"
-    if volume >= 35:
-        pyscript.entity_card_office.row_3_icon = "mdi:volume-high"
-    elif volume >= 20:
-        pyscript.entity_card_office.row_3_icon = "mdi:volume-medium"
-    else:
-        pyscript.entity_card_office.row_3_icon = "mdi:volume-low"
+    icon = {
+        "playing": "mdi:play",
+        "paused": "mdi:pause",
+        "idle": "mdi:stop",
+    }
+    pyscript.entity_card_office.row_2_value = f"{volume}%"
+    pyscript.entity_card_office.row_2_icon = icon.get(media_player.office, "mdi:alert-circle")
+
+
+@time_trigger("startup", "cron(* * * * *)")
+def entity_card_update_row_3():
+    utc_time = datetime.utcnow().strftime("%-I:%M %p")
+    pyscript.entity_card_office.row_3_icon = "mdi:web-clock"
+    pyscript.entity_card_office.row_3_value = utc_time
