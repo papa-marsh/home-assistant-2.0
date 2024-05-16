@@ -14,6 +14,16 @@ else:
     import util
 
 
+@time_trigger("cron(0 8 * * *)")
+def workout_fan_on():
+    switch.turn_on(entity_id="switch.workout_fan")
+
+
+@time_trigger("cron(0 9 * * *)")
+def workout_fan_off():
+    switch.turn_off(entity_id="switch.workout_fan")
+
+
 @state_trigger("pyscript.chelsea_next_fixture.blink==True")
 def chelsea_kickoff_notification():
     competition = pyscript.chelsea_next_fixture.competition.replace("The", "").replace("the", "")
