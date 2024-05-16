@@ -75,6 +75,11 @@ entities:
           button:
             width: 55%
             justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_1", "on") %}
+                var(--custom-card-active-background-color)
+              {% endif %}
             margin: 2px 4px 0
       - icon: mdi:numeric-1-circle
         style:
@@ -82,7 +87,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_1", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -96,7 +106,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_1", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -110,7 +125,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_1", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -124,7 +144,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_1", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -139,6 +164,11 @@ entities:
           button:
             width: 55%
             justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_2", "on") %}
+                var(--custom-card-active-background-color)
+              {% endif %}
             margin: 2px 4px 0
       - icon: mdi:numeric-1-circle
         style:
@@ -146,7 +176,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_2", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -160,7 +195,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_2", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -174,7 +214,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_2", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -188,7 +233,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_2", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -203,6 +253,11 @@ entities:
           button:
             width: 55%
             justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_3", "on") %}
+                var(--custom-card-active-background-color)
+              {% endif %}
             margin: 2px 4px 0
       - icon: mdi:numeric-1-circle
         style:
@@ -210,7 +265,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_3", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -224,7 +284,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_3", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -238,7 +303,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_3", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -252,7 +322,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_3", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -267,6 +342,11 @@ entities:
           button:
             width: 55%
             justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_4", "on") %}
+                var(--custom-card-active-background-color)
+              {% endif %}
             margin: 2px 4px 0
       - icon: mdi:numeric-1-circle
         style:
@@ -274,7 +354,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_4", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -288,7 +373,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_4", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -302,7 +392,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_4", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -316,7 +411,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_4", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -331,6 +431,11 @@ entities:
           button:
             width: 55%
             justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_5", "on") %}
+                var(--custom-card-active-background-color)
+              {% endif %}
             margin: 2px 4px 0
       - icon: mdi:numeric-1-circle
         style:
@@ -338,7 +443,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_5", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -352,7 +462,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_5", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -366,7 +481,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_5", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
@@ -380,7 +500,12 @@ entities:
             width: 15%
             justify-content: center
             border-radius: var(--ha-card-border-radius)
-            background-color: var(--paper-card-background-color)
+            background-color: |-
+              {% if is_state("switch.rain_bird_sprinkler_5", "on") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
             margin: 2px 4px 0
         tap_action:
           action: call-service
