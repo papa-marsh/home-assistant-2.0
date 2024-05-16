@@ -1,0 +1,390 @@
+type: entities
+entities:
+  - type: custom:paper-buttons-row
+    buttons:
+      - name: |-
+          {% if state_attr("pyscript.sprinklers", "run_program") %}
+            Running
+          {% else %}
+            All
+          {% endif %}
+        style:
+          button:
+            width: 30%
+            justify-content: center
+            padding: 8px 24px
+            border-radius: var(--ha-card-border-radius)
+            background-color: |-
+              {% if state_attr("pyscript.sprinklers", "run_program") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
+            margin: 8px 4px 12px
+        tap_action:
+          action: call-service
+          service: sprinklers.run_program
+      - name: |-
+          {% if state_attr("pyscript.sprinklers", "skip_next") %}
+            Skipped
+          {% else %}
+            Skip
+          {% endif %}
+        style:
+          button:
+            width: 30%
+            justify-content: center
+            padding: 8px 24px
+            border-radius: var(--ha-card-border-radius)
+            background-color: |-
+              {% if state_attr("pyscript.sprinklers", "skip_next") %}
+                var(--custom-card-active-background-color)
+              {% else %}
+                var(--paper-card-background-color)
+              {% endif %}
+            margin: 8px 4px 12px
+        tap_action:
+          action: call-service
+          service: sprinklers.skip_next
+      - name: |-
+          {% if state_attr("pyscript.sprinklers", "running") %}
+            Stop
+          {% else %}
+            Stopped
+          {% endif %}
+        style:
+          button:
+            width: 30%
+            justify-content: center
+            padding: 8px 24px
+            border-radius: var(--ha-card-border-radius)
+            background-color: |-
+              {% if state_attr("pyscript.sprinklers", "running") %}
+                var(--paper-card-background-color)
+              {% else %}
+                var(--custom-card-active-background-color)
+              {% endif %}
+            margin: 8px 4px 12px
+        tap_action:
+          action: call-service
+          service: sprinklers.stop_all
+  - type: custom:paper-buttons-row
+    buttons:
+      - name: Front - East
+        style:
+          button:
+            width: 55%
+            justify-content: center
+            margin: 2px 4px 0
+      - icon: mdi:numeric-1-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 1
+            minutes: 1
+      - icon: mdi:numeric-2-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 1
+            minutes: 2
+      - icon: mdi:numeric-5-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 1
+            minutes: 5
+      - icon: mdi:numeric-10-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 1
+            minutes: 10
+  - type: custom:paper-buttons-row
+    buttons:
+      - name: Front - Middle
+        style:
+          button:
+            width: 55%
+            justify-content: center
+            margin: 2px 4px 0
+      - icon: mdi:numeric-1-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 2
+            minutes: 1
+      - icon: mdi:numeric-2-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 2
+            minutes: 2
+      - icon: mdi:numeric-5-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 2
+            minutes: 5
+      - icon: mdi:numeric-10-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 2
+            minutes: 10
+  - type: custom:paper-buttons-row
+    buttons:
+      - name: Front - West
+        style:
+          button:
+            width: 55%
+            justify-content: center
+            margin: 2px 4px 0
+      - icon: mdi:numeric-1-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 3
+            minutes: 1
+      - icon: mdi:numeric-2-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 3
+            minutes: 2
+      - icon: mdi:numeric-5-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 3
+            minutes: 5
+      - icon: mdi:numeric-10-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 3
+            minutes: 10
+  - type: custom:paper-buttons-row
+    buttons:
+      - name: Back - West
+        style:
+          button:
+            width: 55%
+            justify-content: center
+            margin: 2px 4px 0
+      - icon: mdi:numeric-1-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 4
+            minutes: 1
+      - icon: mdi:numeric-2-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 4
+            minutes: 2
+      - icon: mdi:numeric-5-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 4
+            minutes: 5
+      - icon: mdi:numeric-10-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 4
+            minutes: 10
+  - type: custom:paper-buttons-row
+    buttons:
+      - name: Back - East
+        style:
+          button:
+            width: 55%
+            justify-content: center
+            margin: 2px 4px 0
+      - icon: mdi:numeric-1-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 5
+            minutes: 1
+      - icon: mdi:numeric-2-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 5
+            minutes: 2
+      - icon: mdi:numeric-5-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 5
+            minutes: 5
+      - icon: mdi:numeric-10-circle
+        style:
+          button:
+            width: 15%
+            justify-content: center
+            border-radius: var(--ha-card-border-radius)
+            background-color: var(--paper-card-background-color)
+            margin: 2px 4px 0
+        tap_action:
+          action: call-service
+          service: sprinklers.run_zone
+          service_data:
+            zone: 5
+            minutes: 10

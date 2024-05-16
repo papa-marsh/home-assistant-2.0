@@ -10,26 +10,10 @@ entities:
     name: Battery Level
   - entity: binary_sensor.tess_doors
     name: Doors
-  - entity: number.tess_charge_limit
-    name: Charge Limit
-  - entity: select.tess_heated_seat_left
-    name: Driver Seat Heater
-  - entity: switch.tess_heated_steering
-    name: Steering Wheel Heater
-  - entity: lock.tess_doors
-    name: Door Locks
-  - entity: switch.tess_sentry_mode
-    name: Sentry Mode
-  - entity: cover.tess_trunk
-    name: Trunk
-  - entity: cover.tess_frunk
-    name: Frunk
-  - entity: cover.tess_windows
-    name: Windows
 card_mod:
   style: |
     ha-card {
-      height: 584px !important;
+      height: 230px !important;
     }
     #states div {
       margin-top: 2px !important;

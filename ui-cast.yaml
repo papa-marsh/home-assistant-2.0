@@ -71,6 +71,7 @@ views:
             - type: vertical-stack
               cards:
                 - !include lovelace/home/tess.yaml
+                - !include lovelace/home/sprinklers.yaml
   - theme: Backend-selected
     title: Soccer
     type: panel

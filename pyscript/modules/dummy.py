@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     import number
     import person
     import pyscript
+    import rainbird
     import select
     import sensor
     import service

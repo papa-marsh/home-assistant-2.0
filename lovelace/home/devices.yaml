@@ -15,18 +15,18 @@ entities:
         name: Cyan Remaining
       - entity: sensor.printer_yellow_ink_remaining
         name: Yellow Remaining
-  - entity: switch.butterfly_night_light
-    icon: mdi:butterfly
+  - entity: light.outside_lights
   - entity: switch.ellies_sound_machine
     icon: mdi:waveform
+  - entity: switch.butterfly_night_light
+    icon: mdi:butterfly
+  - entity: switch.workout_fan
+    icon: mdi:fan
   - entity: switch.playstation_fans
     name: Office Media Fans
     icon: mdi:fan
   - entity: switch.space_heater
     icon: mdi:radiator
-  - entity: binary_sensor.chelsea_cabinet_sensor
-    secondary_info: last-changed
-  - entity: light.outside_lights
   - entity: switch.office_door_led
 card_mod:
   style:
