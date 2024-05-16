@@ -69,6 +69,8 @@ def set_sprinkler_state():
     any_running = any([state.get(entity) == "on" for entity in sprinkler_zone_entities()])
     if any_running:
         pyscript.sprinklers.running = True
+        task.sleep(5)
+        pyscript.sprinklers = dates.now()
     else:
         pyscript.sprinklers.running = False
         task.sleep(5)
