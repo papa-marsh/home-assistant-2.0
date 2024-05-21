@@ -16,6 +16,20 @@ else:
     import util
 
 
+@time_trigger("startup")
+def persist_sprinklers():
+    state.persist(
+        "pyscript.sprinklers",
+        default_value="",
+        default_attributes={
+            "run_program": False,
+            "skip_next": False,
+            "running": False,
+            "triggered_manually": False,
+        },
+    )
+
+
 @service("sprinklers.run_program")
 def sprinklers_run_program():
     if pyscript.sprinklers.run_program:
