@@ -211,9 +211,9 @@ def stocks_populate_card(private=False):
     active = False
 
     if visibility == "public":
-        pyscript.entity_card_stocks = format_change(pyscript.entity_card_stocks.staging["spy_week"], percent_formatted=False)
+        pyscript.entity_card_stocks = format_change(pyscript.entity_card_stocks.staging.get("spy_week", 0), percent_formatted=False)
     else:
-        pyscript.entity_card_stocks = format_price(pyscript.entity_card_stocks.staging["total"], precision=0)
+        pyscript.entity_card_stocks = format_price(pyscript.entity_card_stocks.staging.get("total", 0), precision=0)
 
     for row in range(1, 4):
         config = STOCKS_CONFIG[f"row_{row}"][visibility]
