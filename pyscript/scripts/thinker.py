@@ -84,6 +84,18 @@ def daily_review() -> None:
         )
         noti.send()
 
+@time_trigger("cron(30 9 * * 1)")
+def daily_review() -> None:
+        noti = Notification(
+            title="Weekly Review Time :)",
+            message="Tools needed: Miro, Thinker, & a Positive Attitude",
+            group="weekly_thought_review",
+            tag="weekly_thought_review",
+            sound="Minuet.caf",
+            target="marshall",
+        )
+        noti.send()
+
 
 def populate_review_thoughts() -> int:
     """
