@@ -240,7 +240,7 @@ def get_persisted_thought(track_access: bool = False) -> dict[str, str | int]:
     for thought in thoughts:
         max_count = max(max_count, thought["reminder_count"])
 
-    weights = [(max_count + 1) - thought["reminder_count"] for thought in thoughts]
+    weights = [2 * ((max_count + 1) - thought["reminder_count"]) for thought in thoughts]
 
     for _ in range(20):
         selection = random.choices(thoughts, weights=weights, k=1)[0]

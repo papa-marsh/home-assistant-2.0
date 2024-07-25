@@ -148,7 +148,11 @@ def media_card_sync():
 
 @service("pyscript.media_card_more")
 def media_card_more():
-    pyscript.media_card = "volume" if pyscript.media_card == "controls" else "controls"
+    target_map = {
+        "main": "secondary",
+        "secondary": "main",
+    }
+    pyscript.media_card = target_map.get(pyscript.media_card, "main")
 
 
 @state_trigger("pyscript.media_card.group")
