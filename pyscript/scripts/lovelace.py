@@ -1,7 +1,8 @@
-from datetime import date, datetime, timedelta
-from dateutil.tz import tzlocal
 import os
+from datetime import date, datetime, timedelta
 from typing import TYPE_CHECKING
+
+from dateutil.tz import tzlocal
 
 if TYPE_CHECKING:
     from ..modules import dates, util
@@ -91,7 +92,6 @@ def set_chelsea_fixture_card():
             home_path="/local/soccer_badges/Default.png",
             away_path="/local/soccer_badges/Default.png",
         )
-
 
 
 @service("pyscript.chelsea_fixture_tap")

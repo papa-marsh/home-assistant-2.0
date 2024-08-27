@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
-from dateutil.tz import tzlocal
 from typing import TYPE_CHECKING
+
+from dateutil.tz import tzlocal
 
 if TYPE_CHECKING:
     from ..modules import dates
@@ -27,7 +28,6 @@ def air_purifier_off():
             message="The air purifier hasn't run in more than 24 hours",
         )
         noti.send()
-
 
 
 @time_trigger("cron(*/10 * * * *)")
@@ -122,7 +122,7 @@ def entity_card_hold():
 
 @service("pyscript.office_dtap")
 def entity_card_dtap():
-    media_player.media_play_pause(entity_id="media_player.office")
+    switch.toggle(entity_id="switch.office_air_conditioner_switch")
 
 
 @time_trigger("startup")

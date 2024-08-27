@@ -51,7 +51,7 @@ def reset_media_controls():
 
     pyscript.media_card.group = True
     pyscript.media_card.sync = True
-    pyscript.media_card = "controls"
+    pyscript.media_card = "main"
     input_select.select_option(entity_id="input_select.media_card_playlist", option="None Selected")
 
     media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)

@@ -10,6 +10,7 @@ styles:
             else return "var( --ha-card-background, var(--card-background-color, white) )";
         ]]]
     - animation: fade 2s linear infinite
+    - height: 100px
   grid:
     - grid-template-areas: '"h_crest top_row a_crest" "h_crest date a_crest" "h_crest time a_crest"'
     - grid-template-columns: 1fr 1fr 1fr

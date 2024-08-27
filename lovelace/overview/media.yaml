@@ -148,7 +148,7 @@ entities:
           style:
             .: |
               ha-card {
-                margin-top: 2px !important;
+                margin-top: 4px !important;
               }
             mmp-powerstrip $:
               mmp-media-controls:
@@ -207,7 +207,7 @@ entities:
           style:
             .: |
               ha-card {
-                margin-top: -16px !important;
+                margin-top: -18px !important;
               }
             mmp-powerstrip $:
               mmp-media-controls:
@@ -249,7 +249,7 @@ entities:
           style:
             .: |
               ha-card {
-                margin-top: -16px !important;
+                margin-top: -18px !important;
               }
             mmp-powerstrip $:
               mmp-media-controls:
@@ -290,7 +290,7 @@ entities:
           style:
             .: |
               ha-card {
-                margin-top: 2px !important;
+                margin-top: 4px !important;
               }
             mmp-powerstrip $:
               mmp-media-controls:
@@ -331,7 +331,7 @@ entities:
           style:
             .: |
               ha-card {
-                margin-top: -16px !important;
+                margin-top: -18px !important;
               }
             mmp-powerstrip $:
               mmp-media-controls:
@@ -372,7 +372,7 @@ entities:
           style:
             .: |
               ha-card {
-                margin-top: -16px !important;
+                margin-top: -18px !important;
               }
             mmp-powerstrip $:
               mmp-media-controls:
