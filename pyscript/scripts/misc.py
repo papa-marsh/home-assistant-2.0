@@ -1,6 +1,7 @@
 from datetime import date, datetime, timedelta
+from typing import TYPE_CHECKING, Literal
+
 from dateutil.tz import tzlocal
-from typing import Literal, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..modules import dates, util
@@ -9,12 +10,12 @@ if TYPE_CHECKING:
     from ..modules.push import Notification
 else:
     import dates
+    import util
     from files import File
     from push import Notification
-    import util
 
 
-@time_trigger("cron(0 8 * * *)")
+@time_trigger("cron(45 7 * * *)")
 def workout_fan_on():
     switch.turn_on(entity_id="switch.workout_fan")
 
@@ -42,6 +43,11 @@ def chelsea_kickoff_notification():
     noti.send()
 
 
+@event_trigger("sound_machine")
+def sound_machine_on(**_):
+    switch.turn_on(entity_id="switch.ellies_sound_machine")
+
+
 @state_trigger("switch.ellies_sound_machine")
 def toggle_butterfly_night_light():
     if switch.ellies_sound_machine == "off":
@@ -54,7 +60,7 @@ def toggle_butterfly_night_light():
 def emily_good_morning():
     if 5 <= dates.now().hour < 17:
         switch.turn_off(entity_id="switch.ellies_sound_machine")
-        
+
 
 @time_trigger("cron(0 8,20 * * *)")
 def feed_chelsea_notification():
@@ -177,12 +183,12 @@ def complication_emily_location_update():
 
 
 @event_trigger("emily_cycle_started")
-def emily_cycle_started(**__):
+def emily_cycle_started(**_):
     add_cycle_event("start")
 
 
 @event_trigger("emily_cycle_ended")
-def emily_cycle_ended(**__):
+def emily_cycle_ended(**_):
     add_cycle_event("end")
 
 

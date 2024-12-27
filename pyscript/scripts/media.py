@@ -6,10 +6,11 @@ if TYPE_CHECKING:
     from ..modules.dummy import *
     from ..modules.push import Notification
 else:
+    import secrets
+
     import constants
     import dates
     from push import Notification
-    import secrets
 
 
 @event_trigger("emilys_playlist")
@@ -46,24 +47,23 @@ def play_ellies_playlist(**kwargs):
 
 @time_trigger("cron(0 4 * * *)")
 def reset_media_controls():
-    media_player.media_pause(entity_id=constants.SPEAKER_GROUP + ["media_player.office"])
-    media_player.volume_mute(entity_id=constants.SPEAKER_GROUP + ["media_player.office"], is_volume_muted=False,)
+    media_player.media_pause(entity_id=constants.ALL_SPEAKERS)
+    media_player.volume_mute(entity_id=constants.ALL_SPEAKERS, is_volume_muted=False,)
 
     pyscript.media_card.group = True
     pyscript.media_card.sync = True
     pyscript.media_card = "main"
     input_select.select_option(entity_id="input_select.media_card_playlist", option="None Selected")
 
-    media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
-    media_player.volume_set(entity_id="media_player.office", volume_level=0.35)
+    media_player.volume_set(entity_id=constants.ALL_SPEAKERS, volume_level=0.3)
     media_player.volume_set(entity_id="media_player.living_room_tv", volume_level=0.1)
 
 
 @state_trigger("switch.ellies_sound_machine=='on'")
 def bedtime_speaker_volume():
     if person.emily != secrets.IN_LAWS_ZONE:
-        media_player.volume_set(entity_id="media_player.office", volume_level=0.22)
-        media_player.volume_set(entity_id=constants.SPEAKER_GROUP, volume_level=0.3)
+        media_player.volume_set(entity_id="media_player.office", volume_level=0.25)
+        media_player.volume_set(entity_id=constants.MAIN_FLOOR_SPEAKERS, volume_level=0.3)
 
 
 @time_trigger("startup")
@@ -89,7 +89,7 @@ def set_media_card_playlists():
     task.unique("set_media_card_playlists")
     now = dates.now()
     sonos_integration_id = "5710f1a75e16bd6a0b67108a0d28adbe"
-    
+
     if not isinstance(pyscript.vars.sonos_last_reload, datetime):
         pyscript.vars.sonos_last_reload = now
 
@@ -131,9 +131,18 @@ def play_media_card_playlist():
 
     current_playlist = media_player.living_room.media_playlist if "media_playlist" in media_player.living_room else None
     if current_playlist != input_select.media_card_playlist:
-        media_player.shuffle_set(entity_id=constants.SPEAKER_GROUP, shuffle=True)
-        media_player.repeat_set(entity_id=constants.SPEAKER_GROUP, repeat="all")
+        media_player.shuffle_set(entity_id=constants.MAIN_FLOOR_SPEAKERS, shuffle=True)
+        media_player.repeat_set(entity_id=constants.MAIN_FLOOR_SPEAKERS, repeat="all")
         media_player.select_source(entity_id="media_player.living_room", source=input_select.media_card_playlist)
+
+
+@service("pyscript.media_card_more")
+def media_card_more():
+    target_map = {
+        "main": "secondary",
+        "secondary": "main",
+    }
+    pyscript.media_card = target_map.get(pyscript.media_card, "main")
 
 
 @service("pyscript.media_card_group")
@@ -144,15 +153,6 @@ def media_card_group():
 @service("pyscript.media_card_sync")
 def media_card_sync():
     pyscript.media_card.sync = not pyscript.media_card.sync
-
-
-@service("pyscript.media_card_more")
-def media_card_more():
-    target_map = {
-        "main": "secondary",
-        "secondary": "main",
-    }
-    pyscript.media_card = target_map.get(pyscript.media_card, "main")
 
 
 @state_trigger("pyscript.media_card.group")
@@ -178,7 +178,7 @@ def update_sync_button():
 
 @state_trigger("media_player.living_room.group_members", "pyscript.media_card.group")
 def join_to_group():
-    if pyscript.media_card.group and len(media_player.living_room.group_members) < len(constants.SPEAKER_GROUP):
+    if pyscript.media_card.group and len(media_player.living_room.group_members) < len(constants.MAIN_FLOOR_SPEAKERS):
         group_speakers()
 
 
@@ -196,20 +196,20 @@ def sync_volume(target="media_player.living_room", **kwargs):
         target = kwargs["var_name"]
     volume = state.getattr(target).get("volume_level")
     if volume:
-        for speaker in constants.SPEAKER_GROUP:
+        for speaker in constants.MAIN_FLOOR_SPEAKERS:
             if speaker != target:
                 media_player.volume_set(entity_id=speaker, volume_level=volume)
 
 
 def group_speakers(target="media_player.living_room"):
-    for speaker in constants.SPEAKER_GROUP:
+    for speaker in constants.MAIN_FLOOR_SPEAKERS:
         if state.get(speaker) == "playing":
-            media_player.join(entity_id=speaker, group_members=constants.SPEAKER_GROUP)
+            media_player.join(entity_id=speaker, group_members=constants.MAIN_FLOOR_SPEAKERS)
             break
     else:
         media_player.join(
             entity_id=target,
-            group_members=constants.SPEAKER_GROUP,
+            group_members=constants.MAIN_FLOOR_SPEAKERS,
         )
 
 
@@ -217,5 +217,5 @@ def ungroup_speakers(target=None):
     if target:
         media_player.unjoin(entity_id=target)
     else:
-        for speaker in constants.SPEAKER_GROUP:
+        for speaker in constants.MAIN_FLOOR_SPEAKERS:
             media_player.unjoin(entity_id=speaker)

@@ -9,9 +9,9 @@ if TYPE_CHECKING:
 else:
     import constants
     import dates
+    import util
     from files import File
     from push import Notification
-    import util
 
 
 @time_trigger("startup")
@@ -29,7 +29,7 @@ def persist_vars():
     pyscript.vars.ios_actions_unlocked = False
     pyscript.vars.preference_value_mutex = False
     pyscript.vars.suppress_zone_noti = {"Marshall": False, "Emily": False}
-    pyscript.vars.zone_debounce = {"Marshall":  None, "Emily": None}
+    pyscript.vars.zone_debounce = {"Marshall": None, "Emily": None}
     pyscript.vars.sonos_last_reload = dates.now()
 
 
@@ -108,7 +108,7 @@ def reset_preferences():
 
 
 @event_trigger("ios.action_fired", "actionName=='Unlock Actions'")
-def ios_unlock_actions(**__):
+def ios_unlock_actions(**_):
     state.setattr("pyscript.vars.ios_actions_unlocked", True)
     task.sleep(10)
     state.setattr("pyscript.vars.ios_actions_unlocked", False)

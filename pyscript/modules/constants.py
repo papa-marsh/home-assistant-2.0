@@ -11,11 +11,16 @@ NEST_DISPLAYS = [
     "media_player.kitchen_display",
 ]
 
-SPEAKER_GROUP = [
-    "media_player.basement",
+MAIN_FLOOR_SPEAKERS = [
     "media_player.living_room",
     "media_player.craft_room",
     "media_player.front_room",
+]
+
+ALL_SPEAKERS = [
+    *MAIN_FLOOR_SPEAKERS,
+    "media_player.basement",
+    "media_player.office",
 ]
 
 ASSET_COLOR_THRESHOLD = 10.0

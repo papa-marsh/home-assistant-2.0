@@ -1,6 +1,7 @@
 from datetime import timedelta
-from dateutil.tz import tzlocal
 from typing import TYPE_CHECKING
+
+from dateutil.tz import tzlocal
 
 if TYPE_CHECKING:
     from ..modules import constants, dates, secrets, util
@@ -8,12 +9,13 @@ if TYPE_CHECKING:
     from ..modules.files import File
     from ..modules.push import Notification
 else:
+    import secrets
+
     import constants
     import dates
+    import util
     from files import File
     from push import Notification
-    import secrets
-    import util
 
 
 @time_trigger("startup")
@@ -125,7 +127,6 @@ def basement_flood_sensor():
     noti.send()
 
 
-
 @state_trigger(
     "cover.east_stall",
     "cover.west_stall",
@@ -145,7 +146,7 @@ def door_open_notification(**kwargs):
             id=id,
             name=name,
             open_time=open_time,
-            silent=False,
+            silent=id == "slider_door",
         )
 
 
@@ -205,17 +206,6 @@ def silence_door_open_notification(**kwargs):
 def turn_off_door_open_notification(**kwargs):
     id = kwargs["action_data"]["id"]
     task.unique(f"{id}_left_open")
-    if id == "slider_door" and climate.thermostat != "off":
-        climate.turn_off(entity_id="climate.thermostat")
-        noti = Notification(
-            title="Air Off",
-            message="The thermostat and reminder notification have been turned off",
-            tag="slider_door_left_open",
-            group="slider_door_left_open",
-            target="all",
-            priority="time-sensitive",
-        )
-        noti.send()
 
 
 @event_trigger(
@@ -257,10 +247,24 @@ def clear_door_open_notification(**kwargs):
         noti.clear()
 
 
-@state_trigger(
-    "person.marshall", "person.emily", "device_tracker.tess_location_tracker"
-)
-def garage_auto_open(**kwargs):
+@state_trigger("person.marshall", "device_tracker.nyx_location_tracker")
+def nyx_garage_auto_open(**kwargs):
+    now = dates.now()
+    location = device_tracker.nyx_location_tracker
+    if (
+        kwargs["value"] == "home"
+        and kwargs["old_value"] not in ["home", "unavailable"]
+        and cover.west_stall == "closed"
+        and 6 <= now.hour < 23
+        and (now - cover.west_stall.last_changed).seconds > 180
+        and (location != "home" or (now - location.last_changed).seconds < 180)
+        and File("zones").read([location, "near_home"], False)
+    ):
+        cover.open_cover(entity_id=f"cover.west_stall")
+
+
+@state_trigger("person.emily", "device_tracker.tess_location_tracker")
+def tess_garage_auto_open(**kwargs):
     now = dates.now()
     location = device_tracker.tess_location_tracker
     if (
@@ -268,14 +272,14 @@ def garage_auto_open(**kwargs):
         and kwargs["old_value"] not in ["home", "unavailable"]
         and cover.east_stall == "closed"
         and 6 <= now.hour < 23
-        and (now - cover.east_stall.last_changed).seconds > 300
-        and (location != "home" or (now - location.last_changed).seconds < 300)
+        and (now - cover.east_stall.last_changed).seconds > 180
+        and (location != "home" or (now - location.last_changed).seconds < 180)
         and File("zones").read([location, "near_home"], False)
     ):
-        cover.open_cover(entity_id="cover.east_stall")
+        cover.open_cover(entity_id=f"cover.east_stall")
 
 
-@util.require_ios_action_unlock
+# @util.require_ios_action_unlock
 @event_trigger("ios.action_fired", "actionName=='East Stall'")
 @event_trigger("ios.action_fired", "actionName=='West Stall'")
 def ios_garage_stall(**kwargs):
@@ -384,7 +388,7 @@ def persist_entity_card_home():
 
 @service("pyscript.home_tap")
 def entity_card_tap():
-    return
+    pyscript.entity_card_home.blink = False
 
 
 @service("pyscript.home_hold")
@@ -437,6 +441,7 @@ def entity_card_update_row_1():
         humidity = climate.thermostat.current_humidity
         pyscript.entity_card_home.row_1_value = f"{temp:.0f}° · {humidity:.0f}%"
         pyscript.entity_card_home.row_1_icon = "mdi:thermometer-water"
+
 
 @time_trigger("startup")
 @state_trigger("climate.thermostat", "climate.thermostat.hvac_action", "climate.thermostat.temperature", "climate.thermostat.current_temperature")

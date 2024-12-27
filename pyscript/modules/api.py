@@ -1,7 +1,8 @@
-from datetime import date, datetime
 import json
-import requests
+from datetime import date, datetime
 from typing import TYPE_CHECKING
+
+import requests
 
 if TYPE_CHECKING:
     from . import secrets

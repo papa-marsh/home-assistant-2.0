@@ -1,7 +1,8 @@
-from datetime import date, datetime, timedelta
-from dateutil.tz import tzlocal
-from typing import Any, Literal, TYPE_CHECKING
 import random
+from datetime import date, datetime, timedelta
+from typing import TYPE_CHECKING, Any, Literal
+
+from dateutil.tz import tzlocal
 
 if TYPE_CHECKING:
     from ..modules import dates
@@ -68,7 +69,7 @@ def set_reviewed_status(reviewed: bool, date_key: date | None = None) -> None:
     File("thinker").write(key_list, reviewed)
 
 
-@time_trigger("cron(25 9 * * 1-5)")
+@time_trigger("cron(20 9 * * 1-5)")
 def daily_review() -> None:
     thought_count = populate_review_thoughts()
 
@@ -84,17 +85,30 @@ def daily_review() -> None:
         )
         noti.send()
 
+
 @time_trigger("cron(30 9 * * 1)")
-def daily_review() -> None:
-        noti = Notification(
-            title="Weekly Review Time :)",
-            message="Tools needed: Miro, Thinker, & a Positive Attitude",
-            group="weekly_thought_review",
-            tag="weekly_thought_review",
-            sound="Minuet.caf",
-            target="marshall",
-        )
-        noti.send()
+def weekly_review() -> None:
+    noti = Notification(
+        title="Weekly Review Time :)",
+        message="Tools needed: Miro, Thinker, & a Positive Attitude",
+        group="weekly_thought_review",
+        tag="weekly_thought_review",
+        sound="Minuet.caf",
+        target="marshall",
+    )
+    noti.send()
+
+
+@time_trigger("cron(30 9 * * 2-5)")
+def daily_planning() -> None:
+    noti = Notification(
+        title="Daily Planning",
+        message="Look through the week's plan!",
+        group="daily_planning",
+        tag="daily_planning",
+        target="marshall",
+    )
+    noti.send()
 
 
 def populate_review_thoughts() -> int:
@@ -123,7 +137,7 @@ def populate_review_thoughts() -> int:
     pyscript.thinker.review_thoughts = review_thoughts
     pyscript.thinker.review_index = 0
     pyscript.thinker = "on" if review_thoughts else "off"
-    
+
     populate_review_markdown()
 
     return len(review_thoughts)
@@ -155,6 +169,7 @@ def populate_review_markdown() -> None:
     pyscript.thinker.review_markdown = markdown_content
     pyscript.thinker_edit_thought = "off"
 
+
 @service("thinker.review_thought")
 def review_thought(state: Literal["save", "skip"]) -> None:
     if pyscript.thinker.review_index >= len(pyscript.thinker.review_thoughts):
@@ -174,14 +189,13 @@ def review_thought(state: Literal["save", "skip"]) -> None:
 @service("thinker.edit_thought")
 def edit_thought() -> None:
     index = pyscript.thinker.review_index
-    
+
     if pyscript.thinker_edit_thought == "on":
         input_text.thinker_edit_thought = ""
         pyscript.thinker_edit_thought = "off"
     else:
         input_text.thinker_edit_thought = pyscript.thinker.review_thoughts[index]["thought"]
         pyscript.thinker_edit_thought = "on"
-    
 
 
 @service("thinker.confirm_edit")
@@ -219,7 +233,7 @@ def commit_review() -> None:
                 "reminder_count": 0,
                 "last_reminder": None
             })
-    
+
     file.write(["persisted_thoughts"], persisted_thoughts)
 
     set_reviewed_status(True, date_key)
@@ -248,14 +262,14 @@ def get_persisted_thought(track_access: bool = False) -> dict[str, str | int]:
         if paused_until <= today:
             selection.pop("paused_until", None)
             break
-    
+
     if track_access:
         selection_index = thoughts.index(selection)
         thoughts[selection_index]["reminder_count"] += 1
         thoughts[selection_index]["last_reminder"] = date.today()
 
         file.write(["persisted_thoughts"], thoughts)
-    
+
     return selection.copy()
 
 
@@ -271,7 +285,7 @@ def check_send_reminder() -> None:
     last_reminder = pyscript.thinker.last_reminder.astimezone(tzlocal())
 
     elapsed_minutes = (dates.now() - last_reminder).seconds / 60
-    probability = (elapsed_minutes / 5000) ** 1.5
+    probability = (elapsed_minutes / 5000) ** 1.6
 
     if random.random() < probability:
         pyscript.thinker.last_reminder = dates.now()
@@ -279,6 +293,7 @@ def check_send_reminder() -> None:
             send_reminder()
 
 
+@service("thinker.send_reminder")
 def send_reminder() -> None:
     thought = get_persisted_thought(track_access=True)
     seen_count = thought["reminder_count"] + 1
@@ -360,7 +375,7 @@ def reminder_remove(**kwargs) -> None:
     contents = file.read()
     persisted_thoughts = contents["persisted_thoughts"]
     removed_thoughts = contents["removed_thoughts"]
-    
+
     persisted_thoughts = [pt for pt in persisted_thoughts if pt["thought"] != thought["thought"]]
     removed_thoughts.append(thought)
 

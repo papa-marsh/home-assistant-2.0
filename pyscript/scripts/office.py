@@ -30,6 +30,15 @@ def air_purifier_off():
         noti.send()
 
 
+@state_trigger("person.emily", "person.marshall")
+def air_purifier_on_while_gone():
+    if person.marshall != "home" and person.emily != "home":
+        high_setting = 100
+        fan.set_percentage(entity_id="fan.office_purifier", percentage=high_setting)
+    else:
+        fan.turn_off(entity_id="fan.office_purifier")
+
+
 @time_trigger("cron(*/10 * * * *)")
 def space_heater_auto_off():
     two_hours_ago = (dates.now() - timedelta(hours=2)).astimezone(tzlocal())
@@ -49,6 +58,13 @@ def meeting_active_notification():
             priority="time-sensitive",
         )
         noti.send()
+
+
+@state_trigger("pyscript.entity_card_office == 'Busy'")
+def meeting_active_notification_retroactive():
+    two_min_ago = (dates.now() - timedelta(minutes=2)).astimezone(tzlocal())
+    if person.emily == "home" and person.emily.last_changed < two_min_ago:
+        meeting_active_notification()
 
 
 @time_trigger("startup")
@@ -97,22 +113,25 @@ def persist_entity_card_office():
 @service("pyscript.office_tap")
 @event_trigger("office_leds")
 def entity_card_tap():
-    if pyscript.entity_card_office.active:
-        state.set(
-            "pyscript.entity_card_office",
-            value="Available",
-            active=False,
-            state_icon="mdi:cloud",
-        )
-        switch.turn_off(entity_id="switch.office_door_led")
+    if pyscript.entity_card_office.blink:
+        pyscript.entity_card_office.blink = False
     else:
-        state.set(
-            "pyscript.entity_card_office",
-            value="Busy",
-            active=True,
-            state_icon="mdi:headset",
-        )
-        switch.turn_on(entity_id="switch.office_door_led")
+        if pyscript.entity_card_office.active:
+            state.set(
+                "pyscript.entity_card_office",
+                value="Available",
+                active=False,
+                state_icon="mdi:cloud",
+            )
+            switch.turn_off(entity_id="switch.office_door_led")
+        else:
+            state.set(
+                "pyscript.entity_card_office",
+                value="Busy",
+                active=True,
+                state_icon="mdi:headset",
+            )
+            switch.turn_on(entity_id="switch.office_door_led")
 
 
 @service("pyscript.office_hold")
@@ -156,3 +175,8 @@ def entity_card_update_row_3():
     utc_time = datetime.utcnow().strftime("%-I:%M %p")
     pyscript.entity_card_office.row_3_icon = "mdi:web-clock"
     pyscript.entity_card_office.row_3_value = utc_time
+
+
+@time_trigger("cron(0 9 * * 1-5)")
+def daily_review_blink_on():
+    pyscript.entity_card_office.blink = True

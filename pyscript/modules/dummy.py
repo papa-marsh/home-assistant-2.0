@@ -28,3 +28,7 @@ if TYPE_CHECKING:
     import switch
     import task
     import update
+
+    import state_trigger
+    import time_trigger
+    import event_trigger
