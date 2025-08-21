@@ -114,19 +114,6 @@ def sprinkler_zone_entities():
     return [f"switch.rain_bird_sprinkler_{i}" for i in range(1, 8)]
 
 
-@state_trigger("binary_sensor.basement_flood_sensor == 'on'")
-def basement_flood_sensor():
-    noti = Notification(
-        title="Basement Flooding",
-        message=f"Water detected in the basement at {dates.parse_timestamp(output_format='time')}",
-        tag="basement_flood_critical",
-        group="basement_flood_critical",
-        priority="critical",
-        target="marshall",
-    )
-    noti.send()
-
-
 @state_trigger(
     "cover.east_stall",
     "cover.west_stall",
@@ -180,7 +167,8 @@ def door_open_notification_loop(id, name, open_time, silent):
     while True:
         duration = (dates.now() - open_time.astimezone(tzlocal())).seconds // 60
         noti.message = f"{name} has been open for {duration} minutes"
-        noti.send()
+        if duration in [10, 30, 60, 90, 120, 150, 180]:
+            noti.send()
         task.sleep(10 * 60)
 
 

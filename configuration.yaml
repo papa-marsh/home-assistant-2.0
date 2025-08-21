@@ -51,10 +51,25 @@ scene: !include scenes.yaml
 
 script: !include scripts.yaml
 
+rest_command:
+  send_to_maestro:
+    url: !secret maestro_state_changed_url
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      X-Auth-Token: !secret maestro_token
+    payload: >
+      {
+        "event_type": {{ event_type | tojson }},
+        "event_data": {{ event_data | tojson }},
+        "time_fired": {{ time_fired | tojson }},
+        "timestamp": {{ now().isoformat()| tojson }}
+      }
+
 shell_command:
-  cast_to_office_display: python3 -m pip install catt && catt -d 'Office Display' cast_site 'http://192.168.0.2:8123/lovelace-cast/overview'
-  cast_to_living_room_display: python3 -m pip install catt && catt -d 'Living Room Display' cast_site 'http://192.168.0.2:8123/lovelace-cast/overview'
-  cast_to_kitchen_display: python3 -m pip install catt && catt -d 'Kitchen Display' cast_site 'http://192.168.0.2:8123/lovelace-cast/overview'
+  cast_to_office_display: python3 -m pip install catt && catt -d 'Office Display' cast_site 'http://192.168.0.107:8123/lovelace-cast/overview'
+  cast_to_living_room_display: python3 -m pip install catt && catt -d 'Living Room Display' cast_site 'http://192.168.0.107:8123/lovelace-cast/overview'
+  cast_to_kitchen_display: python3 -m pip install catt && catt -d 'Kitchen Display' cast_site 'http://192.168.0.107:8123/lovelace-cast/overview'
 
 tts:
   - platform: google_translate

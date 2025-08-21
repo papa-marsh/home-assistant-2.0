@@ -69,7 +69,7 @@ def set_reviewed_status(reviewed: bool, date_key: date | None = None) -> None:
     File("thinker").write(key_list, reviewed)
 
 
-@time_trigger("cron(20 9 * * 1-5)")
+@time_trigger("cron(15 9 * * 1-5)")
 def daily_review() -> None:
     thought_count = populate_review_thoughts()
 
@@ -86,26 +86,23 @@ def daily_review() -> None:
         noti.send()
 
 
-@time_trigger("cron(30 9 * * 1)")
+@time_trigger("cron(20 9 * * 1-5)")
 def weekly_review() -> None:
+    if datetime.today().weekday() == 0:
+        title = "Weekly Planning Time :)"
+        message = "What's your focus this week?"
+        sound = "Minuet.caf"
+    else:
+        title = "Daily Review",
+        message = "Time to review this week's focus!",
+        sound = "MultiwayJoin.caf",
+
     noti = Notification(
-        title="Weekly Review Time :)",
-        message="Tools needed: Miro, Thinker, & a Positive Attitude",
+        title=title,
+        message=message,
         group="weekly_thought_review",
         tag="weekly_thought_review",
-        sound="Minuet.caf",
-        target="marshall",
-    )
-    noti.send()
-
-
-@time_trigger("cron(30 9 * * 2-5)")
-def daily_planning() -> None:
-    noti = Notification(
-        title="Daily Planning",
-        message="Look through the week's plan!",
-        group="daily_planning",
-        tag="daily_planning",
+        sound=sound,
         target="marshall",
     )
     noti.send()
