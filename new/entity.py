@@ -36,5 +36,16 @@ class Entity:
     def full_name(self) -> str:
         return f"{self.domain}.{self.name}"
 
+    def __init__(self, entity: str) -> None:
+        entity_split = entity.split(".")
+        if len(entity_split) != 2:
+            raise ValueError("Entity string must adhere to `<domain>.<name`> format")
+
+        self.domain = entity_split[0]
+        self.name = entity_split[1]
+
+        if self.domain not in Domain:
+            raise ValueError("Invalid domain string")
+
     def perform_action(self, action: Action, **kwargs: dict) -> dict:
-        service.call(self.domain, str(action), self.full_name, **kwargs)
+        return service.call(self.domain, str(action), self.full_name, **kwargs)
