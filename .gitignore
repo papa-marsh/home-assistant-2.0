@@ -1,6 +1,5 @@
 .cloud
 .storage
-.vscode
 .pytest_cache
 
 home-assistant_v2.db

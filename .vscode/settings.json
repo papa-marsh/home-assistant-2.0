@@ -1,0 +1,28 @@
+{
+    "[Python]": {
+        "editor.defaultFormatter": "ms-python.autopep8",
+    },
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+    "editor.formatOnSave": true,
+    "files.exclude": {
+        "**/.git": true,
+    },
+    "files.insertFinalNewline": true,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "none",
+        "reportMissingModuleSource": "none"
+    },
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/aws/serverless-application-model/main/samtranslator/schema/schema.json": "file:///Volumes/config/lovelace/entity-cards/template.yaml"
+    },
+    "mypy.configFile": "mypy.ini",
+    "mypy.runUsingActiveInterpreter": false,
+    "mypy.targets": [
+        "pyscript"
+    ],
+}
