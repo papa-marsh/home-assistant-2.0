@@ -1,7 +1,7 @@
 .cloud
 .storage
-.vscode
 .pytest_cache
+__pycache__
 
 home-assistant_v2.db
 home-assistant_v2.db-shm

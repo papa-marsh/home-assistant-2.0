@@ -1,21 +1,22 @@
-- id: '1755384623909'
+- id: "1755384623909"
   alias: Maestro Send State Changed
-  description: ''
+  description: ""
   triggers:
-  - trigger: event
-    event_type: state_changed
-    context: {}
+    - trigger: event
+      event_type: state_changed
+      context: {}
   conditions:
-  - condition: not
-    conditions:
-    - condition: template
-      value_template: '{{ trigger.event.data.entity_id.startswith(''automation.'')
-        }}'
+    - condition: not
+      conditions:
+        - condition: template
+          value_template:
+            "{{ trigger.event.data.entity_id.startswith('automation.')
+            }}"
   actions:
-  - action: rest_command.send_to_maestro
-    metadata: {}
-    data:
-      event_type: '{{ trigger.event.event_type }}'
-      event_data: '{{ trigger.event.data }}'
-      time_fired: '{{ trigger.event.time_fired }}'
-  mode: single
+    - action: rest_command.send_to_maestro
+      metadata: {}
+      data:
+        event_type: "{{ trigger.event.event_type }}"
+        event_data: "{{ trigger.event.data }}"
+        time_fired: "{{ trigger.event.time_fired }}"
+  mode: parallel
