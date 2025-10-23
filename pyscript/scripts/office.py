@@ -12,40 +12,6 @@ else:
     from push import Notification
 
 
-@time_trigger("cron(0 23 * * *)")
-def air_purifier_on():
-    medium_setting = 100 * (2 / 3)
-    fan.set_percentage(entity_id="fan.office_purifier", percentage=medium_setting)
-
-
-@time_trigger("cron(0 6 * * *)")
-def air_purifier_off():
-    fan.turn_off(entity_id="fan.office_purifier")
-    if (dates.now() - fan.office_purifier.last_changed).seconds / 3600 > 24:
-        noti = Notification(
-            target="marshall",
-            title="Air Purifier Error",
-            message="The air purifier hasn't run in more than 24 hours",
-        )
-        noti.send()
-
-
-@state_trigger("person.emily", "person.marshall")
-def air_purifier_on_while_gone():
-    if person.marshall != "home" and person.emily != "home":
-        high_setting = 100
-        fan.set_percentage(entity_id="fan.office_purifier", percentage=high_setting)
-    else:
-        fan.turn_off(entity_id="fan.office_purifier")
-
-
-@time_trigger("cron(*/10 * * * *)")
-def space_heater_auto_off():
-    two_hours_ago = (dates.now() - timedelta(hours=2)).astimezone(tzlocal())
-    if switch.space_heater == "on" and switch.space_heater.last_changed < two_hours_ago:
-        switch.turn_off(entity_id="switch.space_heater")
-
-
 @state_trigger("person.emily == 'home'")
 def meeting_active_notification():
     if pyscript.entity_card_office == "Busy":
@@ -111,7 +77,6 @@ def persist_entity_card_office():
 
 
 @service("pyscript.office_tap")
-@event_trigger("office_leds")
 def entity_card_tap():
     if pyscript.entity_card_office.blink:
         pyscript.entity_card_office.blink = False
@@ -145,7 +110,9 @@ def entity_card_dtap():
 
 
 @time_trigger("startup")
-@state_trigger("sensor.office_ambient_sensor_temperature", "sensor.office_ambient_sensor_humidity", "switch.space_heater")
+@state_trigger(
+    "sensor.office_ambient_sensor_temperature", "sensor.office_ambient_sensor_humidity", "switch.space_heater"
+)
 def entity_card_update_row_1():
     if sensor.office_ambient_sensor_temperature in ["unknown", "unavailable"]:
         pyscript.entity_card_office.row_1_value = "Offline"
@@ -177,6 +144,6 @@ def entity_card_update_row_3():
     pyscript.entity_card_office.row_3_value = utc_time
 
 
-@time_trigger("cron(0 9 * * 1-5)")
+@time_trigger("cron(20 8 * * 1-5)")
 def daily_review_blink_on():
     pyscript.entity_card_office.blink = True

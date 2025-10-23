@@ -14,33 +14,38 @@ else:
     from push import Notification
 
 
-@state_trigger("binary_sensor.tess_charger=='on'")
-def tess_reminder_to_reset_charge_limit():
-    if int(number.tess_charge_limit) > 80:
-        noti = Notification(
-            title="Tess High Charge Limit",
-            message=f"Tess is plugged in with a charge limit of {number.tess_charge_limit}%.",
-            target="marshall",
-            tag="tess_reset_charge_limit",
-            group="tess_reset_charge_limit",
-        )
-        noti.send()
+# @state_trigger("binary_sensor.tess_charger=='on'")
+# def tess_reminder_to_reset_charge_limit():
+#     if int(number.tess_charge_limit) > 80:
+#         noti = Notification(
+#             title="Tess High Charge Limit",
+#             message=f"Tess is plugged in with a charge limit of {number.tess_charge_limit}%.",
+#             target="marshall",
+#             tag="tess_reset_charge_limit",
+#             group="tess_reset_charge_limit",
+#         )
+#         noti.send()
 
 
-@state_trigger("binary_sensor.nyx_charger=='on'")
-def nyx_reminder_to_reset_charge_limit():
-    if int(number.nyx_charge_limit) > 80:
-        noti = Notification(
-            title="Nyx High Charge Limit",
-            message=f"Nyx is plugged in with a charge limit of {number.nyx_charge_limit}%.",
-            target="marshall",
-            tag="nyx_reset_charge_limit",
-            group="nyx_reset_charge_limit",
-        )
-        noti.send()
+# @state_trigger("binary_sensor.nyx_charger=='on'")
+# def nyx_reminder_to_reset_charge_limit():
+#     if int(number.nyx_charge_limit) > 80:
+#         noti = Notification(
+#             title="Nyx High Charge Limit",
+#             message=f"Nyx is plugged in with a charge limit of {number.nyx_charge_limit}%.",
+#             target="marshall",
+#             tag="nyx_reset_charge_limit",
+#             group="nyx_reset_charge_limit",
+#         )
+#         noti.send()
 
 
-@state_trigger("binary_sensor.tess_charger", "binary_sensor.tess_parking_brake", "binary_sensor.nyx_charger", "binary_sensor.nyx_parking_brake")
+@state_trigger(
+    "binary_sensor.tess_charger",
+    "binary_sensor.tess_parking_brake",
+    "binary_sensor.nyx_charger",
+    "binary_sensor.nyx_parking_brake",
+)
 def update_watch_complication():
     push.update_complications(target="marshall")
 
@@ -113,48 +118,48 @@ def send_critical_on_drive():
 #             switch.turn_off(entity_id="switch.tess_charger")
 
 
-@time_trigger("cron(30 19 * * *)")
-def charge_reminder():
-    if (
-        device_tracker.tess_location_tracker == "home"
-        and binary_sensor.tess_charger == "off"
-        and int(sensor.tess_battery) < int(number.tess_charge_limit) - 15
-    ):
-        noti = Notification(
-            title="Tess is Unplugged",
-            message=f"Heads up - Tess is unplugged with {sensor.tess_battery}% battery",
-            target="all",
-            tag="tess_unplugged",
-            group="tess_unplugged",
-            priority="time-sensitive",
-        )
-        noti.send()
-    if (
-        device_tracker.nyx_location_tracker == "home"
-        and binary_sensor.nyx_charger == "off"
-        and int(sensor.nyx_battery) < int(number.nyx_charge_limit) - 30
-    ):
-        noti = Notification(
-            title="Nyx is Unplugged",
-            message=f"Heads up - Nyx is unplugged with {sensor.nyx_battery}% battery",
-            target="all",
-            tag="nyx_unplugged",
-            group="nyx_unplugged",
-            priority="time-sensitive",
-        )
-        noti.send()
+# @time_trigger("cron(30 19 * * *)")
+# def charge_reminder():
+#     if (
+#         device_tracker.tess_location_tracker == "home"
+#         and binary_sensor.tess_charger == "off"
+#         and int(sensor.tess_battery) < int(number.tess_charge_limit) - 15
+#     ):
+#         noti = Notification(
+#             title="Tess is Unplugged",
+#             message=f"Heads up - Tess is unplugged with {sensor.tess_battery}% battery",
+#             target="all",
+#             tag="tess_unplugged",
+#             group="tess_unplugged",
+#             priority="time-sensitive",
+#         )
+#         noti.send()
+#     if (
+#         device_tracker.nyx_location_tracker == "home"
+#         and binary_sensor.nyx_charger == "off"
+#         and int(sensor.nyx_battery) < int(number.nyx_charge_limit) - 30
+#     ):
+#         noti = Notification(
+#             title="Nyx is Unplugged",
+#             message=f"Heads up - Nyx is unplugged with {sensor.nyx_battery}% battery",
+#             target="all",
+#             tag="nyx_unplugged",
+#             group="nyx_unplugged",
+#             priority="time-sensitive",
+#         )
+#         noti.send()
 
 
-@state_trigger("binary_sensor.tess_charger=='on'")
-def tess_clear_charge_reminder():
-    noti = Notification(tag="tess_unplugged")
-    noti.clear()
+# @state_trigger("binary_sensor.tess_charger=='on'")
+# def tess_clear_charge_reminder():
+#     noti = Notification(tag="tess_unplugged")
+#     noti.clear()
 
 
-@state_trigger("binary_sensor.nyx_charger=='on'")
-def nyx_clear_charge_reminder():
-    noti = Notification(tag="nyx_unplugged")
-    noti.clear()
+# @state_trigger("binary_sensor.nyx_charger=='on'")
+# def nyx_clear_charge_reminder():
+#     noti = Notification(tag="nyx_unplugged")
+#     noti.clear()
 
 
 # @time_trigger("startup")

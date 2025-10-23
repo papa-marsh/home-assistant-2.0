@@ -79,7 +79,13 @@ def sprinklers_run_zone(zone: int, minutes: int):
 
 
 @time_trigger("startup")
-@state_trigger("switch.rain_bird_sprinkler_1", "switch.rain_bird_sprinkler_2", "switch.rain_bird_sprinkler_3", "switch.rain_bird_sprinkler_4", "switch.rain_bird_sprinkler_5")
+@state_trigger(
+    "switch.rain_bird_sprinkler_1",
+    "switch.rain_bird_sprinkler_2",
+    "switch.rain_bird_sprinkler_3",
+    "switch.rain_bird_sprinkler_4",
+    "switch.rain_bird_sprinkler_5",
+)
 def set_sprinkler_state():
     task.unique("set_sprinkler_state")
     any_running = any([state.get(entity) == "on" for entity in sprinkler_zone_entities()])
@@ -235,36 +241,36 @@ def clear_door_open_notification(**kwargs):
         noti.clear()
 
 
-@state_trigger("person.marshall", "device_tracker.nyx_location_tracker")
-def nyx_garage_auto_open(**kwargs):
-    now = dates.now()
-    location = device_tracker.nyx_location_tracker
-    if (
-        kwargs["value"] == "home"
-        and kwargs["old_value"] not in ["home", "unavailable"]
-        and cover.west_stall == "closed"
-        and 6 <= now.hour < 23
-        and (now - cover.west_stall.last_changed).seconds > 180
-        and (location != "home" or (now - location.last_changed).seconds < 180)
-        and File("zones").read([location, "near_home"], False)
-    ):
-        cover.open_cover(entity_id=f"cover.west_stall")
+# @state_trigger("person.marshall", "device_tracker.nyx_location_tracker")
+# def nyx_garage_auto_open(**kwargs):
+#     now = dates.now()
+#     location = device_tracker.nyx_location_tracker
+#     if (
+#         kwargs["value"] == "home"
+#         and kwargs["old_value"] not in ["home", "unavailable"]
+#         and cover.west_stall == "closed"
+#         and 6 <= now.hour < 23
+#         and (now - cover.west_stall.last_changed).seconds > 180
+#         and (location != "home" or (now - location.last_changed).seconds < 180)
+#         and File("zones").read([location, "near_home"], False)
+#     ):
+#         cover.open_cover(entity_id=f"cover.west_stall")
 
 
-@state_trigger("person.emily", "device_tracker.tess_location_tracker")
-def tess_garage_auto_open(**kwargs):
-    now = dates.now()
-    location = device_tracker.tess_location_tracker
-    if (
-        kwargs["value"] == "home"
-        and kwargs["old_value"] not in ["home", "unavailable"]
-        and cover.east_stall == "closed"
-        and 6 <= now.hour < 23
-        and (now - cover.east_stall.last_changed).seconds > 180
-        and (location != "home" or (now - location.last_changed).seconds < 180)
-        and File("zones").read([location, "near_home"], False)
-    ):
-        cover.open_cover(entity_id=f"cover.east_stall")
+# @state_trigger("person.emily", "device_tracker.tess_location_tracker")
+# def tess_garage_auto_open(**kwargs):
+#     now = dates.now()
+#     location = device_tracker.tess_location_tracker
+#     if (
+#         kwargs["value"] == "home"
+#         and kwargs["old_value"] not in ["home", "unavailable"]
+#         and cover.east_stall == "closed"
+#         and 6 <= now.hour < 23
+#         and (now - cover.east_stall.last_changed).seconds > 180
+#         and (location != "home" or (now - location.last_changed).seconds < 180)
+#         and File("zones").read([location, "near_home"], False)
+#     ):
+#         cover.open_cover(entity_id=f"cover.east_stall")
 
 
 # @util.require_ios_action_unlock
@@ -432,7 +438,12 @@ def entity_card_update_row_1():
 
 
 @time_trigger("startup")
-@state_trigger("climate.thermostat", "climate.thermostat.hvac_action", "climate.thermostat.temperature", "climate.thermostat.current_temperature")
+@state_trigger(
+    "climate.thermostat",
+    "climate.thermostat.hvac_action",
+    "climate.thermostat.temperature",
+    "climate.thermostat.current_temperature",
+)
 def entity_card_update_row_2():
     if climate.thermostat in ["unknown", "unavailable"]:
         pyscript.entity_card_home.row_2_value = "Offline"
@@ -442,11 +453,7 @@ def entity_card_update_row_2():
         action = state.getattr("climate.thermostat").get("hvac_action", "off")
         temp = int(climate.thermostat.current_temperature)
         preset = climate.thermostat.temperature
-        icon = {
-            "cool": "mdi:snowflake",
-            "heat": "mdi:fire",
-            "off": "mdi:hvac-off"
-        }
+        icon = {"cool": "mdi:snowflake", "heat": "mdi:fire", "off": "mdi:hvac-off"}
         value = f"{action}" if temp == preset or not preset else f"{action} ({preset}°)"
         pyscript.entity_card_home.row_2_value = value
         pyscript.entity_card_home.row_2_icon = icon[mode]

@@ -52,18 +52,36 @@ scene: !include scenes.yaml
 script: !include scripts.yaml
 
 rest_command:
-  send_to_maestro:
-    url: !secret maestro_state_changed_url
+  maestro_send_state_change:
+    url: !secret maestro_webhook_url
     method: POST
     headers:
       Content-Type: "application/json"
       X-Auth-Token: !secret maestro_token
     payload: >
       {
-        "event_type": {{ event_type | tojson }},
-        "event_data": {{ event_data | tojson }},
+        "timestamp": {{ now().isoformat()| tojson }},
         "time_fired": {{ time_fired | tojson }},
-        "timestamp": {{ now().isoformat()| tojson }}
+        "event_type": {{ event_type | tojson }},
+        "entity_id": {{ entity_id | tojson }},
+        "old_state": {{ old_state | tojson }},
+        "new_state": {{ new_state | tojson }},
+        "old_attributes": {{ old_attributes if old_attributes is not none else "null" }},
+        "new_attributes": {{ new_attributes if new_attributes is not none else "null" }}
+      }
+  maestro_send_event:
+    url: !secret maestro_webhook_url
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      X-Auth-Token: !secret maestro_token
+    payload: >
+      {
+        "timestamp": {{ now().isoformat()| tojson }},
+        "time_fired": {{ time_fired | tojson }},
+        "event_type": {{ event_type | tojson }},
+        "user_id": {{ user_id | tojson }},
+        "data": {{ data }}
       }
 
 shell_command:

@@ -15,20 +15,14 @@ else:
     from push import Notification
 
 
-@time_trigger("cron(45 7 * * *)")
-def workout_fan_on():
-    switch.turn_on(entity_id="switch.workout_fan")
-
-
-@time_trigger("cron(0 9 * * *)")
-def workout_fan_off():
-    switch.turn_off(entity_id="switch.workout_fan")
-
-
 @state_trigger("pyscript.chelsea_next_fixture.blink==True")
 def chelsea_kickoff_notification():
     competition = pyscript.chelsea_next_fixture.competition.replace("The", "").replace("the", "")
-    opponent = pyscript.chelsea_next_fixture.home_team if pyscript.chelsea_next_fixture.home_team != "Chelsea" else pyscript.chelsea_next_fixture.away_team
+    opponent = (
+        pyscript.chelsea_next_fixture.home_team
+        if pyscript.chelsea_next_fixture.home_team != "Chelsea"
+        else pyscript.chelsea_next_fixture.away_team
+    )
     location = calendar.chelsea_fixtures.location
     message = f"The {competition} match against {opponent} is about to kick off at {location}"
 
@@ -46,14 +40,6 @@ def chelsea_kickoff_notification():
 @event_trigger("sound_machine")
 def sound_machine_on(**_):
     switch.turn_on(entity_id="switch.ellies_sound_machine")
-
-
-@state_trigger("switch.ellies_sound_machine")
-def toggle_butterfly_night_light():
-    if switch.ellies_sound_machine == "off":
-        switch.turn_on(entity_id="switch.butterfly_night_light")
-    else:
-        switch.turn_off(entity_id="switch.butterfly_night_light")
 
 
 @event_trigger("emily_good_morning")
@@ -123,7 +109,7 @@ def notify_on_zone_change(**kwargs):
                     group="summary_on_zone_change",
                     tag="summary_on_zone_change",
                     target=name.lower(),
-                    priority="passive"
+                    priority="passive",
                 )
                 noti.send()
 
@@ -141,7 +127,7 @@ def notify_on_zone_change(**kwargs):
                 group="summary_on_zone_change",
                 tag="summary_on_zone_change",
                 target=name.lower(),
-                priority="passive"
+                priority="passive",
             )
             noti.send()
 
@@ -205,15 +191,12 @@ def add_cycle_event(event_type: Literal["start", "end"]) -> None:
             message=f"Cycle has already {event_type}ed. Press and hold to modify the {event_type} date",
             group="add_cycle_event",
             tag="add_cycle_event",
-            target="emily"
+            target="emily",
         )
         noti.add_action(id="edit_cycle_event_0", title="Today")
         noti.add_action(id="edit_cycle_event_1", title="Yesterday")
         for i in range(2, 7):
-            noti.add_action(
-                id=f"edit_cycle_event_{i}",
-                title=(date.today() - timedelta(days=i)).strftime("%A")
-            )
+            noti.add_action(id=f"edit_cycle_event_{i}", title=(date.today() - timedelta(days=i)).strftime("%A"))
 
         noti.send()
 
@@ -223,7 +206,7 @@ def add_cycle_event(event_type: Literal["start", "end"]) -> None:
             message=f"Can't {event_type} cycle today because cycle {event_opposite}ed today. Re-trigger 'Cycle {event_opposite.capitalize()}ed' to edit",
             group="add_cycle_event",
             tag="add_cycle_event",
-            target="emily"
+            target="emily",
         )
         noti.send()
 
@@ -247,6 +230,6 @@ def edit_cycle_event(**kwargs):
             message="There's a date conflict that will break things. Talk to Marshall to fix it",
             group="add_cycle_event",
             tag="add_cycle_event",
-            target="both"
+            target="both",
         )
         noti.send()
