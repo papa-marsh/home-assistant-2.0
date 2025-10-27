@@ -40,28 +40,28 @@ else:
 #         noti.send()
 
 
-@state_trigger(
-    "binary_sensor.tess_charger",
-    "binary_sensor.tess_parking_brake",
-    "binary_sensor.nyx_charger",
-    "binary_sensor.nyx_parking_brake",
-)
-def update_watch_complication():
-    push.update_complications(target="marshall")
+# @state_trigger(
+#     "binary_sensor.tess_charger",
+#     "binary_sensor.tess_parking_brake",
+#     "binary_sensor.nyx_charger",
+#     "binary_sensor.nyx_parking_brake",
+# )
+# def update_watch_complication():
+#     push.update_complications(target="marshall")
 
 
-@util.require_pref_check("Tess Drive Critical", "On", reset=True)
-@state_trigger("binary_sensor.tess_parking_brake=='off'")
-def send_critical_on_drive():
-    noti = Notification(
-        title="Tess In Drive",
-        message="Parking brake is off and Tess is in drive",
-        target="marshall",
-        priority="critical",
-        tag="tess_drive_critical",
-        group="tess_drive_critical",
-    )
-    noti.send()
+# @util.require_pref_check("Tess Drive Critical", "On", reset=True)
+# @state_trigger("binary_sensor.tess_parking_brake=='off'")
+# def send_critical_on_drive():
+#     noti = Notification(
+#         title="Tess In Drive",
+#         message="Parking brake is off and Tess is in drive",
+#         target="marshall",
+#         priority="critical",
+#         tag="tess_drive_critical",
+#         group="tess_drive_critical",
+#     )
+#     noti.send()
 
 
 # @state_trigger("binary_sensor.tess_charger=='off'")
@@ -199,78 +199,78 @@ def send_critical_on_drive():
 #         noti.send()
 
 
-@time_trigger("startup")
-def persist_complication_tess():
-    state.persist(
-        "pyscript.complication_tess",
-        default_value="",
-        default_attributes={"leading": "", "outer": "", "trailing": "", "gauge": 0},
-    )
+# @time_trigger("startup")
+# def persist_complication_tess():
+#     state.persist(
+#         "pyscript.complication_tess",
+#         default_value="",
+#         default_attributes={"leading": "", "outer": "", "trailing": "", "gauge": 0},
+#     )
 
 
-@time_trigger("startup")
-@state_trigger("lock.tess_doors")
-def tess_complication_leading():
-    pyscript.complication_tess.leading = "🔒" if lock.tess_doors == "locked" else ""
+# @time_trigger("startup")
+# @state_trigger("lock.tess_doors")
+# def tess_complication_leading():
+#     pyscript.complication_tess.leading = "🔒" if lock.tess_doors == "locked" else ""
 
 
-@time_trigger("startup")
-@state_trigger("sensor.tess_battery", "climate.tess_hvac_climate_system")
-def tess_complication_outer():
-    pyscript.complication_tess.outer = f"{sensor.tess_battery}"
-    pyscript.complication_tess.outer += "❄️" if climate.tess_hvac_climate_system == "heat_cool" else "%"
+# @time_trigger("startup")
+# @state_trigger("sensor.tess_battery", "climate.tess_hvac_climate_system")
+# def tess_complication_outer():
+#     pyscript.complication_tess.outer = f"{sensor.tess_battery}"
+#     pyscript.complication_tess.outer += "❄️" if climate.tess_hvac_climate_system == "heat_cool" else "%"
 
 
-@time_trigger("startup")
-@state_trigger("binary_sensor.tess_charger")
-def tess_complication_trailing():
-    pyscript.complication_tess.trailing = "⚡️" if binary_sensor.tess_charger == "on" else ""
+# @time_trigger("startup")
+# @state_trigger("binary_sensor.tess_charger")
+# def tess_complication_trailing():
+#     pyscript.complication_tess.trailing = "⚡️" if binary_sensor.tess_charger == "on" else ""
 
 
-@time_trigger("startup")
-@state_trigger("sensor.tess_battery", "number.tess_charge_limit")
-def tess_complication_gauge():
-    try:
-        pyscript.complication_tess.gauge = int(sensor.tess_battery) / int(number.tess_charge_limit)
-    except Exception as e:
-        log.error(f"Exception caught while updating Tess complication: {e}")
+# @time_trigger("startup")
+# @state_trigger("sensor.tess_battery", "number.tess_charge_limit")
+# def tess_complication_gauge():
+#     try:
+#         pyscript.complication_tess.gauge = int(sensor.tess_battery) / int(number.tess_charge_limit)
+#     except Exception as e:
+#         log.error(f"Exception caught while updating Tess complication: {e}")
 
 
-@time_trigger("startup")
-def persist_complication_nyx():
-    state.persist(
-        "pyscript.complication_nyx",
-        default_value="",
-        default_attributes={"leading": "", "outer": "", "trailing": "", "gauge": 0},
-    )
+# @time_trigger("startup")
+# def persist_complication_nyx():
+#     state.persist(
+#         "pyscript.complication_nyx",
+#         default_value="",
+#         default_attributes={"leading": "", "outer": "", "trailing": "", "gauge": 0},
+#     )
 
 
-@time_trigger("startup")
-@state_trigger("lock.nyx_doors")
-def nyx_complication_leading():
-    pyscript.complication_nyx.leading = "🔒" if lock.nyx_doors == "locked" else ""
+# @time_trigger("startup")
+# @state_trigger("lock.nyx_doors")
+# def nyx_complication_leading():
+#     pyscript.complication_nyx.leading = "🔒" if lock.nyx_doors == "locked" else ""
 
 
-@time_trigger("startup")
-@state_trigger("sensor.nyx_battery", "climate.nyx_hvac_climate_system")
-def nyx_complication_outer():
-    pyscript.complication_nyx.outer = f"{sensor.nyx_battery}"
-    pyscript.complication_nyx.outer += "❄️" if climate.nyx_hvac_climate_system == "heat_cool" else "%"
+# @time_trigger("startup")
+# @state_trigger("sensor.nyx_battery", "climate.nyx_hvac_climate_system")
+# def nyx_complication_outer():
+#     pyscript.complication_nyx.outer = f"{sensor.nyx_battery}"
+#     pyscript.complication_nyx.outer += "❄️" if climate.nyx_hvac_climate_system == "heat_cool" else "%"
 
 
-@time_trigger("startup")
-@state_trigger("binary_sensor.nyx_charger")
-def nyx_complication_trailing():
-    pyscript.complication_nyx.trailing = "⚡️" if binary_sensor.nyx_charger == "on" else ""
+# @time_trigger("startup")
+# @state_trigger("binary_sensor.nyx_charger")
+# def nyx_complication_trailing():
+#     pyscript.complication_nyx.trailing = "⚡️" if binary_sensor.nyx_charger == "on" else ""
 
 
-@time_trigger("startup")
-@state_trigger("sensor.nyx_battery", "number.nyx_charge_limit")
-def nyx_complication_gauge():
-    try:
-        pyscript.complication_nyx.gauge = int(sensor.nyx_battery) / int(number.nyx_charge_limit)
-    except Exception as e:
-        log.error(f"Exception caught while updating Nyx complication: {e}")
+# @time_trigger("startup")
+# @state_trigger("sensor.nyx_battery", "number.nyx_charge_limit")
+# def nyx_complication_gauge():
+#     try:
+#         pyscript.complication_nyx.gauge = int(sensor.nyx_battery) / int(number.nyx_charge_limit)
+#     except Exception as e:
+#         log.error(f"Exception caught while updating Nyx complication: {e}")
 
 
 @time_trigger("startup")
