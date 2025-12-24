@@ -1,57 +1,64 @@
-- id: "1755384623909"
+- id: '1755384623909'
   alias: Maestro Send State Changed
-  description: ""
+  description: ''
   triggers:
-    - trigger: event
-      event_type: state_changed
-      context: {}
+  - trigger: event
+    event_type: state_changed
+    context: {}
   conditions:
-    - condition: not
-      conditions:
-        - condition: template
-          value_template:
-            "{{ trigger.event.data.entity_id.startswith('automation.')
-            }}"
+  - condition: not
+    conditions:
+    - condition: template
+      value_template: '{{ trigger.event.data.entity_id.startswith(''automation.'')
+        }}'
   actions:
-    - action: rest_command.maestro_send_state_change
-      metadata: {}
-      data:
-        time_fired: "{{ trigger.event.time_fired }}"
-        event_type: "{{ trigger.event.event_type }}"
-        entity_id: "{{ trigger.event.data.entity_id }}"
-        old_state:
-          "{{ trigger.event.data.old_state.state if trigger.event.data.old_state
-          else none }}"
-        new_state:
-          "{{ trigger.event.data.new_state.state if trigger.event.data.new_state
-          else none }}"
-        old_attributes:
-          "{{ trigger.event.data.old_state.attributes | tojson if trigger.event.data.old_state
-          else none }}"
-        new_attributes:
-          "{{ trigger.event.data.new_state.attributes | tojson if trigger.event.data.new_state
-          else none }}"
+  - action: rest_command.maestro_send_state_change
+    metadata: {}
+    data:
+      time_fired: '{{ trigger.event.time_fired }}'
+      event_type: '{{ trigger.event.event_type }}'
+      entity_id: '{{ trigger.event.data.entity_id }}'
+      old_state: '{{ trigger.event.data.old_state.state if trigger.event.data.old_state
+        else none }}'
+      new_state: '{{ trigger.event.data.new_state.state if trigger.event.data.new_state
+        else none }}'
+      old_attributes: '{{ trigger.event.data.old_state.attributes | tojson if trigger.event.data.old_state
+        else none }}'
+      new_attributes: '{{ trigger.event.data.new_state.attributes | tojson if trigger.event.data.new_state
+        else none }}'
   mode: parallel
-- id: "1758549424655"
+  max: 100
+- id: '1758549424655'
   alias: Maestro Send Event Fired
-  description: ""
+  description: ''
   triggers:
-    - trigger: event
-      event_type: "*"
-      context: {}
+  - trigger: event
+    event_type: '*'
+    context: {}
   conditions:
-    - condition: not
-      conditions:
-        - condition: template
-          value_template:
-            '{{ trigger.event.event_type in ["state_changed", "automation_triggered",
-            "call_service", "pyscript_running"] }}'
+  - condition: not
+    conditions:
+    - condition: template
+      value_template: '{{ trigger.event.event_type in ["state_changed", "automation_triggered",
+        "call_service", "pyscript_running"] }}'
   actions:
-    - action: rest_command.maestro_send_event
-      metadata: {}
-      data:
-        time_fired: "{{ trigger.event.time_fired }}"
-        event_type: "{{ trigger.event.event_type }}"
-        user_id: "{{ trigger.event.context.user_id }}"
-        data: "{{ trigger.event.data | tojson }}"
+  - action: rest_command.maestro_send_event
+    metadata: {}
+    data:
+      time_fired: '{{ trigger.event.time_fired }}'
+      event_type: '{{ trigger.event.event_type }}'
+      user_id: '{{ trigger.event.context.user_id }}'
+      data: '{{ trigger.event.data | tojson }}'
   mode: parallel
+  max: 100
+- id: '1763596274572'
+  alias: Maestro HASS Started
+  description: ''
+  triggers:
+  - trigger: homeassistant
+    event: start
+  conditions: []
+  actions:
+  - event: maestro_hass_started
+    event_data: {}
+  mode: single

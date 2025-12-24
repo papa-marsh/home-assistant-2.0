@@ -12,36 +12,36 @@ else:
     from push import Notification
 
 
-@service("pyscript.sync_zones")
-@time_trigger("cron(0 3 * * *)")
-def sync_zones():
-    file_zones = File("zones").read()
-    hass_zones = [
-        state.getattr(zone)["friendly_name"] if zone != "zone.home" else "home"
-        for zone in state.names(domain="zone")
-    ]
+# @service("pyscript.sync_zones")
+# @time_trigger("cron(0 3 * * *)")
+# def sync_zones():
+#     file_zones = File("zones").read()
+#     hass_zones = [
+#         state.getattr(zone)["friendly_name"] if zone != "zone.home" else "home"
+#         for zone in state.names(domain="zone")
+#     ]
 
-    for zone in hass_zones:
-        if zone not in file_zones:
-            file_zones[zone] = {"needs_disposition": "New Zone"}
-    for zone in file_zones:
-        if zone not in hass_zones and zone != "not_home":
-            file_zones[zone]["needs_disposition"] = "Stale Zone"
+#     for zone in hass_zones:
+#         if zone not in file_zones:
+#             file_zones[zone] = {"needs_disposition": "New Zone"}
+#     for zone in file_zones:
+#         if zone not in hass_zones and zone != "not_home":
+#             file_zones[zone]["needs_disposition"] = "Stale Zone"
 
-    File("zones").overwrite(dict(sorted(file_zones.items())))
+#     File("zones").overwrite(dict(sorted(file_zones.items())))
 
 
-@time_trigger("cron(0 8 * * *)")
-def check_cloud_backup_state():
-    if sensor.backup_state != "backed_up":
-        noti = Notification(
-            title="Cloud Backup Failed",
-            message="Google Drive backup appears to have failed - Check add-on",
-            tag="cloud_backup_failed",
-            group="cloud_backup_failed",
-            target="marshall",
-        )
-        noti.send()
+# @time_trigger("cron(0 8 * * *)")
+# def check_cloud_backup_state():
+#     if sensor.backup_state != "backed_up":
+#         noti = Notification(
+#             title="Cloud Backup Failed",
+#             message="Google Drive backup appears to have failed - Check add-on",
+#             tag="cloud_backup_failed",
+#             group="cloud_backup_failed",
+#             target="marshall",
+#         )
+#         noti.send()
 
 
 @time_trigger("cron(*/10 * * * *)")

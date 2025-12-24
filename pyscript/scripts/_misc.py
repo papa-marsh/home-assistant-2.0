@@ -71,80 +71,80 @@ else:
 #     noti.clear()
 
 
-@state_trigger("person.marshall", "person.emily")
-def notify_on_zone_change(**kwargs):
-    name = state.getattr(kwargs["var_name"])["friendly_name"]
-    now = dates.now()
-    old_zone = kwargs["old_value"]
-    old_data = File("zones").read([old_zone])
-    old_prefix = old_data.get("prefix", "")
-    new_zone = kwargs["value"]
-    new_data = File("zones").read([new_zone])
-    new_prefix = new_data.get("prefix", "")
+# @state_trigger("person.marshall", "person.emily")
+# def notify_on_zone_change(**kwargs):
+#     name = state.getattr(kwargs["var_name"])["friendly_name"]
+#     now = dates.now()
+#     old_zone = kwargs["old_value"]
+#     old_data = File("zones").read([old_zone])
+#     old_prefix = old_data.get("prefix", "")
+#     new_zone = kwargs["value"]
+#     new_data = File("zones").read([new_zone])
+#     new_prefix = new_data.get("prefix", "")
 
-    if old_zone == "home":
-        pyscript.vars.left_home_timestamp[name] = now
+#     if old_zone == "home":
+#         pyscript.vars.left_home_timestamp[name] = now
 
-    task.unique(f"{name.lower()}_zone_notify")
+#     task.unique(f"{name.lower()}_zone_notify")
 
-    if old_zone == pyscript.vars.zone_debounce[name]:
-        pyscript.vars.zone_debounce[name] = None
-        return
+#     if old_zone == pyscript.vars.zone_debounce[name]:
+#         pyscript.vars.zone_debounce[name] = None
+#         return
 
-    if "debounce" in new_data:
-        pyscript.vars.zone_debounce[name] = new_zone
-        task.sleep(new_data["debounce"])
-        pyscript.vars.zone_debounce[name] = None
+#     if "debounce" in new_data:
+#         pyscript.vars.zone_debounce[name] = new_zone
+#         task.sleep(new_data["debounce"])
+#         pyscript.vars.zone_debounce[name] = None
 
-    if not new_data.get("is_region"):
-        message = f"{name} arrived at {new_prefix}{new_zone}"
-        if new_zone == "home":
-            left_home = dates.parse_timestamp(pyscript.vars.left_home_timestamp[name])
-            duration = dates.format_duration(left_home)
-            message += f" after {duration}"
+#     if not new_data.get("is_region"):
+#         message = f"{name} arrived at {new_prefix}{new_zone}"
+#         if new_zone == "home":
+#             left_home = dates.parse_timestamp(pyscript.vars.left_home_timestamp[name])
+#             duration = dates.format_duration(left_home)
+#             message += f" after {duration}"
 
-            if util.get_pref(f"{name} Zone Summary Notifications") == "On":
-                noti = Notification(
-                    message=f"You were away for {duration}",
-                    group="summary_on_zone_change",
-                    tag="summary_on_zone_change",
-                    target=name.lower(),
-                    priority="passive",
-                )
-                noti.send()
+#             if util.get_pref(f"{name} Zone Summary Notifications") == "On":
+#                 noti = Notification(
+#                     message=f"You were away for {duration}",
+#                     group="summary_on_zone_change",
+#                     tag="summary_on_zone_change",
+#                     target=name.lower(),
+#                     priority="passive",
+#                 )
+#                 noti.send()
 
-    elif not old_data.get("is_region"):
-        old_zone_entered = dates.parse_timestamp(old_zone.last_changed.astimezone(tzlocal()))
-        duration = dates.format_duration(old_zone_entered)
-        zone_summary_on = util.get_pref(f"{name} Zone Summary Notifications") == "On"
-        too_short_for_update = (now - old_zone_entered).seconds < (5 * 60)
+#     elif not old_data.get("is_region"):
+#         old_zone_entered = dates.parse_timestamp(old_zone.last_changed.astimezone(tzlocal()))
+#         duration = dates.format_duration(old_zone_entered)
+#         zone_summary_on = util.get_pref(f"{name} Zone Summary Notifications") == "On"
+#         too_short_for_update = (now - old_zone_entered).seconds < (5 * 60)
 
-        message = f"{name} left {old_prefix}{old_zone} after {duration}"
+#         message = f"{name} left {old_prefix}{old_zone} after {duration}"
 
-        if zone_summary_on and old_zone != "home" and not too_short_for_update:
-            noti = Notification(
-                message=f"You spent {duration} at {old_prefix}{old_zone}",
-                group="summary_on_zone_change",
-                tag="summary_on_zone_change",
-                target=name.lower(),
-                priority="passive",
-            )
-            noti.send()
+#         if zone_summary_on and old_zone != "home" and not too_short_for_update:
+#             noti = Notification(
+#                 message=f"You spent {duration} at {old_prefix}{old_zone}",
+#                 group="summary_on_zone_change",
+#                 tag="summary_on_zone_change",
+#                 target=name.lower(),
+#                 priority="passive",
+#             )
+#             noti.send()
 
-    elif new_zone != "not_home":
-        message = f"{name} is in {new_prefix}{new_zone}"
+#     elif new_zone != "not_home":
+#         message = f"{name} is in {new_prefix}{new_zone}"
 
-    else:
-        message = f"{name} left {old_prefix}{old_zone}"
+#     else:
+#         message = f"{name} left {old_prefix}{old_zone}"
 
-    if util.get_pref(f"{name} Zone Notifications") == "On":
-        noti = Notification(
-            message=message.replace("The", "the"),
-            group="notify_on_zone_change",
-            tag="notify_on_zone_change",
-            target="emily" if name == "Marshall" else "marshall",
-        )
-        noti.send()
+#     if util.get_pref(f"{name} Zone Notifications") == "On":
+#         noti = Notification(
+#             message=message.replace("The", "the"),
+#             group="notify_on_zone_change",
+#             tag="notify_on_zone_change",
+#             target="emily" if name == "Marshall" else "marshall",
+#         )
+#         noti.send()
 
 
 # @time_trigger("cron(0 5 * * *)")

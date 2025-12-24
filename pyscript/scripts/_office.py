@@ -12,44 +12,44 @@ else:
     from push import Notification
 
 
-@state_trigger("person.emily == 'home'")
-def meeting_active_notification():
-    if pyscript.entity_card_office == "Busy":
-        noti = Notification(
-            target="emily",
-            title="Heads Up",
-            message="Dad's in a meeting",
-            tag="meeting_active",
-            group="meeting_active",
-            priority="time-sensitive",
-        )
-        noti.send()
+# @state_trigger("person.emily == 'home'")
+# def meeting_active_notification():
+#     if pyscript.entity_card_office == "Busy":
+#         noti = Notification(
+#             target="emily",
+#             title="Heads Up",
+#             message="Dad's in a meeting",
+#             tag="meeting_active",
+#             group="meeting_active",
+#             priority="time-sensitive",
+#         )
+#         noti.send()
 
 
-@state_trigger("pyscript.entity_card_office == 'Busy'")
-def meeting_active_notification_retroactive():
-    two_min_ago = (dates.now() - timedelta(minutes=2)).astimezone(tzlocal())
-    if person.emily == "home" and person.emily.last_changed < two_min_ago:
-        meeting_active_notification()
+# @state_trigger("pyscript.entity_card_office == 'Busy'")
+# def meeting_active_notification_retroactive():
+#     two_min_ago = (dates.now() - timedelta(minutes=2)).astimezone(tzlocal())
+#     if person.emily == "home" and person.emily.last_changed < two_min_ago:
+#         meeting_active_notification()
 
 
-@time_trigger("startup")
-@state_trigger("pyscript.entity_card_office == 'Available'")
-def clear_meeting_active_notification():
-    noti = Notification(tag="meeting_active")
-    noti.clear()
+# @time_trigger("startup")
+# @state_trigger("pyscript.entity_card_office == 'Available'")
+# def clear_meeting_active_notification():
+#     noti = Notification(tag="meeting_active")
+#     noti.clear()
 
 
-@time_trigger("startup")
-@state_trigger("media_player.playstation_4", "media_player.playstation_4.source")
-def toggle_playstation_fans():
-    ignore_list = ["Amazon Prime Video", "Netflix"]
-    source = state.getattr("media_player.playstation_4").get("source", None)
+# @time_trigger("startup")
+# @state_trigger("media_player.playstation_4", "media_player.playstation_4.source")
+# def toggle_playstation_fans():
+#     ignore_list = ["Amazon Prime Video", "Netflix"]
+#     source = state.getattr("media_player.playstation_4").get("source", None)
 
-    if media_player.playstation_4 == "playing" and source not in ignore_list:
-        switch.turn_on(entity_id="switch.playstation_fans")
-    else:
-        switch.turn_off(entity_id="switch.playstation_fans")
+#     if media_player.playstation_4 == "playing" and source not in ignore_list:
+#         switch.turn_on(entity_id="switch.playstation_fans")
+#     else:
+#         switch.turn_off(entity_id="switch.playstation_fans")
 
 
 @time_trigger("startup")
@@ -81,6 +81,7 @@ def entity_card_tap():
     if pyscript.entity_card_office.blink:
         pyscript.entity_card_office.blink = False
     else:
+        event.fire("meeting_active")
         if pyscript.entity_card_office.active:
             state.set(
                 "pyscript.entity_card_office",
@@ -88,7 +89,6 @@ def entity_card_tap():
                 active=False,
                 state_icon="mdi:cloud",
             )
-            switch.turn_off(entity_id="switch.office_door_led")
         else:
             state.set(
                 "pyscript.entity_card_office",
@@ -96,7 +96,6 @@ def entity_card_tap():
                 active=True,
                 state_icon="mdi:headset",
             )
-            switch.turn_on(entity_id="switch.office_door_led")
 
 
 @service("pyscript.office_hold")
