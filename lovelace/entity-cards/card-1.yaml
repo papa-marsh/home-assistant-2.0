@@ -15,7 +15,7 @@ custom_fields:
 double_tap_action:
   action: call-service
   service: '[[[ return "pyscript." + entity.attributes.name + "_dtap"]]]'
-entity: pyscript.entity_card_tess
+entity: maestro.entity_card_1
 extra_styles:
   "[[[ if ( entity.attributes.blink ) return `@keyframes fade { from {
   opacity: 1.0; } 50% { opacity: 0.2; } to { opacity: 1.0; } }` ]]]"

@@ -21,106 +21,106 @@ else:
 # MARK: Sprinklers
 
 
-@time_trigger("startup")
-def persist_sprinklers():
-    state.persist(
-        "pyscript.sprinklers",
-        default_value="",
-        default_attributes={
-            "run_program": False,
-            "skip_next": False,
-            "running": False,
-            "triggered_manually": False,
-        },
-    )
+# @time_trigger("startup")
+# def persist_sprinklers():
+#     state.persist(
+#         "pyscript.sprinklers",
+#         default_value="",
+#         default_attributes={
+#             "run_program": False,
+#             "skip_next": False,
+#             "running": False,
+#             "triggered_manually": False,
+#         },
+#     )
 
 
-@service("sprinklers.run_program")
-def sprinklers_run_program():
-    if pyscript.sprinklers.run_program:
-        return
+# @service("sprinklers.run_program")
+# def sprinklers_run_program():
+#     if pyscript.sprinklers.run_program:
+#         return
 
-    task.unique("sprinklers_program")
-    program = {1: 5, 2: 15, 3: 5, 4: 15, 5: 15}
-    total = sum(program.values())
-    message = f"Sprinkler program has started and will run for {total} minutes"
+#     task.unique("sprinklers_program")
+#     program = {1: 5, 2: 15, 3: 5, 4: 15, 5: 15}
+#     total = sum(program.values())
+#     message = f"Sprinkler program has started and will run for {total} minutes"
 
-    for zone in program:
-        minutes = program[zone]
-        message += f"\nZone {zone}: {minutes} minutes"
+#     for zone in program:
+#         minutes = program[zone]
+#         message += f"\nZone {zone}: {minutes} minutes"
 
-    noti = Notification(
-        title="Sprinklers Running",
-        message=f"Sprinkler program has started and will run for {total} minutes",
-        group="sprinkler_program_running",
-        target="marshall",
-    )
-    noti.send()
+#     noti = Notification(
+#         title="Sprinklers Running",
+#         message=f"Sprinkler program has started and will run for {total} minutes",
+#         group="sprinkler_program_running",
+#         target="marshall",
+#     )
+#     noti.send()
 
-    pyscript.sprinklers.run_program = True
-    for zone in program:
-        minutes = program[zone]
-        sprinklers_run_zone(zone, minutes)
-        task.sleep(minutes * 60)
-
-
-@service("sprinklers.skip_next")
-def sprinklers_skip_next():
-    pyscript.sprinklers.skip_next = True if not pyscript.sprinklers.skip_next else False
+#     pyscript.sprinklers.run_program = True
+#     for zone in program:
+#         minutes = program[zone]
+#         sprinklers_run_zone(zone, minutes)
+#         task.sleep(minutes * 60)
 
 
-@service("sprinklers.stop_all")
-def sprinklers_stop_all():
-    task.unique("sprinklers_program")
-    service.call("switch", "turn_off", entity_id=sprinkler_zone_entities())
+# @service("sprinklers.skip_next")
+# def sprinklers_skip_next():
+#     pyscript.sprinklers.skip_next = True if not pyscript.sprinklers.skip_next else False
 
 
-@service("sprinklers.run_zone")
-def sprinklers_run_zone(zone: int, minutes: int):
-    pyscript.sprinklers.triggered_manually = True
-    rainbird.start_irrigation(entity_id=f"switch.rain_bird_sprinkler_{zone}", duration=minutes)
+# @service("sprinklers.stop_all")
+# def sprinklers_stop_all():
+#     task.unique("sprinklers_program")
+#     service.call("switch", "turn_off", entity_id=sprinkler_zone_entities())
 
 
-@time_trigger("startup")
-@state_trigger(
-    "switch.rain_bird_sprinkler_1",
-    "switch.rain_bird_sprinkler_2",
-    "switch.rain_bird_sprinkler_3",
-    "switch.rain_bird_sprinkler_4",
-    "switch.rain_bird_sprinkler_5",
-)
-def set_sprinkler_state():
-    task.unique("set_sprinkler_state")
-    any_running = any([state.get(entity) == "on" for entity in sprinkler_zone_entities()])
-    if any_running:
-        pyscript.sprinklers.running = True
-        task.sleep(5)
-        pyscript.sprinklers = dates.now()
-    else:
-        pyscript.sprinklers.running = False
-        task.sleep(5)
-        pyscript.sprinklers.run_program = False
-        pyscript.sprinklers.triggered_manually = False
+# @service("sprinklers.run_zone")
+# def sprinklers_run_zone(zone: int, minutes: int):
+#     pyscript.sprinklers.triggered_manually = True
+#     rainbird.start_irrigation(entity_id=f"switch.rain_bird_sprinkler_{zone}", duration=minutes)
 
 
-@state_trigger("switch.rain_bird_sprinkler_1=='on'")
-def sprinkler_skip_program():
-    if not pyscript.sprinklers.skip_next or 5 <= dates.now().hour < 20 or pyscript.sprinklers.triggered_manually:
-        return
+# @time_trigger("startup")
+# @state_trigger(
+#     "switch.rain_bird_sprinkler_1",
+#     "switch.rain_bird_sprinkler_2",
+#     "switch.rain_bird_sprinkler_3",
+#     "switch.rain_bird_sprinkler_4",
+#     "switch.rain_bird_sprinkler_5",
+# )
+# def set_sprinkler_state():
+#     task.unique("set_sprinkler_state")
+#     any_running = any([state.get(entity) == "on" for entity in sprinkler_zone_entities()])
+#     if any_running:
+#         pyscript.sprinklers.running = True
+#         task.sleep(5)
+#         pyscript.sprinklers = dates.now()
+#     else:
+#         pyscript.sprinklers.running = False
+#         task.sleep(5)
+#         pyscript.sprinklers.run_program = False
+#         pyscript.sprinklers.triggered_manually = False
 
-    sprinklers_stop_all()
-    pyscript.sprinklers.skip_next = False
 
-    noti = Notification(
-        title="Sprinklers Skipped",
-        message=f"Sprinkler program skipped",
-        target="marshall",
-    )
-    noti.send()
+# @state_trigger("switch.rain_bird_sprinkler_1=='on'")
+# def sprinkler_skip_program():
+#     if not pyscript.sprinklers.skip_next or 5 <= dates.now().hour < 20 or pyscript.sprinklers.triggered_manually:
+#         return
+
+#     sprinklers_stop_all()
+#     pyscript.sprinklers.skip_next = False
+
+#     noti = Notification(
+#         title="Sprinklers Skipped",
+#         message=f"Sprinkler program skipped",
+#         target="marshall",
+#     )
+#     noti.send()
 
 
-def sprinkler_zone_entities():
-    return [f"switch.rain_bird_sprinkler_{i}" for i in range(1, 8)]
+# def sprinkler_zone_entities():
+#     return [f"switch.rain_bird_sprinkler_{i}" for i in range(1, 8)]
 
 
 # MARK: Door Open
