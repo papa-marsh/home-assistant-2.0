@@ -1,0 +1,12 @@
+fire_ui_event:
+  alias: Fire UI Event
+  description: Fire a Maestro UI Event
+  fields:
+    trigger:
+      description: The source of the action
+      example: entity_card_1_tap
+  sequence:
+  - event: maestro_ui_event
+    event_data:
+      trigger: '{{ trigger }}'
+  icon: mdi:gesture-tap-button

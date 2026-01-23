@@ -15,12 +15,7 @@ else:
     from push import Notification
 
 
-STATE_SYMBOLS = {
-    "pending": "🔷",
-    "active": "🔶",
-    "save": "✅",
-    "skip": "❌"
-}
+STATE_SYMBOLS = {"pending": "🔷", "active": "🔶", "save": "✅", "skip": "❌"}
 
 
 @time_trigger("startup")
@@ -86,28 +81,6 @@ def daily_review() -> None:
         noti.send()
 
 
-@time_trigger("cron(20 9 * * 1-5)")
-def weekly_review() -> None:
-    if datetime.today().weekday() == 0:
-        title = "Weekly Planning Time :)"
-        message = "What's your focus this week?"
-        sound = "Minuet.caf"
-    else:
-        title = "Daily Review",
-        message = "Time to review this week's focus!",
-        sound = "MultiwayJoin.caf",
-
-    noti = Notification(
-        title=title,
-        message=message,
-        group="weekly_thought_review",
-        tag="weekly_thought_review",
-        sound=sound,
-        target="marshall",
-    )
-    noti.send()
-
-
 def populate_review_thoughts() -> int:
     """
     Scans for the chronologically first unreviewed day (excluding today).
@@ -121,12 +94,14 @@ def populate_review_thoughts() -> int:
     for date_key, contents in raw_thoughts.items():
         if date_key != date.today() and not contents["reviewed"]:
             for index, thought in enumerate(contents["thoughts"]):
-                review_thoughts.append({
-                    "index": index,
-                    "date": date_key,
-                    "thought": thought,
-                    "state": "active" if index == 0 else "pending"
-                })
+                review_thoughts.append(
+                    {
+                        "index": index,
+                        "date": date_key,
+                        "thought": thought,
+                        "state": "active" if index == 0 else "pending",
+                    }
+                )
 
             break
 
@@ -155,13 +130,11 @@ def populate_review_markdown() -> None:
     day_of_week = date_key.strftime("%A")
     colloquial_date = dates.colloquial_date(date_key, ordinals=True)
 
-    markdown_content = (
-        "# New Thoughts to Review!\n"
-        f"## {day_of_week}, {colloquial_date}")
+    markdown_content = f"# New Thoughts to Review!\n## {day_of_week}, {colloquial_date}"
 
     for thought_data in pyscript.thinker.review_thoughts:
         symbol = STATE_SYMBOLS[thought_data["state"]]
-        markdown_content += f"\n\n{symbol} {thought_data["thought"]}"
+        markdown_content += f"\n\n{symbol} {thought_data['thought']}"
 
     pyscript.thinker.review_markdown = markdown_content
     pyscript.thinker_edit_thought = "off"
@@ -197,12 +170,14 @@ def edit_thought() -> None:
 
 @service("thinker.confirm_edit")
 def confirm_edit() -> None:
-    pyscript.thinker.review_thoughts.append({
-        "index": len(pyscript.thinker.review_thoughts),
-        "date": pyscript.thinker.review_thoughts[0]["date"],
-        "thought": str(input_text.thinker_edit_thought),
-        "state": "pending",
-    })
+    pyscript.thinker.review_thoughts.append(
+        {
+            "index": len(pyscript.thinker.review_thoughts),
+            "date": pyscript.thinker.review_thoughts[0]["date"],
+            "thought": str(input_text.thinker_edit_thought),
+            "state": "pending",
+        }
+    )
 
     input_text.thinker_edit_thought = ""
     populate_review_markdown()
@@ -224,12 +199,14 @@ def commit_review() -> None:
             date_string = review_thought["date"].strftime("%Y/%m/%d")
             preprocessed_date = datetime.strptime(date_string, "%Y/%m/%d").date()
 
-            persisted_thoughts.append({
-                "date": preprocessed_date,
-                "thought": review_thought["thought"],
-                "reminder_count": 0,
-                "last_reminder": None
-            })
+            persisted_thoughts.append(
+                {
+                    "date": preprocessed_date,
+                    "thought": review_thought["thought"],
+                    "reminder_count": 0,
+                    "last_reminder": None,
+                }
+            )
 
     file.write(["persisted_thoughts"], persisted_thoughts)
 
@@ -306,11 +283,11 @@ def send_reminder() -> None:
         group="thought_reminder",
         target="marshall",
         sound="HourlyChime_Haptic.caf",
-        action_data=thought
+        action_data=thought,
     )
     noti.add_action(id="thinker_reminder_share", title="Share")
     noti.add_action(id="thinker_reminder_pause", title="Pause")
-    noti.add_action(id="thinker_reminder_remove", title="Remove", destructive=True),
+    (noti.add_action(id="thinker_reminder_remove", title="Remove", destructive=True),)
     noti.send()
 
     pyscript.thinker.current_reminder = message
@@ -332,7 +309,7 @@ def reminder_share(**kwargs) -> None:
         group="shared_thought",
         target="emily",
         sound="HourlyChime_Haptic.caf",
-        url="thinker"
+        url="thinker",
     )
     noti.send()
 

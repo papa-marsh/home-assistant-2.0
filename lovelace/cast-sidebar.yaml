@@ -2,7 +2,7 @@ digitalClock: true
 twelveHourVersion: true
 date: true
 width: 25
-template: "{{ states('pyscript.sidebar_text') }}"
+template: "{{ states('maestro.cast_sidebar_text') }}"
 hideTopMenu: true
 sidebarMenu:
   - action: navigate

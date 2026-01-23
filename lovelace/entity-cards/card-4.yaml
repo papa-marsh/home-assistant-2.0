@@ -14,16 +14,20 @@ custom_fields:
   state: "[[[ return entity.state ]]]"
 double_tap_action:
   action: call-service
-  service: '[[[ return "pyscript." + entity.attributes.name + "_dtap"]]]'
-entity: pyscript.entity_card_stocks
+  service: script.fire_ui_event
+  service_data:
+    trigger: entity_card_4_double_tap
+entity: maestro.entity_card_4
 extra_styles:
   "[[[ if ( entity.attributes.blink ) return `@keyframes fade { from {
   opacity: 1.0; } 50% { opacity: 0.2; } to { opacity: 1.0; } }` ]]]"
 hold_action:
   action: call-service
-  service: '[[[ return "pyscript." + entity.attributes.name + "_hold"]]]'
+  service: script.fire_ui_event
+  service_data:
+    trigger: entity_card_4_hold
 icon: "[[[ return entity.attributes.state_icon ]]]"
-name: "[[[ return entity.attributes.name ]]]"
+name: "[[[ return entity.attributes.title ]]]"
 styles:
   card:
     - animation: fade 2s linear infinite
@@ -86,5 +90,7 @@ styles:
     - overflow: unset
 tap_action:
   action: call-service
-  service: '[[[ return "pyscript." + entity.attributes.name + "_tap"]]]'
+  service: script.fire_ui_event
+  service_data:
+    trigger: entity_card_4_tap
 type: custom:button-card
