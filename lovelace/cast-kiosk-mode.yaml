@@ -1,4 +1,1 @@
-user_settings:
-  - users:
-      - cast
-    kiosk: true
+hide_header: '{{ user_name in ("cast") }}'

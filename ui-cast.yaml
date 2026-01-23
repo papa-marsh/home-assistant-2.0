@@ -18,7 +18,7 @@ views:
               cards:
                 - !include lovelace/overview/weather.yaml
                 - !include lovelace/overview/garage-buttons.yaml
-                - !include lovelace/overview/chelsea-fixture.yaml
+                - !include lovelace/overview/next-sports-game.yaml
                 - type: horizontal-stack
                   cards:
                     - !include lovelace/entity-cards/card-1.yaml
