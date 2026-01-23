@@ -8,6 +8,7 @@ home-assistant_v2.db-shm
 home-assistant_v2.db-wal
 home-assistant.log
 home-assistant.log.1
+home-assistant.log.old
 home-assistant.log.fault
 
 www/community
