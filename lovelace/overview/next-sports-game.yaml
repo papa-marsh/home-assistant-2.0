@@ -1,16 +1,16 @@
 type: custom:button-card
-entity: maestro.next_sports_game
+entity: maestro.next_game_card
 show_icon: false
 show_name: false
 styles:
   card:
     - height: 100px
   grid:
-    - grid-template-areas: '"h_crest top_row a_crest" "h_crest date a_crest" "h_crest time a_crest"'
+    - grid-template-areas: '"left_icon top_row right_icon" "left_icon middle_row right_icon" "left_icon bottom_row right_icon"'
     - grid-template-columns: 1fr 1fr 1fr
     - grid-template-rows: 1fr 1fr 1fr
   custom_fields:
-    h_crest:
+    left_icon:
       - display: inline-grid
       - place-self: center
       - align-self: flex-start
@@ -18,25 +18,20 @@ styles:
       - display: inline-grid
       - align-self: center
       - overflow: visible
-    date:
+    middle_row:
       - display: inline-grid
       - align-self: center
       - overflow: visible
-    time:
+    bottom_row:
       - display: inline-grid
       - align-self: center
-    a_crest:
+    right_icon:
       - display: inline-grid
       - place-self: center
       - align-self: flex-start
 custom_fields:
-  # h_crest: '[[[ return `<img id="icon" src="${entity.attributes.home_path}" style="position: relative;">` ]]]'
-  # top_row: "[[[ return `<span>${entity.attributes.top_row}</span>`]]]"
-  # date: "[[[ return `<span>${entity.attributes.date}</span>` ]]]"
-  # time: "[[[ return `<span>${entity.attributes.time}</span>` ]]]"
-  # a_crest: '[[[ return `<img id="icon"src="${entity.attributes.away_path}" style="position: relative;">` ]]]'
-  h_crest: "Temp"
-  top_row: "Temp"
-  date: "Temp"
-  time: "Temp"
-  a_crest: "Temp"
+  left_icon: '[[[ return `<img id="icon" src="${entity.attributes.left_icon_path}" style="position: relative;">` ]]]'
+  top_row: "[[[ return `<span>${entity.attributes.top_row}</span>`]]]"
+  middle_row: "[[[ return `<span>${entity.attributes.middle_row}</span>` ]]]"
+  bottom_row: "[[[ return `<span>${entity.attributes.bottom_row}</span>` ]]]"
+  right_icon: '[[[ return `<img id="icon"src="${entity.attributes.right_icon_path}" style="position: relative;">` ]]]'

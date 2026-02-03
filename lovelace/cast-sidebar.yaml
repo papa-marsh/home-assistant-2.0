@@ -1,26 +1,41 @@
 digitalClock: true
 twelveHourVersion: true
 date: true
+dateFormat: MMMM Do
 width: 25
 template: "{{ states('maestro.cast_sidebar_text') }}"
 hideTopMenu: true
+bottomCard:
+  type: custom:calendar-card-pro
+  cardOptions:
+    entities:
+      - entity: calendar.family
+      - entity: calendar.marshall
+      - entity: calendar.emily
+      - entity: calendar.ellie
+      - entity: calendar.olivia
+    days_to_show: 14
+    compact_events_to_show: 3
+    accent_color: RGB(255,255,255,.2)
+    weekday_font_size: 12px
+    day_font_size: 18px
+    show_month: false
+    month_font_size: 10px
+    show_location: false
+  cardStyle: |
+    ha-card {
+      padding: 0 !important;
+      background-color: unset !important;
+    }
 sidebarMenu:
   - action: navigate
     navigation_path: "/lovelace-cast/overview"
     name: "Overview"
     icon: mdi:view-dashboard
   - action: navigate
-    navigation_path: "/lovelace-cast/family"
-    name: "Family"
-    icon: mdi:human-male-female-child
-  - action: navigate
     navigation_path: "/lovelace-cast/home"
     name: "Home"
     icon: mdi:home
-  - action: navigate
-    navigation_path: "/lovelace-cast/soccer"
-    name: "Soccer"
-    icon: mdi:soccer
   - action: navigate
     navigation_path: "/lovelace-cast/system"
     name: "System"

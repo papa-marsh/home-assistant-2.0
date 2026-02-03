@@ -3,6 +3,7 @@ entity: media_player.living_room
 card_mod:
   style: |
     ha-card {
+      --primary-color: RGB(0,0,0,0);
       height: 315px !important;
       margin: 1px !important;
     }

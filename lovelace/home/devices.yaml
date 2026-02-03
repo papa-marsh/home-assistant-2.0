@@ -1,44 +1,33 @@
 type: entities
 entities:
-  - type: custom:fold-entity-row
-    head:
-      entity: sensor.printer_status
-      name: Printer
-    entities:
-      - entity: sensor.printer_page_counter
-        name: Page Counter
-      - entity: sensor.printer_black_ink_remaining
-        name: Black Remaining
-      - entity: sensor.printer_magenta_ink_remaining
-        name: Magenta Remaining
-      - entity: sensor.printer_cyan_ink_remaining
-        name: Cyan Remaining
-      - entity: sensor.printer_yellow_ink_remaining
-        name: Yellow Remaining
   - entity: light.outside_lights
+    name: Outside Lights
+  - entity: switch.olivias_sound_machine
+    name: Olivia's Sound Machine
+    icon: mdi:waveform
   - entity: switch.ellies_sound_machine
     icon: mdi:waveform
+    name: Ellie's Sound Machine
   - entity: switch.butterfly_night_light
+    name: Butterfly Night Light
     icon: mdi:butterfly
   - entity: switch.workout_fan
-    icon: mdi:fan
-  - entity: switch.playstation_fans
-    name: Office Media Fans
+    name: Workout Fan
     icon: mdi:fan
   - entity: switch.space_heater
     icon: mdi:radiator
+    name: Office Space Heater
   - entity: switch.office_door_led
+    name: Office Door LEDs
+    icon: mdi:led-strip-variant
+  - entity: fan.office_purifier
+    icon: mdi:air-purifier
+title: Devices
+show_header_toggle: false
+state_color: true
 card_mod:
   style:
     .: |
       ha-card {
-        height: 436px !important;
-      }
-      #states div {
-        margin-top: -2px !important;
-        margin-bottom: 14px !important;
-      }
-    fold-entity-row $: |
-      ha-icon {
-        margin-left: 10px !important;
+        height: 584px !important;
       }
