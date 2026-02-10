@@ -4,7 +4,6 @@ background: var(--background-image)
 views:
   - theme: Backend-selected
     title: Overview
-    type: panel
     icon: mdi:view-dashboard
     path: overview
     badges: []
@@ -35,7 +34,6 @@ views:
                     - !include lovelace/entity-cards/card-6.yaml
   - theme: Backend-selected
     title: Home
-    type: panel
     icon: mdi:home
     path: home
     badges: []
@@ -54,7 +52,6 @@ views:
                 - !include lovelace/home/sprinklers.yaml
   - theme: Backend-selected
     title: System
-    type: panel
     icon: mdi:tools
     path: system
     badges: []

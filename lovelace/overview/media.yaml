@@ -7,3 +7,9 @@ card_mod:
       height: 315px !important;
       margin: 1px !important;
     }
+    .image {
+      width: 315px !important;
+    }
+    .color-gradient {
+      width: 315px !important;
+    }
