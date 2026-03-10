@@ -1,10 +1,18 @@
 type: custom:button-card
 entity: maestro.next_game_card
+extra_styles:
+  "[[[ if ( entity.attributes.blink ) return `@keyframes fade { from {
+  opacity: 1.0; } 50% { opacity: 0.2; } to { opacity: 1.0; } }` ]]]"
 show_icon: false
 show_name: false
 styles:
   card:
+    - animation: fade 2s linear infinite
     - height: 100px
+    - background:
+        '[[[ if ( entity.attributes.active ) return "var(--custom-card-active-background-color)";
+        else return "var( --ha-card-background, var(--card-background-color, white)
+        )"; ]]]'
   grid:
     - grid-template-areas: '"left_icon top_row right_icon" "left_icon middle_row right_icon" "left_icon bottom_row right_icon"'
     - grid-template-columns: 1fr 1fr 1fr

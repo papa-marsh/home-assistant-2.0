@@ -41,21 +41,6 @@ views:
             - !include lovelace/home/devices.yaml
             - !include lovelace/home/sprinklers.yaml
   - theme: Backend-selected
-    title: Thinker
-    type: panel
-    icon: mdi:head-dots-horizontal
-    path: thinker
-    badges: []
-    cards:
-      - type: custom:mod-card
-        style: !include lovelace/style-mobile-view.yaml
-        card:
-          type: vertical-stack
-          cards:
-            - !include lovelace/thinker/review-thoughts.yaml
-            - !include lovelace/thinker/review-actions.yaml
-            - !include lovelace/thinker/review-edit.yaml
-  - theme: Backend-selected
     title: System
     type: panel
     icon: mdi:tools
@@ -67,7 +52,6 @@ views:
         card:
           type: vertical-stack
           cards:
-            - !include lovelace/system/preferences.yaml
             - !include lovelace/system/admin-buttons.yaml
-            - !include lovelace/system/updates.yaml
+            - !include lovelace/system/gates.yaml
             - !include lovelace/system/status.yaml

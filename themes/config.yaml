@@ -1,9 +1,9 @@
 global:
   sidebar-background: "#2A2A2A"
   custom-card-active-background-color: "#777"
-  custom-warning-background-color: "#F00"
-  custom-warning-text-color: "#F00"
-  custom-favorable-text-color: "#0F0"
+  custom-warning-background-color: "#F55"
+  custom-warning-text-color: "#F55"
+  custom-favorable-text-color: "#5F5"
   mdc-select-fill-color: none
 
 themes:

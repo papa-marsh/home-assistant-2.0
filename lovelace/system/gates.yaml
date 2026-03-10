@@ -1,0 +1,5 @@
+type: entities
+entities:
+  - entity: input_select.gate_selector
+  - entity: input_boolean.gate_state
+  - entity: input_datetime.gate_expiry

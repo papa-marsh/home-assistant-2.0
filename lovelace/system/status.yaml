@@ -6,14 +6,8 @@ entities:
     name: Last Host Reboot
   - entity: binary_sensor.remote_ui
     name: Cloud Remote UI
-  - entity: binary_sensor.z_wave_js_running
-    name: Z-Wave JS
   - entity: sensor.backup_state
     name: Cloud Backup
-  - entity: binary_sensor.rpi_power_status
-    name: Host Power Status
-  - entity: sensor.cpu_temperature
-    name: CPU Temperature
   - entity: sensor.processor_use
     name: Processor Use
   - entity: sensor.disk_use_percent_home
@@ -28,6 +22,6 @@ card_mod:
   style:
     "#states": |
       div {
-        margin-top: -6px !important;
-        margin-bottom: -5px !important;
+        margin-top: -4px !important;
+        margin-bottom: -4px !important;
       }
