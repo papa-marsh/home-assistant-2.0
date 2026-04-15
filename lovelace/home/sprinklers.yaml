@@ -3,7 +3,7 @@ entities:
   - type: custom:paper-buttons-row
     buttons:
       - name: |-
-          {% if state_attr("pyscript.sprinklers", "run_program") %}
+          {% if is_state("input_boolean.sprinklers_running", "on") %}
             Running
           {% else %}
             All
@@ -15,7 +15,7 @@ entities:
             padding: 6px 24px
             border-radius: var(--ha-card-border-radius)
             background-color: |-
-              {% if state_attr("pyscript.sprinklers", "run_program") %}
+              {% if is_state("input_boolean.sprinklers_running", "on") %}
                 var(--custom-card-active-background-color)
               {% else %}
                 var(--paper-card-background-color)
@@ -23,9 +23,11 @@ entities:
             margin: 6px 4px 8px
         tap_action:
           action: call-service
-          service: sprinklers.run_program
+          service: script.fire_ui_event
+          service_data:
+            trigger: sprinklers_run_program
       - name: |-
-          {% if state_attr("pyscript.sprinklers", "skip_next") %}
+          {% if is_state("input_boolean.sprinklers_skip_next", "on") %}
             Skipped
           {% else %}
             Skip
@@ -37,7 +39,7 @@ entities:
             padding: 6px 24px
             border-radius: var(--ha-card-border-radius)
             background-color: |-
-              {% if state_attr("pyscript.sprinklers", "skip_next") %}
+              {% if is_state("input_boolean.sprinklers_skip_next", "on") %}
                 var(--custom-card-active-background-color)
               {% else %}
                 var(--paper-card-background-color)
@@ -45,9 +47,11 @@ entities:
             margin: 6px 4px 8px
         tap_action:
           action: call-service
-          service: sprinklers.skip_next
+          service: script.fire_ui_event
+          service_data:
+            trigger: sprinklers_skip_next
       - name: |-
-          {% if state_attr("pyscript.sprinklers", "running") %}
+          {% if is_state("input_boolean.sprinklers_running", "on") %}
             Stop
           {% else %}
             Stopped
@@ -59,7 +63,7 @@ entities:
             padding: 6px 24px
             border-radius: var(--ha-card-border-radius)
             background-color: |-
-              {% if state_attr("pyscript.sprinklers", "running") %}
+              {% if is_state("input_boolean.sprinklers_running", "on") %}
                 var(--paper-card-background-color)
               {% else %}
                 var(--custom-card-active-background-color)
@@ -67,7 +71,9 @@ entities:
             margin: 6px 4px 8px
         tap_action:
           action: call-service
-          service: sprinklers.stop_all
+          service: script.fire_ui_event
+          service_data:
+            trigger: sprinklers_stop_all
   - type: custom:paper-buttons-row
     buttons:
       - name: Front - East
@@ -91,10 +97,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 1
-            minutes: 1
+            entity_id: switch.rain_bird_sprinkler_1
+            duration: 1
       - icon: mdi:numeric-2-circle
         style:
           button:
@@ -110,10 +116,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 1
-            minutes: 2
+            entity_id: switch.rain_bird_sprinkler_1
+            duration: 2
       - icon: mdi:numeric-5-circle
         style:
           button:
@@ -129,10 +135,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 1
-            minutes: 5
+            entity_id: switch.rain_bird_sprinkler_1
+            duration: 5
       - icon: mdi:numeric-10-circle
         style:
           button:
@@ -148,10 +154,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 1
-            minutes: 10
+            entity_id: switch.rain_bird_sprinkler_1
+            duration: 10
   - type: custom:paper-buttons-row
     buttons:
       - name: Front - Middle
@@ -175,10 +181,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 2
-            minutes: 1
+            entity_id: switch.rain_bird_sprinkler_2
+            duration: 1
       - icon: mdi:numeric-2-circle
         style:
           button:
@@ -194,10 +200,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 2
-            minutes: 2
+            entity_id: switch.rain_bird_sprinkler_2
+            duration: 2
       - icon: mdi:numeric-5-circle
         style:
           button:
@@ -213,10 +219,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 2
-            minutes: 5
+            entity_id: switch.rain_bird_sprinkler_2
+            duration: 5
       - icon: mdi:numeric-10-circle
         style:
           button:
@@ -232,10 +238,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 2
-            minutes: 10
+            entity_id: switch.rain_bird_sprinkler_2
+            duration: 10
   - type: custom:paper-buttons-row
     buttons:
       - name: Front - West
@@ -259,10 +265,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 3
-            minutes: 1
+            entity_id: switch.rain_bird_sprinkler_3
+            duration: 1
       - icon: mdi:numeric-2-circle
         style:
           button:
@@ -278,10 +284,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 3
-            minutes: 2
+            entity_id: switch.rain_bird_sprinkler_3
+            duration: 2
       - icon: mdi:numeric-5-circle
         style:
           button:
@@ -297,10 +303,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 3
-            minutes: 5
+            entity_id: switch.rain_bird_sprinkler_3
+            duration: 5
       - icon: mdi:numeric-10-circle
         style:
           button:
@@ -316,10 +322,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 3
-            minutes: 10
+            entity_id: switch.rain_bird_sprinkler_3
+            duration: 10
   - type: custom:paper-buttons-row
     buttons:
       - name: Back - West
@@ -343,10 +349,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 4
-            minutes: 1
+            entity_id: switch.rain_bird_sprinkler_4
+            duration: 1
       - icon: mdi:numeric-2-circle
         style:
           button:
@@ -362,10 +368,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 4
-            minutes: 2
+            entity_id: switch.rain_bird_sprinkler_4
+            duration: 2
       - icon: mdi:numeric-5-circle
         style:
           button:
@@ -381,10 +387,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 4
-            minutes: 5
+            entity_id: switch.rain_bird_sprinkler_4
+            duration: 5
       - icon: mdi:numeric-10-circle
         style:
           button:
@@ -400,10 +406,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 4
-            minutes: 10
+            entity_id: switch.rain_bird_sprinkler_4
+            duration: 10
   - type: custom:paper-buttons-row
     buttons:
       - name: Back - East
@@ -427,10 +433,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 5
-            minutes: 1
+            entity_id: switch.rain_bird_sprinkler_5
+            duration: 1
       - icon: mdi:numeric-2-circle
         style:
           button:
@@ -446,10 +452,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 5
-            minutes: 2
+            entity_id: switch.rain_bird_sprinkler_5
+            duration: 2
       - icon: mdi:numeric-5-circle
         style:
           button:
@@ -465,10 +471,10 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 5
-            minutes: 5
+            entity_id: switch.rain_bird_sprinkler_5
+            duration: 5
       - icon: mdi:numeric-10-circle
         style:
           button:
@@ -484,7 +490,7 @@ entities:
             margin: 2px 4px 0
         tap_action:
           action: call-service
-          service: sprinklers.run_zone
+          service: rainbird.start_irrigation
           service_data:
-            zone: 5
-            minutes: 10
+            entity_id: switch.rain_bird_sprinkler_5
+            duration: 10
