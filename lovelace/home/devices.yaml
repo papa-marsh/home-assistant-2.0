@@ -2,6 +2,9 @@ type: entities
 entities:
   - entity: light.outside_lights
     name: Outside Lights
+  - entity: switch.master_sound_machine
+    name: Master Sound Machine
+    icon: mdi:waveform
   - entity: switch.olivias_sound_machine
     name: Olivia's Sound Machine
     icon: mdi:waveform
@@ -11,9 +14,6 @@ entities:
   - entity: switch.butterfly_night_light
     name: Butterfly Night Light
     icon: mdi:butterfly
-  - entity: switch.workout_fan
-    name: Workout Fan
-    icon: mdi:fan
   - entity: switch.space_heater
     icon: mdi:radiator
     name: Office Space Heater

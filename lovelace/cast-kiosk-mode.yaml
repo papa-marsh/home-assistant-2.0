@@ -1,1 +1,1 @@
-hide_header: '{{ user_name in ("cast") }}'
+kiosk: '[[[ user_name === "cast" ]]]'
