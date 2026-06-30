@@ -65,34 +65,31 @@ command_line:
       command: "cat /sys/class/thermal/thermal_zone0/temp"
       value_template: "{{ value | multiply(0.0018) | round(0) + 32 }}"
 
-cover:
-  - platform: template
-    covers:
-      east_stall:
+template:
+  - cover:
+      - name: "East Stall"
         device_class: garage
-        friendly_name: "East Stall"
-        value_template: "{{ is_state('binary_sensor.east_stall_input', 'off') }}"
+        state: >
+          {{ is_state('binary_sensor.east_stall_input', 'off') if has_value('binary_sensor.east_stall_input') else None }}
         open_cover:
-          service: switch.turn_on
-          data:
+          action: switch.turn_on
+          target:
             entity_id: switch.east_stall
         close_cover:
-          service: switch.turn_on
-          data:
+          action: switch.turn_on
+          target:
             entity_id: switch.east_stall
-  - platform: template
-    covers:
-      west_stall:
+      - name: "West Stall"
         device_class: garage
-        friendly_name: "West Stall"
-        value_template: "{{ is_state('binary_sensor.west_stall_input', 'off') }}"
+        state: >
+          {{ is_state('binary_sensor.west_stall_input', 'off') if has_value('binary_sensor.west_stall_input') else None }}
         open_cover:
-          service: switch.turn_on
-          data:
+          action: switch.turn_on
+          target:
             entity_id: switch.west_stall
         close_cover:
-          service: switch.turn_on
-          data:
+          action: switch.turn_on
+          target:
             entity_id: switch.west_stall
 
 sensor:
