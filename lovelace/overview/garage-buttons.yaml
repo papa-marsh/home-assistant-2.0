@@ -1,36 +1,30 @@
 type: horizontal-stack
 cards:
   - type: custom:button-card
-    entity: cover.east_stall
+    entity: binary_sensor.east_stall
+    icon: |
+      [[[ if (entity.state == "on") return "mdi:garage-open"; else return "mdi:garage"; ]]]
     styles:
       card:
         - height: 110px
         - background: |
             [[[
-              if (entity.state == "open") return "var(--custom-card-active-background-color)";
+              if (entity.state == "on") return "var(--custom-card-active-background-color)";
               else return "var( --ha-card-background, var(--card-background-color, white) )";
             ]]]
       icon:
         - color: '[[[ return "var(--primary-text-color)"; ]]]'
-    tap_action:
-      action: call-service
-      service: cover.toggle
-      service_data:
-        entity_id: cover.east_stall
   - type: custom:button-card
-    entity: cover.west_stall
+    entity: binary_sensor.west_stall
+    icon: |
+      [[[ if (entity.state == "on") return "mdi:garage-open"; else return "mdi:garage"; ]]]
     styles:
       card:
         - height: 110px
         - background: |
             [[[
-              if (entity.state == "open") return "var(--custom-card-active-background-color)";
+              if (entity.state == "on") return "var(--custom-card-active-background-color)";
               else return "var( --ha-card-background, var(--card-background-color, white) )";
             ]]]
       icon:
         - color: '[[[ return "var(--primary-text-color)"; ]]]'
-    tap_action:
-      action: call-service
-      service: cover.toggle
-      service_data:
-        entity_id: cover.west_stall
