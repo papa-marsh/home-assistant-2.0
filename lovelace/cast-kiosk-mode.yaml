@@ -1,1 +1,1 @@
-kiosk: '[[[ user_name === "cast" ]]]'
+kiosk: true
