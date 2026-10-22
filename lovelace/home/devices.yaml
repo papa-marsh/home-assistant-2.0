@@ -1,7 +1,11 @@
 type: entities
 entities:
-  - entity: light.outside_lights
-    name: Outside Lights
+  - entity: light.porch_west_light
+    name: West porch light
+  - entity: light.porch_east_light
+    name: East porch light
+  - entity: light.driveway_light
+    name: Driveway light
   - entity: switch.master_sound_machine
     name: Master Sound Machine
     icon: mdi:waveform
@@ -20,8 +24,6 @@ entities:
   - entity: switch.office_door_led
     name: Office Door LEDs
     icon: mdi:led-strip-variant
-  - entity: fan.office_purifier
-    icon: mdi:air-purifier
 title: Devices
 show_header_toggle: false
 state_color: true
