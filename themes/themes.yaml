@@ -1,4 +1,6 @@
 Default:
+  modes:
+    dark: {}
   accent-color: rgba(255, 159, 9, 1)
   app-header-background-color: rgba(30, 2, 61, 0.4)
   #   background-image: center / cover no-repeat fixed url('/hacsfiles/themes/backgrounds/homekit-bg-blue-red.jpg')
@@ -16,10 +18,10 @@ Default:
   ha-card-border-radius: 20px
   ha-card-border-width: 0
   ha-slider-background: none !important
-  input-disabled-fill-color: transparent
+  input-disabled-fill-color: var(--primary-background-color)
   input-disabled-ink-color: var(--disabled-text-color)
   input-dropdown-icon-color: var(--primary-text-color)
-  input-fill-color: transparent
+  input-fill-color: var(--primary-background-color)
   input-hover-line-color: var(--secondary-text-color)
   input-idle-line-color: var(--secondary-text-color)
   input-ink-color: var(--primary-text-color)
@@ -32,7 +34,8 @@ Default:
   lumo-body-text-color: var(--primary-text-color)
   markdown-code-background-color: "#464646"
   mcg-title-letter-spacing: .15em
-  mdc-select-fill-color: none
+  mdc-select-fill-color: var(--input-fill-color)
+  mdc-theme-surface: var(--primary-background-color)
   mini-media-player-base-color: white
   mini-media-player-icon-color: white
   more-info-header-background: rgba(25, 25, 25, 0.5)
