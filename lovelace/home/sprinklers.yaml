@@ -494,3 +494,9 @@ entities:
           service_data:
             entity_id: switch.rain_bird_sprinkler_5
             duration: 10
+card_mod:
+  style:
+    .: |
+      ha-card {
+        height: 334px !important;
+      }

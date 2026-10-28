@@ -37,7 +37,7 @@ views:
         card:
           type: vertical-stack
           cards:
-            - !include lovelace/home/climate.yaml
+            - !include lovelace/home/bedroom-temp.yaml
             - !include lovelace/home/devices.yaml
             - !include lovelace/home/sprinklers.yaml
   - theme: Backend-selected

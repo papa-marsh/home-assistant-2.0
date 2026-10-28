@@ -1,5 +1,7 @@
 type: entities
 entities:
+  - entity: climate.thermostat
+    name: Thermostat
   - entity: light.porch_west_light
     name: West porch light
   - entity: light.porch_east_light
