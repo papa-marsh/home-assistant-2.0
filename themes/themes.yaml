@@ -3,7 +3,6 @@ Default:
     dark: {}
   accent-color: rgba(255, 159, 9, 1)
   app-header-background-color: rgba(30, 2, 61, 0.4)
-  #   background-image: center / cover no-repeat fixed url('/hacsfiles/themes/backgrounds/homekit-bg-blue-red.jpg')
   card-background-color: rgba(34, 34, 36, 0.8)
   clear-background-color: var(--ha-card-background)
   code-editor-background-color: "#161616"
@@ -30,7 +29,7 @@ Default:
   label-badge-red: rgba(255, 159, 9, 0.7)
   label-badge-text-color: "#F1F1F1"
   light-primary-color: "#B6B6C1"
-  lovelace-background: var(--background-image)
+  lovelace-background: 'center / cover no-repeat fixed url("/local/backgrounds/homekit-bg-blue-red.jpg")'
   lumo-body-text-color: var(--primary-text-color)
   markdown-code-background-color: "#464646"
   mcg-title-letter-spacing: .15em
