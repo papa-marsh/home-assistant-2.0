@@ -4,7 +4,7 @@ Default:
   accent-color: rgba(255, 159, 9, 1)
   app-header-background-color: rgba(30, 2, 61, 0.4)
   #   background-image: center / cover no-repeat fixed url('/hacsfiles/themes/backgrounds/homekit-bg-blue-red.jpg')
-  card-background-color: var(--secondary-background-color)
+  card-background-color: rgba(62, 62, 64, 0.8)
   clear-background-color: var(--ha-card-background)
   code-editor-background-color: "#161616"
   codemirror-property: var(--accent-color)
@@ -14,7 +14,7 @@ Default:
   custom-warning-text-color: "#F55"
   disabled-text-color: "#555"
   divider-color: rgba(152, 152, 157, 0.3)
-  ha-card-background: rgba(10, 10, 10, 0.4)
+  ha-card-background: var(--card-background-color)
   ha-card-border-radius: 20px
   ha-card-border-width: 0
   ha-slider-background: none !important
@@ -58,7 +58,7 @@ Default:
   primary-background-color: "#2c2c2e"
   primary-color: "#ff9f09"
   primary-text-color: "#FFF"
-  rgb-card-background-color: rgb(10, 10, 10)
+  rgb-card-background-color: 62, 62, 64
   secondary-background-color: rgba(25, 25, 25, 0.9)
   secondary-text-color: "#d3d3d3"
   sidebar-background: "#2A2A2A"
