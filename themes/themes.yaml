@@ -1,3 +1,5 @@
+# Top-level theme names must stay in sync with the Theme enum in maestro's
+# scripts/system/themes.py, which populates input_select.theme_selector.
 Default:
   modes:
     dark: {}
