@@ -3,19 +3,20 @@ show_icon: true
 show_state: true
 type: glance
 entities:
+  - entity: sensor.office_ambient_sensor_temperature
+    name: Office
   - entity: sensor.master_bedroom_temperature_sensor
-    name: Master Bedroom
+    name: Master
   - entity: sensor.ellies_room_temperature_sensor_temperature
-    name: Ellie's Room
+    name: Ellie
   - entity: sensor.olivias_room_temperature_sensor_temperature
-    name: Olivia's Room
-    show_last_changed: false
-    show_state: true
+    name: Olivia
+  - entity: sensor.office_ambient_sensor_humidity
+    name: " "
   - entity: sensor.master_bedroom_temperature_sensor_humidity
-    show_state: true
     name: " "
   - entity: sensor.ellies_room_temperature_sensor_humidity
     name: " "
   - entity: sensor.olivias_room_temperature_sensor_humidity
     name: " "
-columns: 3
+columns: 4
